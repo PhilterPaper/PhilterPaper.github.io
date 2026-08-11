@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <title>Output of Text::KnuthPlass examples</title>
+    <style>
+      th, td { padding: 5pt; }
+      table { border: 2px solid black; }
+    
+      /* adapted from StackOverflow */
+      /* rows */
+      tr {
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+      }
+
+      /* columns */
+      td {
+        padding: 10px;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+      }
+
+    /* resets */
+    /* tr:first-child {
+         border-top: none;
+       } */
+
+      tr:last-child {
+        border-bottom: none;
+      }
+
+      td:first-child {
+        border-left: none;
+      }
+
+      td:last-child {
+        border-right: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Sample of Examples from Text::KnuthPlass</h2>
+    <p>Here is a sampling of the PDF and Text output files generated from 
+Text::KnuthPlass's <i>examples/</i> directory. The filenames all have a 
+filetype of ".pl", which, depending on how your operating system is set up, may
+automatically invoke Perl. Running <code>tools/3_examples.pl</code> will
+generate all this output.
+    </p>
+
+    <h3>PDF output (via PDF::Builder)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Output Names</th>
+          <th>Program Name</th>
+          <th>Excerpt?</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tr>
+        <td><a href="PDF/KP.pdf" download rel="nofollow,noindex">KP.pdf</a></td>
+        <td>PDF/KP.pl</td>
+        <td>no</td>
+        <td>Demonstrate basic Knuth-Plass functionality. This example is originally 
+mostly from the bramstein/typeset package.</td>
+      </tr>
+      <tr>
+        <td><a href="PDF/Flatland.pdf" download rel="nofollow,noindex">Flatland.pdf</a></td>
+        <td>PDF/Flatland.pl</td>
+        <td>no</td>
+        <td>Demonstrate a brief book excerpt (<i>Flatland</i>). There are cutouts for
+illustrations. This example is originally from the bramstein/typeset 
+package.</td>
+      </tr>
+      <tr>
+        <td><a href="PDF/Triangle.pdf" download rel="nofollow,noindex">Triangle.pdf</a></td>
+        <td>PDF/Triangle.pl</td>
+        <td>no</td>
+        <td>Demonstrate other paragraph shapes, including triangular and circular.</td>
+      </tr>
+    </table>
+
+    <h3>Text output (flat ASCII text files)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Output Names</th>
+          <th>Program Name</th>
+          <th>Excerpt?</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tr>
+        <td><a href="Text/T_KP.txt" download rel="nofollow,noindex">T_KP.txt</a></td>
+        <td>Text/KP.pl</td>
+        <td>no</td>
+        <td>Demonstrate basic Knuth-Plass functionality. This example is originally 
+mostly from the bramstein/typeset package.</td>
+      </tr>
+      <tr>
+        <td><a href="Text/T_Flatland.txt" download rel="nofollow,noindex">T_Flatland.txt</a></td>
+        <td>Text/Flatland.pl</td>
+        <td>no</td>
+        <td>Demonstrate a brief book excerpt (<i>Flatland</i>). There are cutouts for
+illustrations. This example is originally from the bramstein/typeset 
+package.</td>
+      </tr>
+      <tr>
+        <td><a href="Text/T_Triangle.txt" download rel="nofollow,noindex">T_Triangle.txt</a></td>
+        <td>Text/Triangle.pl</td>
+        <td>no</td>
+        <td>Demonstrate other paragraph shapes, including triangular and circular.</td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+------------ top of page --------------
+
+
+    |In olden times when wishing still helped one, there lived a king whose|
+    |daughters were all beautiful;  and the youngest was so beautiful  that|
+    |the  sun  itself,  which has seen so much,  was astonished whenever it|
+    |shone in her face. Close by the king's castle lay a great dark forest,|
+    |and  under  an  old  lime-tree in the forest was a well,  and when the|
+    |day was very warm,  the king's child went out into the forest and  sat|
+    |down  by  the  side  of the cool fountain;  and when she was bored she|
+    |took a golden ball,  and threw it up on high and caught it;  and  this|
+    |ball was her favorite plaything.                                      |
+      
+      
+    |Some  people prefer to have the right edge of their text look 'solid',|
+    |by setting periods, commas, and other punctuation marks (including in-|
+    |serted hyphens)  in the right-hand margin.  For example, this practice|
+    |is occasionally used in contemporary advertising.  It is easy  to  get|
+    |inserted  hyphens  into  the  margin:  We  simply let the width of the|
+    |corresponding penalty item be zero.  And it is almost as  easy  to  do|
+    |the  same  for periods and other symbols,  by putting every such char-|
+    |acter in a box of width zero and adding the  actual  symbol  width  to|
+    |the  glue that follows.  If no break occurs at this glue,  the accumu-|
+    |lated width is the same as before;  and if a  break  does  occur,  the|
+    |line  will be justified as if the period or other symbol were not pre-|
+    |sent.                                                                 |
+      
+      
+    |That  double-dot  you  see above some letters--they're the same thing,|
+    |right?  No!  Although they look the same,  the two are  actually  very|
+    |different,  and not at all interchangeable.  An umlaut is used in Ger-|
+    |manic languages,  and merely means that the primary vowel  (a,  o,  or|
+    |u)  is followed by an e.  It is a shorthand for (initially)  handwrit-|
+    |ing:  ä is more or less interchangeable with ae (not  to  be  confused|
+    |with  the  ae ligature),  ö is oe (again,  not oe ligature),  and ü is|
+    |ue.  This, of course, changes the pronunciation of the vowel,  just as|
+    |adding  an  e  to an English word (at the end)  shifts the vowel sound|
+    |(e.g., mat to mate). Some word spellings, especially for proper names,|
+    |may  prefer  one  or  the other form (usually _e).  Whether to use the|
+    |umlaut form or the two-letter form is usually an arbitrary  choice  in|
+    |electronic  typesetting,  unless the chosen font lacks the umlaut form|
+    |(as well as a combining "dieresis"  character).  It is more common  in|
+    |English-language  cold metal typesetting to lack the umlaut form,  and|
+    |require the two-letter form.  See also thorn and "ye",  where the  "e"|
+    |was originally written as a superscript to the thorn (þ).             |
+      
+      
+    |Though the Pearl measures less than 50 miles in total length|
+    |from its modest source as a  cool  mountain  spring  to  the|
+    |screaming  cascades  and  steaming estuary of its downstream|
+    |reaches,  over those miles,  the river has in one  place  or|
+    |another  everything  you  could  possibly  ask for.  You can|
+    |roam among lush temperate rain forests,  turgid white  water|
+    |canyons, contemplative meanders among aisles of staid aspens|
+    |(with trout leaping to slurp all the afternoon insects  from|
+    |its  calm surface),  and forbidding swamp land as formidable|
+    |as any that Humphrey Bogart muddled through in  The  African|
+    |Queen.                                                      |
+      
+      
+
+
+
+
+
+
+
+------------ bottom of page -----------
