@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Text::KnuthPlass docs and examples</title>
+  </head>
+  <body>
+    <h2>Text::KnuthPlass documentation and examples</h2>
+    <p>This is a library to call from your Perl code to create well-formed paragraph text layouts, using the famed Knuth-Plass (TeX) algorithm.
+    </p>
+    <p>Text::KnuthPlass uses the famed Knuth-Plass line-splitting algorithm (used in TeX and LaTeX) to break up a text string into a properly "shaped" paragraph. Certain rules are followed to not only efficiently pack the paragraph into a minimal number of lines, but also to minimize hyphenation, keep line density fairly constant, and take other measures to ensure that the output is typographically "nice looking". It works with both fixed-width fonts and with proportional (variable-width) fonts, where you supply the font library that calculates word lengths (e.g., PDF::Builder's advancewidth() method). Text::KnuthPlass permits varying line lengths, to allow text to flow around other objects, such as illustrations. It also makes use of (by default) Text::Hyphen, a library to indicate where words can be split (for hyphenation purposes).
+    </p>
+    <p>See also this blog on <a href="https://www.catskilltech.com/utils/show.php?link=paragraph-shaping">Paragraph Shaping</a> for a deeper dive into the subject.
+    </p>
+    <p>Text::KnuthPlass can run as a pure Perl library, or it can be built with XS C code to speed it up.
+    </p>
+    <ul>
+      <li><a href="../index.html">Up</a> to Master Index &mdash; back up to see other projects</li>
+      <li>Documentation &mdash; Browser-ready documentation online
+        <ul>
+          <li><a href="docs/Text/KnuthPlass_index.html">Master Index</a> of all modules</li>
+          <li><a href="docs/Text/KnuthPlass.html">Text/KnuthPlass.pm</a> top module of tree</li>
+          <li><a href="docs/README.html">README</a> file</li>
+          <li><a href="docs/RoadMap.html">Road Map</a> where we're going with this</li>
+        </ul>
+      </li>
+      <li><a href="xmps/index.html">Examples</a> PDF and text output from supplied examples</li>
+      <li><a href="https://github.com/PhilterPaper/Text-KnuthPlass">Code repository</a> on GitHub</li>
+      <li><a href="https://metacpan.org/pod/Text::KnuthPlass">CPAN distribution</a> installable image</li>
+      <li><a href="https://github.com/PhilterPaper/Text-KnuthPlass/issues?q=is%3Aissue+sort%3Aupdated-desc+is%3Aopen">Tickets</a> support tickets, discussions, etc.</li>
+      <li><a href="https://github.com/PhilterPaper/Text-KnuthPlass/pulls">Pull Requests</a> for advanced developers, for <b>NEW</b> function or fixes, <b>NOT</b> for reporting bugs!</li>
+    </ul>
+  </body>
+</html>

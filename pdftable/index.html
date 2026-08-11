@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>PDF::Table docs and examples</title>
+  </head>
+  <body>
+    <h2>PDF::Table documentation and examples</h2>
+    <p>This is a library to call from your Perl code to create tables in PDF documents, using either PDF::Builder, or the older PDF::API2.
+    </p>
+    </p>
+    <p>PDF::Table is a Perl library to format tables for insertion into PDF documents, using either the PDF::Builder or the PDF::API2 PDF-creation libraries, called from a Perl program. The PDF library (e.g., PDF::Builder) makes certain objects available to PDF::Table, as well as providing support services, and handles the overall PDF creation task. PDF::Table is called from within that library, to place tables of specific layout at the current active place on a document page. Tables may split across pages.
+    </p>
+    <p>Note that PDF::Table, unlike PDF::Builder or PDF::API2, does <i>not</i> provide a set of low-level building blocks, but rather, is an all-in-one "table" call with very complex and flexible input. The table layout capability is a bit richer than that found in HTML/CSS, with a great deal of control over row, column, and cell properties, as well as rule and border formatting. With PDF::Builder as the underlying engine, PDF::Table cell content may be defined using Markdown or HTML markup languages. However, note that PDF::Table itself does not use HTML tag markup, nor does PDF::Builder currently support HTML table tags! The only way to put a table into a document is to invoke PDF::Table.
+    </p>
+    <ul>
+      <li><a href="../index.html">Up</a> to Master Index &mdash; back up to see other projects</li>
+      <li>Documentation &mdash; Browser-ready documentation online
+        <ul>
+          <li><a href="docs/PDF/Table_index.html">Master Index</a> of all modules</li>
+          <li><a href="docs/PDF/Table.html">PDF/Table.pm</a> top module of tree</li>
+          <li><a href="docs/README.html">README</a> file</li>
+          <li><a href="docs/RoadMap.html">Road Map</a> where we're going with this</li>
+        </ul>
+      </li>
+      <li><a href="xmps/index.html">Examples</a> PDF output from supplied examples</li>
+      <li><a href="https://github.com/PhilterPaper/PDF-Table">Code repository</a> on GitHub</li>
+      <li><a href="https://metacpan.org/pod/PDF::Table">CPAN distribution</a> installable image</li>
+      <li><a href="https://github.com/PhilterPaper/PDF-Table/issues?q=is%3Aissue+sort%3Aupdated-desc+is%3Aopen">Tickets</a> support tickets, discussions, etc.</li>
+      <li><a href="https://github.com/PhilterPaper/PDF-Table/pulls">Pull Requests</a> for advanced developers, for <b>NEW</b> function or fixes, <b>NOT</b> for reporting bugs!</li>
+    </ul>
+  </body>
+</html>
