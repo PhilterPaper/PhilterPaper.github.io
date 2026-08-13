@@ -1,9 +1,11 @@
 <html>
   <head>
     <title>Text::KnuthPlass docs and examples</title>
+    <link rel="stylesheet" href="../resources/common.css">
   </head>
   <body>
     <h2>Text::KnuthPlass documentation and examples</h2>
+    <img src="../resources/bluemtns.png" style="max-width: 223px; margins: 0 auto;" alt="hazy blue Catskill Mountains in distance">
     <p>This is a library to call from your Perl code to create well-formed paragraph text layouts, using the famed Knuth-Plass (`TeX`) algorithm.
     </p>
     <p>Text::KnuthPlass uses the famed Knuth-Plass line-splitting algorithm (used in TeX and LaTeX) to break up a text string into a properly "shaped" paragraph. Certain rules are followed to not only efficiently pack the paragraph into a minimal number of lines, but also to minimize hyphenation, keep line density fairly constant, and take other measures to ensure that the output is typographically "nice looking". It works with both fixed-width fonts and with proportional (variable-width) fonts, where you supply the font library that calculates word lengths (e.g., PDF::Builder's <code>advancewidth()</code> method). Text::KnuthPlass permits varying line lengths, to allow text to flow around other objects, such as illustrations. It also makes use of (by default) <code>Text::Hyphen</code>, a library to indicate where words can be split (for hyphenation purposes).

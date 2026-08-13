@@ -1,0 +1,50 @@
+/* common CSS for all pages */
+
+body {
+    max-width: 900px;
+    margin: 0 auto;  /* this centers page */
+    padding: 1rem;
+
+    background-color: #FFFBC0;
+    background-image: url('parchment_paper_seamless_pattern.jpg');
+    font-family: Palatino, "Times Roman", serif;
+    font-size: 13pt;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+table {
+    border: 2px solid black; 
+    background-image: none;
+}
+th, td {
+    padding: 5pt; 
+}
+    
+/* adapted from StackOverflow */
+/* rows */
+tr {  
+   border-top: 1px solid black;
+   /* some browsers CAN do a horizontal border, rather than in the td */
+}
+
+/* columns */
+td {
+   padding: 10px; 
+   border-top: 1px solid black;
+   border-left: 1px solid black;
+}
+
+/* resets */
+/*    
+tr:first-child {
+   border-top: none;
+}  
+*/
+
+td:first-child {
+    border-left: none;
+}
