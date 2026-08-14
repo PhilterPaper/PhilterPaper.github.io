@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Road Map for PDF::Table</title>
+    <link rel="stylesheet" href="../../resources/common.css">
+    <style>
+      body { font-size: 12pt; }
+      li { margin-top: 6pt; }
+      h1 { text-align: center; }
+    </style>
+  </head>
+  <body>
+    <h1>PDF::Table Road Map</h1>
+
+    <p>This module creates and inserts text blocks and tables into PDF documents 
+using the PDF::API2 or PDF::Builder Perl module.</p>
+
+    <p>We can offer no guarantees that any of these items listed will be addressed,
+nor in what order. We will be happy to discuss offers of Pull Requests to implement 
+specific items. Preferably, any new function will work equally well on PDF::API2 and
+PDF::Builder.</p>
+
+    <ol>
+      <li>Some level of hyphenation (word splitting) so that excessively long
+words don't cause problems (#83). Do in sync with PDF::Builder with regards to what
+word-splitter library is used.</li>
+      <li>Handle request (#66) for cell contents that can be preformatted and/or
+fixed-pitch font. If using PDF::Builder, the use of the <code>column()</code> facility
+will fulfill this in part.</li>
+      <li>Be able to control vertical alignment of cell content across a row.</li>
+      <li>Permit defining of table footer (tfoot tag).</li>
+      <li>Permit images within cells (#51). When PDF::Builder's <code>column()</code>
+supports images, that will fulfill this in part. Images as the sole content of a cell
+shouldn't be too bad, but trying to mix with text will be a challenge. We don't want
+to go down the rabbit hole of building an entire markup language just for this.</li>
+      <li>Implement <i>rowspan</i> capability.</li>
+      <li>Make sure that dashed option names are silently converted to undashed forms.
+Possibly deprecate dashed forms at some point.</li>
+    </ul>
+  </body>
+</html>

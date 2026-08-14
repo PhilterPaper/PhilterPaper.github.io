@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <title>README for PDF::Table</title>
+    <link rel="stylesheet" href="../../resources/common.css">
+    <style>
+      body { font-size: 12pt; }
+      li { margin-top: 6pt; }
+    </style>
+  </head>
+  <body>
+    <h1>PDF::Table</h1>
+
+    <p>This module creates and inserts text blocks and tables into PDF documents 
+using the PDF::API2 or PDF::Builder Perl module.</p>
+
+    <h2>What is it?</h2>
+
+    <p>PDF::Table is a library to format tables for insertion into PDF documents, 
+using either the PDF::Builder or the PDF::API2 PDF-creation libraries, called 
+from a Perl program. The PDF library (e.g., PDF::Builder) makes certain objects 
+available to PDF::Table, as well as providing support services, and handles the 
+overall PDF creation task. PDF::Table is called from within that a Perl program
+using that library, to place tables of specific layout at the current active 
+place on a document page. Tables may split across pages.</p>
+
+    <p>Note that PDF::Table, unlike PDF::Builder or PDF::API2, does not provide a set 
+of low-level building blocks, but rather, is an all-in-one "table" call with 
+very complex and flexible input. The table layout capability is a bit richer 
+than that found in HTML/CSS, with a great deal of control over row, column, and 
+cell properties, as well as rule and border formatting. With PDF::Builder as 
+the underlying engine, PDF::Table cell content may be defined using Markdown or 
+HTML markup languages. However, note that PDF::Table itself does not use HTML 
+tag markup, nor does PDF::Builder currently support HTML table tags! The only 
+way to put a table into a document is to invoke PDF::Table.</p>
+
+    <p><a href="https://www.catskilltech.com/FreeSW/product/PDF%2DTable/title/PDF%3A%3ATable/freeSW_full">Home Page</a>, including Documentation and Examples.</p>
+
+    <p><a href="https://github.com/PhilterPaper/PDF-Table/issues"><img src="https://img.shields.io/github/issues/PhilterPaper/PDF-Table" alt="Open Issues"></a>
+<a href="https://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
+<a href="https://GitHub.com/PhilterPaper/PDF-Table/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance"></a></p>
+
+    <p>The official repository for PDF::Table module collaboration:
+"https://github.com/PhilterPaper/PDF-Table.git"</p>
+
+    <p>Any patches, pull requests, issues and feedback are more than welcome.</p>
+
+    <p>Do NOT under ANY circumstances open a PR (Pull Request) to <strong>report a <em>bug</em></strong>. 
+It is a waste of both <em>your</em> and <em>our</em> time and effort. Instead, simply open a 
+regular ticket (<em>issue</em>), and attach a Perl (.pl) program illustrating the 
+problem, if possible. 
+If you believe that you have a program patch (i.e., a permanent change to the
+code), and offer to share it as a PR, we may give the go-ahead. Unsolicited PRs 
+may be closed without further action.</p>
+
+    <h2>Prerequisites</h2>
+
+    <p>Required for installation: Test::More
+Optional for installation: Test::Pod, Test::CheckManifest</p>
+
+    <p>Required for running: Carp, PDF::API2 and/or PDF::Builder
+Optional for running: Pod::Simple::HTML</p>
+
+    <h2>Installation</h2>
+
+    <p>To install the module from CPAN, please type the following command:</p>
+
+    <p><code>cpanm PDF::Table</code></p>
+
+    <p>To test or add features to this module, please type the following command:</p>
+
+    <p><code>cpanm .</code></p>
+
+    <h2>Changes</h2>
+
+    <p>To see a list of changes, please do one or more of the following:</p>
+    <ul>
+      <li>Read the <code>Changes</code> file</li>
+      <li>Review commits history on GitHub</li>
+      <li>Make a diff from the tools menu at CPAN</li>
+    </ul>
+
+    <h2>Contacts</h2>
+
+    <ul>
+      <li>Use the issue tracker on GitHub, "https://github.com/PhilterPaper/PDF-Table/issues"</li>
+      <li>See "https://metacpan.org/pod/PDF::Table" for distribution and more information</li>
+    </ul>
+
+    <h2>License</h2>
+
+    <p>Copyright (C) 2006 by Daemmon Hughes</p>
+
+    <p>Extended by Desislav Kamenov (Twitter @deskata) versions 0.02 - 0.11</p>
+
+    <p>Extended by Phil Perry since version 0.12
+    Copyright (C) 2020 - 2025 by Phil M Perry</p>
+
+    <p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.7 or,
+at your option, any later version of Perl 5 you may have available.
+Note that Perl 5.10 is now the minimum for installation.</p>
+  </body>
+</html>
