@@ -12,6 +12,7 @@
 *.new
 # ignore leftover POD-to-HTML stuff
 pod2htmd.tmp
-# ignore .md documentation
+# ignore .md documentation except for root README
 *.md
+! /README.md
 # local build process
