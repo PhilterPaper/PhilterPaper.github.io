@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Basic::PDF::Dict</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#INSTANCE-VARIABLES">INSTANCE VARIABLES</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#type">type</a></li>
+      <li><a href="#filter">filter</a></li>
+      <li><a href="#outobjdeep">outobjdeep</a></li>
+      <li><a href="#read_stream">read_stream</a></li>
+      <li><a href="#val">val</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Basic::PDF::Dict - PDF Dictionaries and Streams</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Basic/PDF/Objind.html">PDF::Builder::Basic::PDF::Objind</a></p>
+
+<h1 id="INSTANCE-VARIABLES">INSTANCE VARIABLES</h1>
+
+<p>There are various special instance variables which are used to look after, particularly, streams. Each begins with a space:</p>
+
+<dl>
+
+<dt>&#39; stream&#39;</dt>
+<dd>
+
+<p>Holds the stream contents for output</p>
+
+</dd>
+<dt>&#39; streamfile&#39;</dt>
+<dd>
+
+<p>Holds the stream contents in an external file rather than in memory. This is not the same as a PDF file stream. The data is stored in its unfiltered form.</p>
+
+</dd>
+<dt>&#39; streamloc&#39;</dt>
+<dd>
+
+<p>If both &#39; stream&#39; and &#39; streamfile&#39; are empty, this indicates where in the source PDF the stream starts.</p>
+
+</dd>
+</dl>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $d = PDF::Builder::Basic::PDF-&gt;new()</code></pre>
+
+<blockquote>
+
+<p>Creates a new instance of a dictionary. The usual practice is to call <code>PDFDict()</code> instead.</p>
+
+</blockquote>
+
+<h2 id="type">type</h2>
+
+<pre><code>    $type = $d-&gt;type($type)</code></pre>
+
+<blockquote>
+
+<p>Get/Set the standard Type key. It can be passed, and will return, a text value rather than a Name object.</p>
+
+</blockquote>
+
+<h2 id="filter">filter</h2>
+
+<pre><code>    @filters = $d-&gt;filter(@filters)</code></pre>
+
+<blockquote>
+
+<p>Get/Set one or more filters being used by the optional stream attached to the dictionary.</p>
+
+</blockquote>
+
+<h2 id="outobjdeep">outobjdeep</h2>
+
+<pre><code>    $d-&gt;outobjdeep($fh, $pdf)</code></pre>
+
+<blockquote>
+
+<p>Outputs the contents of the dictionary to a PDF file. This is a recursive call.</p>
+
+<p>It also outputs a stream if the dictionary has a stream element. If this occurs then this method will calculate the length of the stream and insert it into the stream&#39;s dictionary.</p>
+
+</blockquote>
+
+<h2 id="read_stream">read_stream</h2>
+
+<pre><code>    $d-&gt;read_stream($force_memory)</code></pre>
+
+<blockquote>
+
+<p>Reads in a stream from a PDF file. If the stream is greater than <code>PDF::Dict::mincache</code> (defaults to 32768) bytes to be stored, then the default action is to create a file for it somewhere and to use that file as a data cache. If $force_memory is set, this caching will not occur and the data will all be stored in the $self-&gt;{&#39; stream&#39;} variable.</p>
+
+</blockquote>
+
+<h2 id="val">val</h2>
+
+<pre><code>    $d-&gt;val()</code></pre>
+
+<blockquote>
+
+<p>Returns the dictionary, which is itself.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Basic/PDF/Array.html">PDF::Builder::Basic::PDF::Array</a> -- Corresponds to a PDF array<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Bool.html">PDF::Builder::Basic::PDF::Bool</a> -- Holds the strings <b>true</b> or <b>false</b><br>
+<a href="../../../.././PDF/Builder/Basic/PDF/File.html">PDF::Builder::Basic::PDF::File</a> -- Holds the trailers and cross-reference tables for a PDF file<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Filter.html">PDF::Builder::Basic::PDF::Filter</a> -- Abstract superclass for PDF stream filters<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Literal.html">PDF::Builder::Basic::PDF::Literal</a> -- Literal PDF Object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Name.html">PDF::Builder::Basic::PDF::Name</a> -- Stores PDF names (things beginning with /)<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Null.html">PDF::Builder::Basic::PDF::Null</a> -- PDF Null type object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Number.html">PDF::Builder::Basic::PDF::Number</a> -- Numbers in PDF<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Objind.html">PDF::Builder::Basic::PDF::Objind</a> -- PDF indirect object reference<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Page.html">PDF::Builder::Basic::PDF::Page</a> -- Represents a PDF page<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Pages.html">PDF::Builder::Basic::PDF::Pages</a> -- PDF pages hierarchical element<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/String.html">PDF::Builder::Basic::PDF::String</a> -- PDF String type objects<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Utils.html">PDF::Builder::Basic::PDF::Utils</a> -- Utility functions for PDF library<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

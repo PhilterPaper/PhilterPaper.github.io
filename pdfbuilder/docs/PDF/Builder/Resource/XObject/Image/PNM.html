@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::XObject::Image::PNM</title>
+<link rel="stylesheet" href="../../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a>
+    <ul>
+      <li><a href="#METHODS">METHODS</a></li>
+      <li><a href="#new">new</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::XObject::Image::PNM - Support routines for PNM (Portable aNy Map) image library</p>
+
+<p>Inherits from <a href="../../../../../PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a></p>
+
+<h2 id="METHODS">METHODS</h2>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $res = PDF::Builder::Resource::XObject::Image::PNM-&gt;new($pdf, $file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Options:</p>
+
+<dl>
+
+<dt>&#39;name&#39; =&gt; &#39;string&#39;</dt>
+<dd>
+
+<p>This is the name you can give for the PNM image object. The default is Nxnnnn.</p>
+
+</dd>
+<dt>&#39;compress&#39; =&gt; 1</dt>
+<dd>
+
+<p>This is the compression you can give for the PNM image object. Any value will cause the use of <i>Flate</i> compression, otherwise (<code>compress</code> not given), <i>ASCIIHexDecode</i> is used.</p>
+
+</dd>
+</dl>
+
+</blockquote>
+
+<p>Returns an image in the PDF. PNM types 1 (ASCII/plain bi-level/PBM), 2 (ASCII/plain grayscale/PGM), 3 (ASCII/plain RGB/PPM), 4 (binary/raw bi-level/PBM), 5 (binary/raw grayscale/PGM), and 6 (binary/raw RGB/PPM) are supported.</p>
+
+<p>For bi-level, only values 0/1 (white/black) are supported. For grayscale, the maximum sample (full white) may be anything from 1 to 65535, with 0 being full black. If the maximum sample value is 255 or smaller, one byte of raw binary data per pixel, otherwise two bytes. For RGB, each sample (full-on of that color) may be anything from 1 to 65535 (the same maximum for all three colors), with 0 being full black. If the maximum sample value is 255 or smaller, three bytes of raw binary data per pixel, otherwise six bytes.</p>
+
+<p>Remember that you need to use Builder.pm&#39;s image_pnm method to use this functionality.</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../../Builder_index.html">Master Index</a><br>
+<a href="../../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a> -- Base class for external raster image objects<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/GD.html">PDF::Builder::Resource::XObject::Image::GD</a> -- Support routines for Graphics Development image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/GIF.html">PDF::Builder::Resource::XObject::Image::GIF</a> -- Support routines for GIF image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/JPEG.html">PDF::Builder::Resource::XObject::Image::JPEG</a> -- Support routines for JPEG image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNG.html">PDF::Builder::Resource::XObject::Image::PNG</a> -- Support routines for PNG image library (using pure Perl code)<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNG_IPL.html">PDF::Builder::Resource::XObject::Image::PNG_IPL</a> -- Support routines for PNG image library (using Image::PNG::Libpng)<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/SVG.html">PDF::Builder::Resource::XObject::Image::SVG</a> -- Support routines for SVG (Scalable Vector Graphics) image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF.html">PDF::Builder::Resource::XObject::Image::TIFF</a> -- TIFF image support<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF_GT.html">PDF::Builder::Resource::XObject::Image::TIFF_GT</a> -- TIFF image support (Graphics::TIFF enabled)<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

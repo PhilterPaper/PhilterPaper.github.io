@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::CIDFont</title>
+<link rel="stylesheet" href="../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+      <li><a href="#Down-Children">Down (Children)</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#glyphByCId">glyphByCId</a></li>
+      <li><a href="#uniByCId">uniByCId</a></li>
+      <li><a href="#cidByUni">cidByUni</a></li>
+      <li><a href="#cidByEnc">cidByEnc</a></li>
+      <li><a href="#wxByCId">wxByCId</a></li>
+      <li><a href="#wxByUni">wxByUni</a></li>
+      <li><a href="#wxByEnc">wxByEnc</a></li>
+      <li><a href="#width">width</a></li>
+      <li><a href="#width_cid">width_cid</a></li>
+      <li><a href="#cidsByStr">cidsByStr</a></li>
+      <li><a href="#cidsByUtf">cidsByUtf</a></li>
+      <li><a href="#textByStr">textByStr</a></li>
+      <li><a href="#textByStrKern">textByStrKern</a></li>
+      <li><a href="#text">text</a></li>
+      <li><a href="#text_cid">text_cid</a></li>
+      <li><a href="#text_cid_kern">text_cid_kern</a></li>
+      <li><a href="#encodeByName">encodeByName</a></li>
+      <li><a href="#glyphNum">glyphNum</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::CIDFont - Base class for CID fonts</p>
+
+<p>Inherits from <a href="../../../PDF/Builder/Resource/BaseFont.html">PDF::Builder::Resource::BaseFont</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $font = PDF::Builder::Resource::CIDFont-&gt;new($pdf, $name)</code></pre>
+
+<blockquote>
+
+<p>Returns a cid-font object, base class for all CID-based fonts.</p>
+
+</blockquote>
+
+<h2 id="glyphByCId">glyphByCId</h2>
+
+<pre><code>    $n = $font-&gt;glyphByCId($gid)</code></pre>
+
+<blockquote>
+
+<p>Returns a character&#39;s glyph name (string), given its glyph ID.</p>
+
+</blockquote>
+
+<h2 id="uniByCId">uniByCId</h2>
+
+<pre><code>    $u = $font-&gt;uniByCId($gid)</code></pre>
+
+<blockquote>
+
+<p>Returns a character&#39;s Unicode point, given its glyph ID. If no match, return U+0000.</p>
+
+</blockquote>
+
+<h2 id="cidByUni">cidByUni</h2>
+
+<pre><code>    $c = $font-&gt;cidByUni($uid)</code></pre>
+
+<blockquote>
+
+<p>Returns a glyph ID, given its Unicode point.</p>
+
+</blockquote>
+
+<h2 id="cidByEnc">cidByEnc</h2>
+
+<pre><code>    $c = $font-&gt;cidByEnc($char)</code></pre>
+
+<blockquote>
+
+<p>Returns a character&#39;s glyph ID, given its encoding (single byte value 0 to 255).</p>
+
+</blockquote>
+
+<h2 id="wxByCId">wxByCId</h2>
+
+<pre><code>    $w = $font-&gt;wxByCId($gid)</code></pre>
+
+<blockquote>
+
+<p>Returns a character&#39;s width, given its glyph ID. Typically this is based on a 1000 unit wide grid.</p>
+
+</blockquote>
+
+<h2 id="wxByUni">wxByUni</h2>
+
+<pre><code>    $w = $font-&gt;wxByUni($uid)</code></pre>
+
+<blockquote>
+
+<p>Returns a character&#39;s width, given its Unicode point. Typically this is based on a 1000 unit wide grid.</p>
+
+</blockquote>
+
+<h2 id="wxByEnc">wxByEnc</h2>
+
+<pre><code>    $w = $font-&gt;wxByEnc($enc)</code></pre>
+
+<blockquote>
+
+<p>Returns a character&#39;s width, given its encoding (a single byte character in the range 0 to 255). Typically this is based on a 1000 unit wide grid.</p>
+
+</blockquote>
+
+<h2 id="width">width</h2>
+
+<pre><code>    $w = $font-&gt;width($string)</code></pre>
+
+<blockquote>
+
+<p>Returns a string&#39;s width. This is typically based on a 1000 wide grid for each glyph.</p>
+
+</blockquote>
+
+<h2 id="width_cid">width_cid</h2>
+
+<pre><code>    $w = $font-&gt;width_cid($gid)</code></pre>
+
+<blockquote>
+
+<p>Returns a character&#39;s width, given its glyph ID. This is typically based on a 1000 wide grid for a glyph.</p>
+
+</blockquote>
+
+<h2 id="cidsByStr">cidsByStr</h2>
+
+<pre><code>    $cidstring = $font-&gt;cidsByStr($string)</code></pre>
+
+<blockquote>
+
+<p>Returns the cid-string (as a single text string, not an array) from string, based on the font&#39;s encoding map.</p>
+
+</blockquote>
+
+<h2 id="cidsByUtf">cidsByUtf</h2>
+
+<pre><code>    $cidstring = $font-&gt;cidsByUtf($utf8string)</code></pre>
+
+<blockquote>
+
+<p>Returns the CID-encoded string (a text string, not an array) from utf8-string.</p>
+
+</blockquote>
+
+<h2 id="textByStr">textByStr</h2>
+
+<pre><code>    $cid_string = $font-&gt;textByStr($text)</code></pre>
+
+<blockquote>
+
+<p>Returns a cid text string, given a text string.</p>
+
+</blockquote>
+
+<h2 id="textByStrKern">textByStrKern</h2>
+
+<pre><code>    $cid_string = $font-&gt;textByStrKern($text, $size, $indent)</code></pre>
+
+<blockquote>
+
+<p>Returns a cid string, given character text, size, and indentation.</p>
+
+</blockquote>
+
+<h2 id="text">text</h2>
+
+<pre><code>    $stream_str = $font-&gt;text($text, $size, $indent)</code></pre>
+
+<blockquote>
+
+<p>Returns a PDF text stream-ready code block to output the given text.</p>
+
+</blockquote>
+
+<h2 id="text_cid">text_cid</h2>
+
+<pre><code>    $stream_str = $font-&gt;text_cid($text, $size)</code></pre>
+
+<blockquote>
+
+<p>Returns a PDF text stream-ready output using glyph IDs, given input text and size.</p>
+
+</blockquote>
+
+<h2 id="text_cid_kern">text_cid_kern</h2>
+
+<pre><code>    $font-&gt;text_cid_kern($text, $size, $indent)</code></pre>
+
+<blockquote>
+
+<p>Returns a PDF output-ready stream command using glyph IDs, given text, size, and indentation.</p>
+
+</blockquote>
+
+<h2 id="encodeByName">encodeByName</h2>
+
+<pre><code>    $font = $font-&gt;encodeByName($enc)</code></pre>
+
+<blockquote>
+
+<p>Returns updated $font object, given an input encoding.</p>
+
+</blockquote>
+
+<h2 id="glyphNum">glyphNum</h2>
+
+<pre><code>    $g_or_w = $font-&gt;glyphNum()</code></pre>
+
+<blockquote>
+
+<p>If &#39;glyphs&#39; table is defined for a font, return its size; otherwise, return the &#39;wx&#39; widths table size.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../Builder_index.html">Master Index</a><br>
+<a href="../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../.././PDF/Builder/Resource/BaseFont.html">PDF::Builder::Resource::BaseFont</a> -- Base class for font resources<br>
+<a href="../../.././PDF/Builder/Resource/ColorSpace.html">PDF::Builder::Resource::ColorSpace</a> -- Base class for PDF color spaces<br>
+<a href="../../.././PDF/Builder/Resource/Colors.html">PDF::Builder::Resource::Colors</a> -- Translate color names into RGB settings<br>
+<a href="../../.././PDF/Builder/Resource/ExtGState.html">PDF::Builder::Resource::ExtGState</a> -- Graphics state dictionary support<br>
+<a href="../../.././PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a> -- Some common support routines for font files<br>
+<a href="../../.././PDF/Builder/Resource/Glyphs.html">PDF::Builder::Resource::Glyphs</a> -- Preparsed uniglyph.txt file information<br>
+<a href="../../.././PDF/Builder/Resource/PaperSizes.html">PDF::Builder::Resource::PaperSizes</a> -- List of standard paper sizes and their dimensions<br>
+<a href="../../.././PDF/Builder/Resource/Pattern.html">PDF::Builder::Resource::Pattern</a> -- Support stub for fill patterns<br>
+<a href="../../.././PDF/Builder/Resource/Shading.html">PDF::Builder::Resource::Shading</a> -- Support stub for fill shading patterns<br>
+<a href="../../.././PDF/Builder/Resource/UniFont.html">PDF::Builder::Resource::UniFont</a> -- Unicode Font Support<br>
+<a href="../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+</p>
+
+<h2 id="Down-Children">Down (Children)</h2>
+<p>
+<a href="../../.././PDF/Builder/Resource/CIDFont/CJKFont.html">PDF::Builder::Resource::CIDFont::CJKFont</a> -- Base class for CJK fonts<br>
+<a href="../../.././PDF/Builder/Resource/CIDFont/TrueType.html">PDF::Builder::Resource::CIDFont::TrueType</a> -- TrueType (ttfont) font support<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

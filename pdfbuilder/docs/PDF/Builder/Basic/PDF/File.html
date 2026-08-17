@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Basic::PDF::File</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#INSTANCE-VARIABLES">INSTANCE VARIABLES</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#open">open</a></li>
+      <li><a href="#version">version</a></li>
+      <li><a href="#header_version">header_version</a></li>
+      <li><a href="#trailer_version">trailer_version</a></li>
+      <li><a href="#require_version">require_version</a></li>
+      <li><a href="#release">release</a></li>
+      <li><a href="#append_file">append_file</a></li>
+      <li><a href="#out_file">out_file</a></li>
+      <li><a href="#create_file">create_file</a></li>
+      <li><a href="#close_file">close_file</a></li>
+      <li><a href="#readval">readval</a></li>
+      <li><a href="#read_obj">read_obj</a></li>
+      <li><a href="#read_objnum">read_objnum</a></li>
+      <li><a href="#new_obj">new_obj</a></li>
+      <li><a href="#out_obj">out_obj</a></li>
+      <li><a href="#free_obj">free_obj</a></li>
+      <li><a href="#remove_obj">remove_obj</a></li>
+      <li><a href="#ship_out">ship_out</a></li>
+      <li><a href="#copy">copy</a></li>
+    </ul>
+  </li>
+  <li><a href="#PRIVATE-METHODS-FUNCTIONS">PRIVATE METHODS &amp; FUNCTIONS</a>
+    <ul>
+      <li><a href="#locate_obj">locate_obj</a></li>
+      <li><a href="#update">update</a></li>
+      <li><a href="#test_obj">test_obj</a></li>
+      <li><a href="#add_obj">add_obj</a></li>
+      <li><a href="#readxrtr">readxrtr</a></li>
+      <li><a href="#out_trailer">out_trailer</a></li>
+      <li><a href="#new1">_new</a></li>
+    </ul>
+  </li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Basic::PDF::File - Holds the trailers and cross-reference tables for a PDF file</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    $p = PDF::Builder::Basic::PDF::File-&gt;open(&quot;filename.pdf&quot;, 1);
+    $p-&gt;new_obj($obj_ref);
+    $p-&gt;free_obj($obj_ref);
+    $p-&gt;append_file();
+    $p-&gt;close_file();
+    $p-&gt;release();       # IMPORTANT!</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This class keeps track of the directory aspects of a PDF file. There are two parts to the directory: the main directory object, which is the parent to all other objects, and a chain of cross-reference tables and corresponding trailer dictionaries, starting with the main directory object.</p>
+
+<h1 id="INSTANCE-VARIABLES">INSTANCE VARIABLES</h1>
+
+<p>Within this class hierarchy, rather than making everything visible via methods, which would be a lot of work, there are various instance variables which are accessible via associative array referencing. To distinguish instance variables from content variables (which may come from the PDF content itself), each such variable name will start with a space.</p>
+
+<p>Variable names which do not start with a space directly reflect elements in a PDF dictionary. In the case of a <code>PDF::Builder::Basic::PDF::File</code>, the elements reflect those in the trailer dictionary.</p>
+
+<p>Since some variables are not designed for class users to access, variables are marked in the documentation with <b>(R)</b> to indicate that such an entry should only be used as <b>read-only</b> information. <b>(P)</b> indicates that the information is <b>private</b>, and not designed for user use at all, but is included in the documentation for completeness and to ensure that nobody else tries to use it.</p>
+
+<dl>
+
+<dt>newroot</dt>
+<dd>
+
+<p>This variable allows the user to create a new root entry to occur in the trailer dictionary which is output when the file is written or appended. If you wish to override the root element in the dictionary you have, use this entry to indicate that without losing the current Root entry. Notice that newroot should point to a PDF level object and not just to a dictionary, which does not have object status.</p>
+
+</dd>
+<dt>INFILE (R)</dt>
+<dd>
+
+<p>Contains the filehandle used to read this information into this PDF directory. It is an IO object.</p>
+
+</dd>
+<dt>fname (R)</dt>
+<dd>
+
+<p>This is the filename which is reflected by INFILE, or the original IO object passed in.</p>
+
+</dd>
+<dt>update (R)</dt>
+<dd>
+
+<p>This indicates that the read file has been opened for update and that at some point, <code>$p-&gt;appendfile()</code> can be called to update the file with the changes that have been made to the memory representation.</p>
+
+</dd>
+<dt>maxobj (R)</dt>
+<dd>
+
+<p>Contains the first usable object number above any that have already appeared in the file so far.</p>
+
+</dd>
+<dt>outlist (P)</dt>
+<dd>
+
+<p>This is a list of Objind which are to be output when the next <code>appendfile()</code> or <code>outfile()</code> occurs.</p>
+
+</dd>
+<dt>firstfree (P)</dt>
+<dd>
+
+<p>Contains the first free object in the free object list. Free objects are removed from the front of the list and added to the end.</p>
+
+</dd>
+<dt>lastfree (P)</dt>
+<dd>
+
+<p>Contains the last free object in the free list. It may be the same as the <code>firstfree</code> if there is only one free object.</p>
+
+</dd>
+<dt>objcache (P)</dt>
+<dd>
+
+<p>All objects are held in the cache to ensure that a system only has one occurrence of each object. In effect, the objind class acts as a container type class to hold the PDF object structure, and it would be unfortunate if there were two identical place-holders floating around a system.</p>
+
+</dd>
+<dt>epos (P)</dt>
+<dd>
+
+<p>The end location of the read-file.</p>
+
+</dd>
+</dl>
+
+<p>Each trailer dictionary contains a number of private instance variables which hold the chain together.</p>
+
+<dl>
+
+<dt>loc (P)</dt>
+<dd>
+
+<p>Contains the location of the start of the cross-reference table preceding the trailer.</p>
+
+</dd>
+<dt>xref (P)</dt>
+<dd>
+
+<p>Contains an anonymous array of each cross-reference table entry.</p>
+
+</dd>
+<dt>prev (P)</dt>
+<dd>
+
+<p>A reference to the previous table. Note this differs from the Prev entry which is in PDF, which contains the location of the previous cross-reference table.</p>
+
+</dd>
+</dl>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    PDF::Builder::Basic::PDF::File-&gt;new()</code></pre>
+
+<blockquote>
+
+<p>Creates a new, empty file object which can act as the host to other PDF objects. Since there is no file associated with this object, it is assumed that the object is created in readiness for creating a new PDF file.</p>
+
+</blockquote>
+
+<h2 id="open">open</h2>
+
+<pre><code>    $p = PDF::Builder::Basic::PDF::File-&gt;open($filename, $update, %options)</code></pre>
+
+<blockquote>
+
+<p>Opens the file and reads all the trailers and cross reference tables to build a complete directory of objects.</p>
+
+<p><code>$filename</code> may be a string or an IO object.</p>
+
+<p><code>$update</code> specifies whether this file is being opened for updating and editing (<i>TRUE</i> value), or simply to be read (<i>FALSE</i> or undefined value).</p>
+
+<p><code>%options</code> may include</p>
+
+<dl>
+
+<dt>diags =&gt; 1</dt>
+<dd>
+
+<p>If <code>diags</code> is set to 1, various warning messages will be given if a suspicious PDF structure is found, and some fixup may be attempted. There is no guarantee that any fixup will change the PDF to legitimate, or that there won&#39;t be other problems found further down the line. If this flag is <i>not</i> given, and a structural problem is found, it is fairly likely that errors (and even a program <b>crash</b>) may happen further along. If you experience crashes when reading in a PDF file, try running with <code>diags</code> and see what is reported.</p>
+
+<p>There are many PDF files out &quot;in the wild&quot; which, while failing to conform to Adobe&#39;s standards, appear to be tolerated by PDF Readers. Thus, Builder will not fail on them, but merely comment on their existence.</p>
+
+</dd>
+</dl>
+
+</blockquote>
+
+<h2 id="version">version</h2>
+
+<pre><code>    $new_version = $p-&gt;pdf_version($version, %opts) # Set 
+
+    $ver = $p-&gt;pdf_version() # Get</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the PDF version (e.g., 1.5). Setting sets both the header and trailer versions. Getting returns the higher of header and trailer versions.</p>
+
+<p>For compatibility with earlier releases, if no decimal point is given, assume &quot;1.&quot; precedes the number given.</p>
+
+<p>A warning message is given if you attempt to <i>decrease</i> the PDF version, as you might have already read in a higher level file, or used a higher level feature. This message is suppressed if the &#39;silent&#39; option is given with any value.</p>
+
+</blockquote>
+
+<h2 id="header_version">header_version</h2>
+
+<pre><code>    $new_version = $p-&gt;header_version($version, %opts) # Set
+
+    $version = $p-&gt;header_version() # Get</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the PDF version stored in the file header.</p>
+
+<p>For compatibility with earlier releases, if no decimal point is given, assume &quot;1.&quot; precedes the number given.</p>
+
+<p>A warning message is given if you attempt to <i>decrease</i> the PDF version, as you might have already read in a higher level file, or used a higher level feature. This message is suppressed if the &#39;silent&#39; option is given with any value.</p>
+
+</blockquote>
+
+<h2 id="trailer_version">trailer_version</h2>
+
+<pre><code>    $new_version = $p-&gt;trailer_version($version, %opts) # Set
+
+    $version = $p-&gt;trailer_version() # Get</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the PDF version stored in the document catalog.</p>
+
+<p>Note that the minimum PDF level for a trailer version is 1.4. It is not permitted to set a PDF level of 1.3 or lower. An existing PDF (read in) of 1.3 or below returns undefined.</p>
+
+<p>For compatibility with earlier releases, if no decimal point is given, assume &quot;1.&quot; precedes the number given.</p>
+
+<p>A warning message is given if you attempt to <i>decrease</i> the PDF version, as you might have already read in a higher level file, or used a higher level feature. This message is suppressed if the &#39;silent&#39; option is given with any value.</p>
+
+</blockquote>
+
+<h2 id="require_version">require_version</h2>
+
+<pre><code>    $prev_version = $p-&gt;require_version($version)</code></pre>
+
+<blockquote>
+
+<p>Ensures that the PDF version is at least <code>$version</code>. Silently sets the version to the higher level.</p>
+
+</blockquote>
+
+<h2 id="release">release</h2>
+
+<pre><code>    $p-&gt;release()</code></pre>
+
+<blockquote>
+
+<p>Releases ALL of the memory used by the PDF document and all of its component objects. After calling this method, do <b>NOT</b> expect to have anything left in the <code>PDF::Builder::Basic::PDF::File</code> object (so if you need to save, be sure to do it before calling this method).</p>
+
+<p><b>NOTE</b>, that it is important that you call this method on any <code>PDF::Builder::Basic::PDF::File</code> object when you wish to destroy it and free up its memory. Internally, PDF files have an enormous number of cross-references, and this causes circular references within the internal data structures. Calling <code>release()</code> causes a brute-force cleanup of the data structures, freeing up all of the memory. Once you&#39;ve called this method, though, don&#39;t expect to be able to do anything else with the <code>PDF::Builder::Basic::PDF::File</code> object; it&#39;ll have <b>no</b> internal state whatsoever.</p>
+
+</blockquote>
+
+<h2 id="append_file">append_file</h2>
+
+<pre><code>    $p-&gt;append_file()</code></pre>
+
+<blockquote>
+
+<p>Appends the objects for output to the read file and then appends the appropriate table.</p>
+
+</blockquote>
+
+<h2 id="out_file">out_file</h2>
+
+<pre><code>    $p-&gt;out_file($fname)</code></pre>
+
+<blockquote>
+
+<p>Writes a PDF file to a file of the given filename, based on the current list of objects to be output. It creates the trailer dictionary based on information in <code>$self</code>.</p>
+
+<p>$fname may be a string or an IO object.</p>
+
+</blockquote>
+
+<h2 id="create_file">create_file</h2>
+
+<pre><code>    $p-&gt;create_file($fname)</code></pre>
+
+<blockquote>
+
+<p>Creates a new output file (no check is made of an existing open file) of the given filename or IO object. Note: make sure that <code>$p-&gt;{&#39; version&#39;}</code> is set correctly before calling this function.</p>
+
+</blockquote>
+
+<h2 id="close_file">close_file</h2>
+
+<pre><code>    $p-&gt;close_file()</code></pre>
+
+<blockquote>
+
+<p>Closes up the open file for output, by outputting the trailer, etc.</p>
+
+</blockquote>
+
+<h2 id="readval">readval</h2>
+
+<pre><code>    ($value, $str) = $p-&gt;readval($str, %opts)</code></pre>
+
+<blockquote>
+
+<p>Reads a PDF value from the current position in the file. If <code>$str</code> is too short, read some more from the current location in the file until the whole object is read. This is a recursive call which may slurp in a whole big stream (unprocessed).</p>
+
+<p>Returns the recursive data structure read and also the current <code>$str</code> that has been read from the file.</p>
+
+</blockquote>
+
+<h2 id="read_obj">read_obj</h2>
+
+<pre><code>    $ref = $p-&gt;read_obj($objind, %opts)</code></pre>
+
+<blockquote>
+
+<p>Given an indirect object reference, locate it and read the object returning the read-in object.</p>
+
+</blockquote>
+
+<h2 id="read_objnum">read_objnum</h2>
+
+<pre><code>    $ref = $p-&gt;read_objnum($num, $gen, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a fully read object of given number and generation in this file</p>
+
+</blockquote>
+
+<h2 id="new_obj">new_obj</h2>
+
+<pre><code>    $objind = $p-&gt;new_obj($obj)</code></pre>
+
+<blockquote>
+
+<p>Creates a new, free object reference based on free space in the cross reference chain. If nothing is free, then think up a new number. If <code>$obj</code>, then turns that object into this new object rather than returning a new object.</p>
+
+</blockquote>
+
+<h2 id="out_obj">out_obj</h2>
+
+<pre><code>    $p-&gt;out_obj($obj)</code></pre>
+
+<blockquote>
+
+<p>Indicates that the given object reference should appear in the output xref table whether with data or freed.</p>
+
+</blockquote>
+
+<h2 id="free_obj">free_obj</h2>
+
+<pre><code>    $p-&gt;free_obj($obj)</code></pre>
+
+<blockquote>
+
+<p>Marks an object reference for output as being freed.</p>
+
+</blockquote>
+
+<h2 id="remove_obj">remove_obj</h2>
+
+<pre><code>    $p-&gt;remove_obj($objind)</code></pre>
+
+<blockquote>
+
+<p>Removes the object from all places where we might remember it.</p>
+
+</blockquote>
+
+<h2 id="ship_out">ship_out</h2>
+
+<pre><code>    $p-&gt;ship_out(@objects)
+
+    $p-&gt;ship_out()</code></pre>
+
+<blockquote>
+
+<p>Ships the given objects (or all objects for output if <code>@objects</code> is empty) to the currently open output file (assuming there is one). Freed objects are not shipped, and once an object is shipped it is switched such that this file becomes its source and it will not be shipped again unless out_obj is called again. Notice that a shipped out object can be re-output or even freed, but that it will not cause the data already output to be changed.</p>
+
+</blockquote>
+
+<h2 id="copy">copy</h2>
+
+<pre><code>    $p-&gt;copy($outpdf, \&amp;filter)</code></pre>
+
+<blockquote>
+
+<p>Iterates over every object in the file reading the object, calling <code>filter</code> with the object, and outputting the result. If <code>filter</code> is not defined, just copies input to output.</p>
+
+</blockquote>
+
+<h1 id="PRIVATE-METHODS-FUNCTIONS">PRIVATE METHODS &amp; FUNCTIONS</h1>
+
+<p>The following methods and functions are considered <b>private</b> to this class. This does not mean you cannot use them if you have a need, just that they aren&#39;t really designed for users of this class.</p>
+
+<h2 id="locate_obj">locate_obj</h2>
+
+<pre><code>    $offset = $p-&gt;locate_obj($num, $gen)</code></pre>
+
+<blockquote>
+
+<p>Returns a file offset to the object asked for by following the chain of cross reference tables until it finds the one you want.</p>
+
+</blockquote>
+
+<h2 id="update">update</h2>
+
+<pre><code>    update($fh, $str, $instream)</code></pre>
+
+<blockquote>
+
+<p>Keeps reading <code>$fh</code> for more data to ensure that <code>$str</code> has at least a line full for <code>readval</code> to work on. At this point we also take the opportunity to ignore comments.</p>
+
+</blockquote>
+
+<h2 id="test_obj">test_obj</h2>
+
+<pre><code>    $objind = $p-&gt;test_obj($num, $gen)</code></pre>
+
+<blockquote>
+
+<p>Tests the cache to see whether an object reference (which may or may not have been getobj()ed) has been cached. Returns it if it has.</p>
+
+</blockquote>
+
+<h2 id="add_obj">add_obj</h2>
+
+<pre><code>    $p-&gt;add_obj($objind)</code></pre>
+
+<blockquote>
+
+<p>Adds the given object to the internal object cache.</p>
+
+</blockquote>
+
+<h2 id="readxrtr">readxrtr</h2>
+
+<pre><code>    $tdict = $p-&gt;readxrtr($xpos, %options)</code></pre>
+
+<blockquote>
+
+<p>Recursive function which reads each of the cross-reference and trailer tables in turn until there are no more.</p>
+
+<p>Returns a dictionary corresponding to the trailer chain. Each trailer also includes the corresponding cross-reference table.</p>
+
+<p>The structure of the xref private element in a trailer dictionary is of an anonymous hash of cross reference elements by object number. Each element consists of an array of 3 elements corresponding to the three elements read in [location, generation number, free or used]. See the PDF specification for details.</p>
+
+<p>See <code>open</code> for options allowed.</p>
+
+</blockquote>
+
+<h2 id="out_trailer">out_trailer</h2>
+
+<pre><code>    $p-&gt;out_trailer($tdict, $update)
+
+    $p-&gt;out_trailer($tdict)</code></pre>
+
+<blockquote>
+
+<p>Outputs the body and trailer for a PDF file by outputting all the objects in the &#39; outlist&#39; and then outputting a xref table for those objects and any freed ones. It then outputs the trailing dictionary and the trailer code.</p>
+
+</blockquote>
+
+<h2 id="new1">_new</h2>
+
+<pre><code>    PDF::Builder::Basic::PDF::File-&gt;_new()</code></pre>
+
+<blockquote>
+
+<p>Creates a very empty PDF file object (used by new() and open())</p>
+
+</blockquote>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Martin Hosken Martin_Hosken@sil.org</p>
+
+<p>Copyright Martin Hosken 1999</p>
+
+<p>No warranty or expression of effectiveness, least of all regarding anyone&#39;s safety, is implied in this software or documentation.</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Basic/PDF/Array.html">PDF::Builder::Basic::PDF::Array</a> -- Corresponds to a PDF array<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Bool.html">PDF::Builder::Basic::PDF::Bool</a> -- Holds the strings <b>true</b> or <b>false</b><br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Dict.html">PDF::Builder::Basic::PDF::Dict</a> -- PDF Dictionaries and Streams<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Filter.html">PDF::Builder::Basic::PDF::Filter</a> -- Abstract superclass for PDF stream filters<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Literal.html">PDF::Builder::Basic::PDF::Literal</a> -- Literal PDF Object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Name.html">PDF::Builder::Basic::PDF::Name</a> -- Stores PDF names (things beginning with /)<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Null.html">PDF::Builder::Basic::PDF::Null</a> -- PDF Null type object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Number.html">PDF::Builder::Basic::PDF::Number</a> -- Numbers in PDF<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Objind.html">PDF::Builder::Basic::PDF::Objind</a> -- PDF indirect object reference<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Page.html">PDF::Builder::Basic::PDF::Page</a> -- Represents a PDF page<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Pages.html">PDF::Builder::Basic::PDF::Pages</a> -- PDF pages hierarchical element<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/String.html">PDF::Builder::Basic::PDF::String</a> -- PDF String type objects<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Utils.html">PDF::Builder::Basic::PDF::Utils</a> -- Utility functions for PDF library<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

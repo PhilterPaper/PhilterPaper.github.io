@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::Font::SynFont</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::Font::SynFont - Module for creating temporary synthetic Fonts</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a></p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>This module permits you to create a &quot;new&quot; font (loaded temporarily, but not permanently stored) based on an existing font, where you can modify certain attributes in the original font, such as:</p>
+
+<pre><code>    * slant/obliqueness 
+    * extra weight/boldness (by drawing glyph outlines at various line 
+      thicknesses, rather than just filling enclosed areas)
+    * condense/expand (narrower or wider characters) a.k.a. B&lt;stretch&gt;
+    * extra space between characters
+    * small caps (synthesized, not using any provided with a font)
+    * change the encoding
+
+    $pdf = PDF::Builder-&gt;new();
+    $cft = $pdf-&gt;font(&#39;Times-Roman&#39;);  # corefont, ttfont, etc. also works
+    $sft = $pdf-&gt;synfont($cft, &#39;condense&#39; =&gt; .75);  # condense by 25%</code></pre>
+
+<p>This works for <i>corefonts</i>, <i>PS fonts</i>, and <i>TTF/OTF fonts</i>; but does not work for <i>CJK fonts</i> or <i>bitmapped fonts</i>. See also <a href="../../../../PDF/Builder/Docs.html#Synthetic-Fonts">&quot;Synthetic Fonts&quot; in PDF::Builder::Docs</a>.</p>
+
+<p><b>Alternate name:</b> <code>synthetic_font</code></p>
+
+<p>This is for compatibility with recent changes to PDF::API2.</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $font = PDF::Builder::Resource::Font::SynFont-&gt;new($pdf, $fontobj, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a synfont object. <code>$fontobj</code> is a normal font object read in from a file, and <code>$font</code> is the modified output.</p>
+
+<p>Valid options %opts are:</p>
+
+<dl>
+
+<dt><i>encode</i></dt>
+<dd>
+
+<p>Changes the encoding of the font from its default. See <i>Perl&#39;s Encode</i> for the supported values. <b>Warning:</b> only single byte encodings are supported. Multibyte encodings such as UTF-8 are invalid.</p>
+
+</dd>
+<dt><i>pdfname</i></dt>
+<dd>
+
+<p>Changes the reference-name of the font from its default. The reference-name is normally generated automatically and can be retrieved via $pdfname=$font-&gt;name().</p>
+
+<p><b>Alternate name:</b> <code>name</code> (for PDF::API2 compatibility)</p>
+
+</dd>
+<dt><i>condense</i></dt>
+<dd>
+
+<p>Character width condense/expand factor (0.1-0.9 = condense, 1 = normal/default, 1.1+ = expand). It is the multiplier to apply to the width of each character.</p>
+
+<p>In some font systems, this aspect or axis is known as <i>stretch</i>.</p>
+
+<p><b>Alternate names:</b> <code>hscale</code> and <code>slant</code> (for PDF::API2 compatibility)</p>
+
+<p>The <i>slant</i> option is a deprecated name in both PDF::Builder and PDF::API2. Its value is the same as <i>condense</i> value (1 = normal, unchanged scale). For the <i>hscale</i> option, the value is percentage (%), with 100 being normal, and other values 100 times the <i>condense</i> value. <b>Use only one (at most) of these three option names.</b></p>
+
+</dd>
+<dt><i>oblique</i></dt>
+<dd>
+
+<p>Italic or slanted text angle (+/-) in degrees, where the character box is skewed (sheared), top to the right. While it&#39;s unlikely that anyone will want to slant characters at +/-360 degrees, they should be aware that these will be treated as an angle of 0 degrees (deg2rad() wraps around). 0 degrees of italic slant (obliqueness) is the default.</p>
+
+<p>Note that a font management system may have separate axes for normal/italic fonts, and the degree of <i>slant</i>. Italic is a different (but related) face to the regular (e.g., Roman) face, sometimes made to resemble handwritten characters, and is usually a binary selection (it&#39;s either italic or it&#39;s not). Slant, on the other hand, can be in arbitrary amounts, and may be applied to either normal (originally Roman posture) or italics (which are often themselves slightly slanted). Finally, what many fonts call &quot;italic&quot; others may call &quot;slanted&quot; or &quot;oblique&quot;, and in these cases the coordinate system is merely sheared to slant the character box.</p>
+
+<p><b>Alternate name:</b> <code>angle</code> (for PDF::API2 compatibility)</p>
+
+<p><b>Use only one (at most) of these two option names.</b></p>
+
+</dd>
+<dt><i>bold</i></dt>
+<dd>
+
+<p>Embolding factor (0.1+, bold=1, heavy=2, ...). It is additional outline <b>thickness</b> (<b>linewidth</b>), which expands the character (glyph) outwards (as well as shrinking unfilled enclosed areas such as bowls and counters). Normally, the glyph&#39;s outline is not drawn (it is only filled); this adds a thick outline. The units are in 1/100ths of a text unit.</p>
+
+<p>If used with the <code>synthetic_font</code> alternate entry name, the unit is 1/1000th of a text unit, so you will need a value 10 times larger than with the <code>synfont</code> entry to get the same effect.</p>
+
+</dd>
+<dt><i>space</i></dt>
+<dd>
+
+<p>Additional charspacing in thousandths of an em.</p>
+
+</dd>
+<dt><i>caps</i></dt>
+<dd>
+
+<p>Create synthetic small-caps. 0 = no, 1 = yes. These are capitals of lowercase letters, at 80% height and 88% width. Note that this is guaranteed to cover ASCII lowercase letters only -- single byte encoded accented characters <i>usually</i> work, but we can make no promises on accented characters in general, as well as ligatures!</p>
+
+<p><b>Alternate name:</b> <code>smallcaps</code> (for PDF::API2 compatibility)</p>
+
+<p><b>Use only one (at most) of these two option names.</b></p>
+
+<p>Note that only lower case letters which appear in the &quot;standard&quot; font (plane 0 for core fonts and PS fonts) will be small-capped. This may include eszett (German sharp s), which becomes SS, and dotless i and j which become I and J respectively. There are many other accented Latin alphabet letters which <i>may</i> show up in planes 1 and higher. Ligatures (e.g., ij and ffl) do not have uppercase equivalents, nor does a long s. If you have text which includes such characters, you may want to consider preprocessing it to replace them with Latin character expansions (e.g., i+j and f+f+l) before small-capping.</p>
+
+</dd>
+</dl>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../.././PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a> -- Some common support routines for font files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/Font/BdFont.html">PDF::Builder::Resource::Font::BdFont</a> -- Module for using bitmapped Fonts<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont.html">PDF::Builder::Resource::Font::CoreFont</a> -- Module for using the 14 standard PDF built-in Fonts (plus 15 Windows Fonts)<br>
+<a href="../../../.././PDF/Builder/Resource/Font/Postscript.html">PDF::Builder::Resource::Font::Postscript</a> -- Support routines for using PostScript (Type 1) fonts<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Outline</title>
+<link rel="stylesheet" href="../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#Examine-the-Outline-Tree">Examine the Outline Tree</a>
+        <ul>
+          <li><a href="#has_children">has_children</a></li>
+          <li><a href="#count">count</a></li>
+          <li><a href="#first">first</a></li>
+          <li><a href="#last">last</a></li>
+          <li><a href="#parent">parent</a></li>
+          <li><a href="#prev">prev</a></li>
+          <li><a href="#next">next</a></li>
+        </ul>
+      </li>
+      <li><a href="#Modify-the-Outline-Tree">Modify the Outline Tree</a>
+        <ul>
+          <li><a href="#outline">outline</a></li>
+          <li><a href="#insert_after">insert_after</a></li>
+          <li><a href="#insert_before">insert_before</a></li>
+          <li><a href="#delete">delete</a></li>
+          <li><a href="#is_open">is_open</a></li>
+          <li><a href="#open">open</a></li>
+          <li><a href="#closed">closed</a></li>
+        </ul>
+      </li>
+      <li><a href="#Set-Outline-Attributes">Set Outline Attributes</a>
+        <ul>
+          <li><a href="#title">title</a></li>
+          <li><a href="#dest">dest</a></li>
+        </ul>
+      </li>
+      <li><a href="#Destination-targets">Destination targets</a>
+        <ul>
+          <li><a href="#uri-url">uri, url</a></li>
+          <li><a href="#launch-file">launch, file</a></li>
+          <li><a href="#pdf-pdf_file-pdfile">pdf, pdf_file, pdfile</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Outline - Manage PDF outlines (a.k.a. <i>bookmarks</i>)</p>
+
+<p>Inherits from <a href="../../PDF/Builder/Basic/PDF/Dict.html">PDF::Builder::Basic::PDF::Dict</a></p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    # Get/create the top-level outline tree
+    my $outlines = $pdf-&gt;outline();
+
+    # Add an entry
+    my $item = $outlines-&gt;outline();
+    $item-&gt;title(&#39;First Page&#39;);
+    $item-&gt;dest($pdf-&gt;open_page(1), fit-def);</code></pre>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $outline = PDF::Builder::Outline-&gt;new($api, $parent)
+
+    $outline = PDF::Builder::Outline-&gt;new($api)</code></pre>
+
+<blockquote>
+
+<p>Returns a new outline object (called from $outlines-&gt;outline()).</p>
+
+<p>By default, if <code>$parent</code> is omitted, the new bookmark is placed at the end of any existing list of bookmarks. Otherwise, it becomes the child of the <code>$parent</code> bookmark.</p>
+
+</blockquote>
+
+<h2 id="Examine-the-Outline-Tree">Examine the Outline Tree</h2>
+
+<h3 id="has_children">has_children</h3>
+
+<pre><code>    $boolean = $outline-&gt;has_children()</code></pre>
+
+<blockquote>
+
+<p>Return true if the current outline item has children (child items).</p>
+
+</blockquote>
+
+<h3 id="count">count</h3>
+
+<pre><code>    $integer = $outline-&gt;count()</code></pre>
+
+<blockquote>
+
+<p>Return the number of descendants that are visible when the current outline item is open (expanded).</p>
+
+</blockquote>
+
+<h3 id="first">first</h3>
+
+<pre><code>    $child = $outline-&gt;first()</code></pre>
+
+<blockquote>
+
+<p>Return the first child of the current outline level, if one exists.</p>
+
+</blockquote>
+
+<h3 id="last">last</h3>
+
+<pre><code>    $child = $outline-&gt;last()</code></pre>
+
+<blockquote>
+
+<p>Return the last child of the current outline level, if one exists.</p>
+
+</blockquote>
+
+<h3 id="parent">parent</h3>
+
+<pre><code>    $parent = $outline-&gt;parent()</code></pre>
+
+<blockquote>
+
+<p>Return the parent of the current item, if not at the top level of the outline tree.</p>
+
+</blockquote>
+
+<h3 id="prev">prev</h3>
+
+<pre><code>    $sibling = $outline-&gt;prev() # Get
+
+    $sibling = $outline-&gt;prev(outline_obj) # Set</code></pre>
+
+<blockquote>
+
+<p>Return the previous item of the current level of the outline tree (<code>undef</code> if already at the first item).</p>
+
+</blockquote>
+
+<h3 id="next">next</h3>
+
+<pre><code>    $sibling = $outline-&gt;next() # Get
+
+    $sibling = $outline-&gt;next(outline_obj) # Set</code></pre>
+
+<blockquote>
+
+<p>Return the next item of the current level of the outline tree (<code>undef</code> if already at the last item).</p>
+
+</blockquote>
+
+<h2 id="Modify-the-Outline-Tree">Modify the Outline Tree</h2>
+
+<h3 id="outline">outline</h3>
+
+<pre><code>    $child_outline = $parent_outline-&gt;outline()</code></pre>
+
+<blockquote>
+
+<p>Returns a new sub-outline (nested outline) added at the end of the <code>$parent_outline</code>&#39;s children. If there are no existing children, create the first one.</p>
+
+</blockquote>
+
+<h3 id="insert_after">insert_after</h3>
+
+<pre><code>    $sibling = $outline-&gt;insert_after()</code></pre>
+
+<blockquote>
+
+<p>Add an outline item immediately following the <code>$outline</code> item.</p>
+
+</blockquote>
+
+<h3 id="insert_before">insert_before</h3>
+
+<pre><code>    $sibling = $outline-&gt;insert_before()</code></pre>
+
+<blockquote>
+
+<p>Add an outline item immediately preceding the <code>$outline</code> item.</p>
+
+</blockquote>
+
+<h3 id="delete">delete</h3>
+
+<pre><code>    $outline-&gt;delete()</code></pre>
+
+<blockquote>
+
+<p>Remove the current outline item from the outline tree. If the item has any children, they will effectively be deleted as well, since they will no longer be linked.</p>
+
+</blockquote>
+
+<h3 id="is_open">is_open</h3>
+
+<pre><code>    $boolean = $outline-&gt;is_open() # Get
+
+    $outline = $outline-&gt;is_open($boolean) # Set</code></pre>
+
+<blockquote>
+
+<p>Get/set whether the outline is expanded (open) or collapsed (closed). <code>$boolean</code> is 0/false to close (collapse) the outline (hide its children), or 1/true to open (expand) it (make its children visible).</p>
+
+</blockquote>
+
+<h3 id="open">open</h3>
+
+<pre><code>    $outline-&gt;open()</code></pre>
+
+<blockquote>
+
+<p>Set the status of the outline to open (i.e., expanded).</p>
+
+<p>This is an <b>alternate</b> method to using is_open(true).</p>
+
+</blockquote>
+
+<h3 id="closed">closed</h3>
+
+<pre><code>    $outline-&gt;closed()</code></pre>
+
+<blockquote>
+
+<p>Set the status of the outline to closed (i.e., collapsed).</p>
+
+<p>This is an <b>alternate</b> method to using is_open(false).</p>
+
+</blockquote>
+
+<h2 id="Set-Outline-Attributes">Set Outline Attributes</h2>
+
+<h3 id="title">title</h3>
+
+<pre><code>    $title = $outline-&gt;title() # Get
+
+    $outline = $outline-&gt;title($text) # Set</code></pre>
+
+<blockquote>
+
+<p>Get/set the title of the outline item.</p>
+
+</blockquote>
+
+<h3 id="dest">dest</h3>
+
+<pre><code>    $outline-&gt;dest($page_object, %position)
+
+    $outline-&gt;dest($page_object)</code></pre>
+
+<blockquote>
+
+<p>Sets the destination page and optional position of the outline.</p>
+
+<p>%position can be any of those listed in <a href="../../PDF/Builder/Docs.html#Page-Fit-Options">&quot;Page Fit Options&quot; in PDF::Builder::Docs</a>.</p>
+
+<p>&quot;xyz&quot; is the <b>default</b> fit setting, with position (left and top) and zoom the same as the calling page&#39;s.</p>
+
+<pre><code>    $outline-&gt;dest($name, %position)
+
+    $outline-&gt;dest($name)</code></pre>
+
+<p>Connect the Outline to a &quot;Named Destination&quot; defined elsewhere, and optional positioning as described above.</p>
+
+<p>Note that PDF::Builder&#39;s <code>dest()</code> is <b>not</b> the same (i.e., an alias) as PDF::API2&#39;s <code>destination()</code>. The argument lists are quite different.</p>
+
+</blockquote>
+
+<h2 id="Destination-targets">Destination targets</h2>
+
+<h3 id="uri-url">uri, url</h3>
+
+<pre><code>    $outline-&gt;uri($url)</code></pre>
+
+<blockquote>
+
+<p>Defines the outline as launch-url with url <code>$url</code>, typically a web page.</p>
+
+<p><b>Alternate name:</b> <code>url</code></p>
+
+<p>Either <code>uri</code> or <code>url</code> may be used; <code>uri</code> is for compatibility with PDF::API2.</p>
+
+</blockquote>
+
+<h3 id="launch-file">launch, file</h3>
+
+<pre><code>    $outline-&gt;launch($file)</code></pre>
+
+<blockquote>
+
+<p>Defines the outline as launch-file with filepath <code>$file</code>. This is typically a local application or file.</p>
+
+<p><b>Alternate name:</b> <code>file</code></p>
+
+<p>Either <code>launch</code> or <code>file</code> may be used; <code>launch</code> is for compatibility with PDF::API2.</p>
+
+</blockquote>
+
+<h3 id="pdf-pdf_file-pdfile">pdf, pdf_file, pdfile</h3>
+
+<pre><code>    $outline-&gt;pdf($pdffile, $page_number, %position, %args)
+
+    $outline-&gt;pdf($pdffile, $page_number)</code></pre>
+
+<blockquote>
+
+<p>Defines the destination of the outline as a PDF-file with filepath <code>$pdffile</code>, on page <code>$pagenum</code> (default 0), and position <code>%position</code> (same as dest()).</p>
+
+<p><b>Alternate names:</b> <code>pdf_file</code> and <code>pdfile</code></p>
+
+<p>Either <code>pdf</code> or <code>pdf_file</code> (or the older <code>pdfile</code>) may be used; <code>pdf</code> is for compatibility with PDF::API2.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../Builder_index.html">Master Index</a><br>
+<a href="../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../.././PDF/Builder/Annotation.html">PDF::Builder::Annotation</a> -- Add annotations to a PDF<br>
+<a href="../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+<a href="../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+<a href="../.././PDF/Builder/Docs.html">PDF::Builder::Docs</a> -- Additional documentation for Builder module<br>
+<a href="../.././PDF/Builder/FontManager.html">PDF::Builder::FontManager</a> -- Managing the font library for PDF::Builder<br>
+<a href="../.././PDF/Builder/Lite.html">PDF::Builder::Lite</a> -- Lightweight PDF creation methods (UNMAINTAINED)<br>
+<a href="../.././PDF/Builder/Matrix.html">PDF::Builder::Matrix</a> -- Matrix operations library<br>
+<a href="../.././PDF/Builder/NamedDestination.html">PDF::Builder::NamedDestination</a> -- Add named destinations (views) to a PDF<br>
+<a href="../.././PDF/Builder/Outlines.html">PDF::Builder::Outlines</a> -- Further Outline handling<br>
+<a href="../.././PDF/Builder/Page.html">PDF::Builder::Page</a> -- Methods to interact with individual pages<br>
+<a href="../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../.././PDF/Builder/UniWrap.html">PDF::Builder::UniWrap</a> -- Support routines for finding line breakpoints with Unicode text<br>
+<a href="../.././PDF/Builder/Util.html">PDF::Builder::Util</a> -- Utility package for often-used methods across the package<br>
+<a href="../.././PDF/Builder/ViewerPreferences.html">PDF::Builder::ViewerPreferences</a> -- How the PDF should be displayed or printed<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

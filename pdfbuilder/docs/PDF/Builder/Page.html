@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Page</title>
+<link rel="stylesheet" href="../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#Page-Size-Methods">Page Size Methods</a>
+        <ul>
+          <li><a href="#Page-Sizes">Page Sizes</a></li>
+          <li><a href="#Page-Boundaries">Page Boundaries</a></li>
+          <li><a href="#userunit">userunit</a></li>
+          <li><a href="#mediabox">mediabox</a></li>
+          <li><a href="#cropbox">cropbox</a></li>
+          <li><a href="#bleedbox">bleedbox</a></li>
+          <li><a href="#trimbox">trimbox</a></li>
+          <li><a href="#artbox">artbox</a></li>
+          <li><a href="#size">size</a></li>
+          <li><a href="#boundaries">boundaries</a></li>
+        </ul>
+      </li>
+      <li><a href="#Page-Operation-Methods">Page Operation Methods</a>
+        <ul>
+          <li><a href="#gfx-graphics">gfx, graphics</a></li>
+          <li><a href="#text">text</a></li>
+          <li><a href="#rotate-rotation">rotate, rotation</a></li>
+          <li><a href="#object">object</a></li>
+          <li><a href="#annotation">annotation</a></li>
+          <li><a href="#resource">resource</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Page - Methods to interact with individual pages</p>
+
+<p>Inherits from <a href="../../PDF/Builder/Basic/PDF/Pages.html">PDF::Builder::Basic::PDF::Pages</a></p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    my $pdf = PDF::Builder-&gt;new();
+
+    # Add a page to a new or existing PDF
+    my $page = $pdf-&gt;page();
+
+    # Set the physical (media) page size
+    # Set prepress page boundaries, a convenience function for those times when
+    # it is not necessary to set other prepress (print-related) page boundaries
+    $page-&gt;size(&#39;letter&#39;); # by common size name
+   #$page-&gt;size([0, 0, 612, 792]); # by points LLx,LLy, URx,URy
+
+    # alternately, can set (or get) prepress page boundaries
+    $page-&gt;boundaries(&#39;media&#39; =&gt; &#39;12x18&#39;, &#39;trim&#39; =&gt; 0.5 * 72);
+
+    # Add an image
+    my $image = $pdf-&gt;image(&#39;/path/to/file.jpg&#39;);
+    $page-&gt;object($image, $x,$y, $w,$h);
+
+    # Create a content object for text
+    my $text = $page-&gt;text();
+
+    # Create a content object for drawing shapes
+    my $canvas = $page-&gt;graphics();  # or gfx()
+
+    # Now to draw graphics (using $canvas object) and text (using $text object).
+    # NOTE that everything in the graphics (canvas) object will be laid down on
+    #   the page BEFORE anything in the text object is laid down. That is,
+    #   text will cover graphics, but not vice-versa. This is simply due to
+    #   the order in which the objects were defined.
+    </code></pre>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $page = PDF::Builder::Page-&gt;new($pdf, $parent, $index)</code></pre>
+
+<blockquote>
+
+<p>Returns a page object (called from $pdf-&gt;page()).</p>
+
+</blockquote>
+
+<h2 id="Page-Size-Methods">Page Size Methods</h2>
+
+<h3 id="Page-Sizes">Page Sizes</h3>
+
+<p>PDF page sizes are stored as rectangular coordinates. For convenience, PDF::Builder also supports a number of aliases and shortcuts that are more human-friendly. The following formats are available:</p>
+
+<dl>
+
+<dt>a standard paper size</dt>
+<dd>
+
+<pre><code>    $page-&gt;boundaries(&#39;media&#39; =&gt; &#39;A4&#39;);</code></pre>
+
+<p>Aliases for the most common paper sizes are built in (case-insensitive). US: Letter, Legal, Ledger, Tabloid (and others) Metric: 4A0, 2A0, A0 - A6, 4B0, 2B0, and B0 - B6 (and others)</p>
+
+<p>See <a href="../../PDF/Builder/Resource/PaperSizes.html">PDF::Builder::Resource::PaperSizes</a> for the full list.</p>
+
+</dd>
+<dt>a &quot;WxH&quot; string in inches</dt>
+<dd>
+
+<pre><code>    $page-&gt;boundaries(&#39;media&#39; =&gt; &#39;8.5x11&#39;);</code></pre>
+
+<p>Many US paper sizes are commonly identified by their size in inches rather than by a particular name. These can be passed as strings with the width and height separated by an <code>x</code>. Examples: <code>4x6</code>, <code>12x18</code>, <code>8.5x11</code></p>
+
+</dd>
+<dt>a number representing a reduction (in points) from the next-larger box</dt>
+<dd>
+
+<p>For example, a 12&quot; x 18&quot; physical sheet to be trimmed down to an 11&quot; x 17&quot; sheet can be specified as follows:</p>
+
+<pre><code>    # Note: There are 72 points per inch
+    $page-&gt;boundaries(&#39;media&#39; =&gt; &#39;12x18&#39;, &#39;trim&#39; =&gt; 0.5 * 72);
+
+    # Equivalent
+    $page-&gt;boundaries(&#39;media&#39; =&gt; [0,        0,        12   * 72, 18   * 72],
+                      &#39;trim&#39;  =&gt; [0.5 * 72, 0.5 * 72, 11.5 * 72, 17.5 * 72]);</code></pre>
+
+<p>This example shows a 12&quot; x 18&quot; physical sheet that will be reduced to a final size of 11&quot; x 17&quot; by trimming 0.5&quot; from each edge. The smaller page boundary is assumed to be centered within the larger one.</p>
+
+<p>The &quot;next-larger box&quot; follows this order, stopping at the first defined value:</p>
+
+<pre><code>    art -&gt; trim -&gt; bleed -&gt; media
+    crop -&gt; media</code></pre>
+
+<p>This option isn&#39;t available for the media box, since it is by definition, the largest boundary.</p>
+
+</dd>
+<dt>[$width, $height] in points</dt>
+<dd>
+
+<pre><code>    $page-&gt;boundaries(&#39;media&#39; =&gt; [8.5 * 72, 11 * 7.2]);</code></pre>
+
+<p>For other page or boundary sizes, the width and height (in points) can be given directly as an array.</p>
+
+</dd>
+<dt>[$x1, $y1, $x2, $y2] in points</dt>
+<dd>
+
+<pre><code>    $page-&gt;boundaries(&#39;media&#39; =&gt; [0, 0, 8.5 * 72, 11 * 72]);</code></pre>
+
+<p>Finally, the absolute (raw) coordinates of the bottom-left and top-right corners of a rectangle can be specified.</p>
+
+</dd>
+</dl>
+
+<h3 id="Page-Boundaries">Page Boundaries</h3>
+
+<p>PDF defines five page boundaries. When creating PDFs for print shops, you&#39;ll most commonly use just the media box and trim box. Traditional print shops may also use the bleed box when adding printer&#39;s marks and other information.</p>
+
+<dl>
+
+<dt>media</dt>
+<dd>
+
+<p>The media box defines the boundaries of the physical medium on which the page is to be printed. It may include any extended area surrounding the finished page for bleed, printing marks, or other such purposes. The default value is as defined for PDF, a US letter page (8.5&quot; x 11&quot;). <b>CAUTION:</b> Most printers can <i>not</i> print all the way to the edge of the physical medium (paper, etc.). Some space around the edges will be reserved for pinch rollers, etc. to move the paper without smearing around toner or ink.</p>
+
+</dd>
+<dt>crop</dt>
+<dd>
+
+<p>The crop box defines the region to which the contents of the page shall be clipped (cropped) when displayed or printed. The default value is the page&#39;s media box. This is a historical page boundary. You&#39;ll likely want to set the bleed and/or trim boxes instead.</p>
+
+</dd>
+<dt>bleed</dt>
+<dd>
+
+<p>The bleed box defines the region to which the contents of the page shall be clipped when output in a production environment. This may include any extra bleed area needed to accommodate the physical limitations of cutting, folding, and trimming equipment. The actual printed page (media box) may include printing marks that fall outside the bleed box. The default value is the page&#39;s crop box.</p>
+
+</dd>
+<dt>trim</dt>
+<dd>
+
+<p>The trim box defines the intended dimensions of the finished page after trimming. It may be smaller than the media box to allow for production-related content, such as printing instructions, cut marks, or color bars. The default value is the page&#39;s crop box.</p>
+
+</dd>
+<dt>art</dt>
+<dd>
+
+<p>The art box defines the extent of the page&#39;s meaningful content (including potential white space) as intended by the page&#39;s creator. The default value is the page&#39;s crop box.</p>
+
+</dd>
+</dl>
+
+<h3 id="userunit">userunit</h3>
+
+<pre><code>    $page-&gt;userunit($value)</code></pre>
+
+<blockquote>
+
+<p>Sets the User Unit for this one page. See <a href="../../PDF/Builder/Docs.html#User-Units">&quot;User Units&quot; in PDF::Builder::Docs</a> for more information.</p>
+
+</blockquote>
+
+<h3 id="mediabox">mediabox</h3>
+
+<pre><code>    $page-&gt;mediabox($alias)
+
+    $page-&gt;mediabox($alias, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $page-&gt;mediabox($w,$h)
+
+    $page-&gt;mediabox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $page-&gt;mediabox()</code></pre>
+
+<blockquote>
+
+<p>Sets or gets the Media Box for this one page. See <a href="../../PDF/Builder/Docs.html#Media-Box">&quot;Media Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h3 id="cropbox">cropbox</h3>
+
+<pre><code>    $page-&gt;cropbox($alias)
+
+    $page-&gt;cropbox($alias, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $page-&gt;cropbox($w,$h)
+
+    $page-&gt;cropbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $page-&gt;cropbox()</code></pre>
+
+<blockquote>
+
+<p>Sets or gets the Crop Box for this one page. See <a href="../../PDF/Builder/Docs.html#Crop-Box">&quot;Crop Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h3 id="bleedbox">bleedbox</h3>
+
+<pre><code>    $page-&gt;bleedbox($alias)
+
+    $page-&gt;bleedbox($alias, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $page-&gt;bleedbox($w,$h)
+
+    $page-&gt;bleedbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $page-&gt;bleedbox()</code></pre>
+
+<blockquote>
+
+<p>Sets or gets or gets the Bleed Box for this one page. See <a href="../../PDF/Builder/Docs.html#Bleed-Box">&quot;Bleed Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h3 id="trimbox">trimbox</h3>
+
+<pre><code>    $page-&gt;trimbox($alias)
+
+    $page-&gt;trimbox($alias, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $page-&gt;trimbox($w,$h)
+
+    $page-&gt;trimbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $page-&gt;trimbox()</code></pre>
+
+<blockquote>
+
+<p>Sets or gets the Trim Box for this one page. See <a href="../../PDF/Builder/Docs.html#Trim-Box">&quot;Trim Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h3 id="artbox">artbox</h3>
+
+<pre><code>    $page-&gt;artbox($alias)
+
+    $page-&gt;artbox($alias, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $page-&gt;artbox($w,$h)
+
+    $page-&gt;artbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $page-&gt;artbox()</code></pre>
+
+<blockquote>
+
+<p>Sets or gets the Art Box for this one page. See <a href="../../PDF/Builder/Docs.html#Art-Box">&quot;Art Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h3 id="size">size</h3>
+
+<pre><code>    $page-&gt;size($size)  # Set
+
+    @rectangle = $page-&gt;size()  # Get</code></pre>
+
+<blockquote>
+
+<p>Set the physical page size or return the coordinates of the rectangle enclosing the physical page size. This is an alternate method provided for compatibility with PDF::API2.</p>
+
+<pre><code>    # Set the physical page (media) size using a common size name
+    $page-&gt;size(&#39;letter&#39;);
+
+    # Set the page size using coordinates in points (X1, Y1, X2, Y2)
+    $page-&gt;size([0, 0, 612, 792]);
+
+    # Get the page coordinates in points
+    my @rectangle = $page-&gt;size();</code></pre>
+
+<p>See Page Sizes above for possible values. The size method is a convenient shortcut for setting the PDF&#39;s media box when other prepress (print-related) page boundaries aren&#39;t required. It&#39;s equivalent to the following:</p>
+
+<pre><code>    # Set
+    $page = $page-&gt;boundaries(&#39;media&#39; =&gt; $size);
+
+    # Get
+    @rectangle = $page-&gt;boundaries()-&gt;{&#39;media&#39;}-&gt;@*;</code></pre>
+
+</blockquote>
+
+<h3 id="boundaries">boundaries</h3>
+
+<pre><code>    $page = $page-&gt;boundaries(%boundaries)
+
+    %boundaries = $page-&gt;boundaries()</code></pre>
+
+<blockquote>
+
+<p>Set prepress page boundaries to facilitate printing. Returns the current page boundaries if called without arguments. This is an alternate method provided for compatibility with PDF::API2.</p>
+
+<pre><code>    # Set
+    %boundaries = $page-&gt;boundaries(
+        # 13x19 inch physical sheet size
+        &#39;media&#39; =&gt; &#39;13x19&#39;,
+        # sheet content is 11x17 with 0.25&quot; bleed
+        &#39;bleed&#39; =&gt; [0.75 * 72, 0.75 * 72, 12.25 * 72, 18.25 * 72],
+        # 11x17 final trimmed size
+        &#39;trim&#39;  =&gt; 0.25 * 72,
+    );</code></pre>
+
+<p>The <code>%boundaries</code> hash contains one or more page boundary keys (see Page Boundaries) to set or replace, each with a corresponding size (see Page Sizes). The resulting boundaries hash will be returned.</p>
+
+<pre><code>    # Get
+    %boundaries = $page-&gt;boundaries();
+    ($x1,$y1, $x2,$y2) = $page-&gt;boundaries(&#39;trim&#39;);</code></pre>
+
+<p>If called without arguments, the returned hashref will contain (Get) all five boundaries. If called with one string argument, it returns the coordinates for the specified page (media, crop, bleed, trim, or art) boundary. If more than one boundary type is given, only the first is processed, and a warning is given that the remainder are ignored.</p>
+
+</blockquote>
+
+<h2 id="Page-Operation-Methods">Page Operation Methods</h2>
+
+<h3 id="gfx-graphics">gfx, graphics</h3>
+
+<pre><code>    $gfx = $page-&gt;gfx(%opts)
+
+    $gfx = $page-&gt;gfx($prepend)
+
+    $gfx = $page-&gt;gfx()</code></pre>
+
+<blockquote>
+
+<p>Returns a graphics content object, for drawing paths and shapes.</p>
+
+<p>You may specify the &quot;prepend&quot; flag in the old or new way. The old way is to give a single boolean value (0 false, non-zero true). The new way is to give a hash element named &#39;prepend&#39;, with the same values.</p>
+
+<dl>
+
+<dt>gfx(boolean_value $prepend)</dt>
+<dd>
+
+</dd>
+<dt>gfx(&#39;prepend&#39; =&gt; boolean_value)</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>If $prepend is <i>true</i>, or the option &#39;prepend&#39; is given with a <i>true</i> value, the content will be prepended to the page description (at the beginning of the page&#39;s content stream). Otherwise, it will be appended. The default is <i>false</i>.</p>
+
+<dl>
+
+<dt>gfx(&#39;compress&#39; =&gt; boolean_value)</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>You may specify a compression flag saying whether the drawing instructions are to be compressed. If not given, the default is for the overall PDF compression setting to be used (<i>on</i> by default).</p>
+
+<p>You may have more than one <i>gfx</i> object. They and <i>text</i> objects will be output as objects and streams <i>in the order <b>that the objects are</b> defined</i>, with all actions pertaining to this <i>gfx</i> object appearing in one stream. However, note that graphics and text objects are not fully independent of each other: the exit state (linewidth, strokecolor, etc.) of one object is the entry state of the next object in line to be output, and so on.</p>
+
+<p>If you intermix multiple <i>gfx</i> and <i>text</i> objects on a page, the results may be confusing. Say you have $gfx1, $text1, $gfx2, and $text2 on your page (<i>created in that order</i>). PDF::Builder will output all the $gfx1-&gt;<i>action</i> calls in one stream, then all the $text1-&gt;<i>action</i> calls in the next stream, and likewise for $gfx2 usage and finally $text2.</p>
+
+<p>Then it&#39;s PDF&#39;s turn to confuse you. PDF will process the entire $gfx1 object stream, accumulating the graphics state to the end of the stream, and using that as the entry state into $text1. In a similar manner, $gfx2 and $text2 are read, processed, and rendered. Thus, a change in, say, the dash pattern in the middle of $gfx1, <i>after</i> you have output some $gfx2, $text1, and $text2 material, may suddenly show up at the beginning of $text1 (and continue through $gfx2 and $text2)!</p>
+
+<p>It is possible to use multiple graphics objects, to avoid having to change settings constantly, but you may want to consider resetting all your settings at the first call to each object, so that you are starting from a known base. This may most easily be done by using $<i>type</i>-&gt;restore() and -&gt;save() just after creating $<i>type</i>:</p>
+
+<pre><code>    $text1 = $page-&gt;text(); 
+      $text1-&gt;save();
+    $grfx1 = $page-&gt;gfx();
+      $grfx1-&gt;restore();
+      $grfx1-&gt;save();
+    $text2 = $page-&gt;text();
+      $text2-&gt;restore();
+      $text2-&gt;save();
+    $grfx2 = $page-&gt;gfx();
+      $grfx1-&gt;restore();</code></pre>
+
+<p><i>Generally,</i> you will want to define the graphics object first, and then the text object after that. This defines the order in which the streams will be rendered (graphics first), which is usually desirable if you&#39;re setting a background color, or have other graphics with which you want to overlay text over. Sometimes, though, you may wish to overlay text with graphics, in which case you might either define the objects text and then graphics, or define a second graphics stream to lay over the text. Most of the time it really doesn&#39;t matter which comes first (as text and graphics don&#39;t interact or overlay), but in any case, be aware of states carried over from the end of one stream into the next.</p>
+
+<p><b>Alternate name:</b> <code>graphics</code></p>
+
+<p>This has been added for PDF::API2 compatibility.</p>
+
+</blockquote>
+
+<h3 id="text">text</h3>
+
+<pre><code>    $text = $page-&gt;text(%opts)
+
+    $text = $page-&gt;text($prepend)
+
+    $text = $page-&gt;text()</code></pre>
+
+<blockquote>
+
+<p>Returns a text content object, for writing text. See <a href="../../PDF/Builder/Content.html">PDF::Builder::Content</a> for details.</p>
+
+<p>You may specify the &quot;prepend&quot; flag in the old or new way. The old way is to give a single boolean value (0 false, non-zero true). The new way is to give a hash element named &#39;prepend&#39;, with the same values.</p>
+
+<dl>
+
+<dt>text(boolean_value $prepend)</dt>
+<dd>
+
+</dd>
+<dt>text(&#39;prepend&#39; =&gt; boolean_value)</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>If $prepend is <i>true</i>, or the option &#39;prepend&#39; is given with a <i>true</i> value, the content will be prepended to the page description (at the beginning of the page&#39;s content stream). Otherwise, it will be appended. The default is <i>false</i>.</p>
+
+<dl>
+
+<dt>text(&#39;compress&#39; =&gt; boolean_value)</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>You may specify a compression flag saying whether the text content is to be compressed. If not given, the default is for the overall PDF compression setting to be used (<i>on</i> by default).</p>
+
+<p>Please see the discussion above in <code>gfx()</code> regarding multiple graphics and text objects on one page, how they are grouped into PDF objects and streams, and the rendering consequences of running through one entire object (stream) at a time, before moving on to the next. Even if you have only one graphics and one text stream, the order in which they are defined has consequences for how text overlays graphics or vice-versa.</p>
+
+<p>The <i>text</i> object has many settings and attributes of its own, but shares many with graphics (<i>gfx</i>), such as strokecolor, fillcolor, linewidth, linedash, and the like. Thus there is some overlap in attributes, and graphics and text calls can affect each other.</p>
+
+</blockquote>
+
+<h3 id="rotate-rotation">rotate, rotation</h3>
+
+<pre><code>    $page-&gt;rotate($deg)</code></pre>
+
+<blockquote>
+
+<p>Rotates the page by the given degrees, which must be a multiple of 90. An angle that is not a multiple of 90 will be rounded to the nearest 90 degrees, with a message.</p>
+
+<p>Note that the rotation angle is <i>clockwise</i> for a positive amount! E.g., a rotation of +90 (or -270) will have the bottom edge of the paper at the left of the screen. After rotating the page 180 degrees, <code>[0, 0]</code> (originally lower left corner) will be be in the top right corner of the page, rather than the bottom left. X will increase to the right, and Y will increase downward.</p>
+
+<p>(This allows you to auto-rotate to landscape without changing the mediabox! There are other ways to accomplish this end, such as using the <code>size()</code> method, which will not change the coordinate system (move the origin).)</p>
+
+<p><b>Note</b> that some users have reported problems with using <code>rotate</code>, that the dimensions were limited to the smaller of the original height or width. If you experience this, be sure to check whether you are doing some sort of <i>crop box</i> or other clipping, that might not rotate as expected with the rest of the page. In other words, you might need to manually adjust the crop box dimensions.</p>
+
+<p>Do not confuse this <code>rotate()</code> call with the <i>graphics context</i> rotation (Content.pm) <code>rotate()</code>, which permits any angle, is of opposite direction, and does not shift the origin!</p>
+
+<p><b>Alternate name:</b> <code>rotation</code></p>
+
+<p>This has been added for PDF::API2 compatibility.</p>
+
+</blockquote>
+
+<h3 id="object">object</h3>
+
+<pre><code>    $page = $page-&gt;object($object, $x,$y, $scale_x,$scale_y)</code></pre>
+
+<blockquote>
+
+<p>Places an image or other external object (a.k.a. XObject) on the page in the specified location.</p>
+
+<p>If <code>$x</code> and <code>$y</code> are omitted, the object will be placed at <code>[0, 0]</code>.</p>
+
+<p>For images, <code>$scale_x</code> and <code>$scale_y</code> represent the width and height of the image on the page in points. If <code>$scale_x</code> is omitted, it will default to 72 pixels per inch. If <code>$scale_y</code> is omitted, the image will be scaled proportionally based on the image dimensions.</p>
+
+<p>For other external objects, the scale is a multiplier, where 1 (the default) represents 100% (i.e. no change).</p>
+
+<p>If the object to be placed depends on a coordinate transformation (e.g. rotation or skew), first create a content object using <a href="#graphics">&quot;graphics&quot;</a>, then call <a href="../../PDF/Builder/Content.html#object">&quot;object&quot; in PDF::Builder::Content</a> after making the appropriate transformations.</p>
+
+</blockquote>
+
+<h3 id="annotation">annotation</h3>
+
+<pre><code>    $ant = $page-&gt;annotation()</code></pre>
+
+<blockquote>
+
+<p>Returns a new annotation object.</p>
+
+</blockquote>
+
+<h3 id="resource">resource</h3>
+
+<pre><code>    $page-&gt;resource($type, $key, $obj)</code></pre>
+
+<blockquote>
+
+<p>Adds a resource to the page-inheritance tree.</p>
+
+<p><b>Example:</b></p>
+
+<pre><code>    $co-&gt;resource(&#39;Font&#39;, $fontkey, $fontobj);
+    $co-&gt;resource(&#39;XObject&#39;, $imagekey, $imageobj);
+    $co-&gt;resource(&#39;Shading&#39;, $shadekey, $shadeobj);
+    $co-&gt;resource(&#39;ColorSpace&#39;, $spacekey, $speceobj);</code></pre>
+
+<p><b>Note:</b> You only have to add the required resources if they are NOT handled by the *font*, *image*, *shade* or *space* methods.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../Builder_index.html">Master Index</a><br>
+<a href="../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../.././PDF/Builder/Annotation.html">PDF::Builder::Annotation</a> -- Add annotations to a PDF<br>
+<a href="../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+<a href="../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+<a href="../.././PDF/Builder/Docs.html">PDF::Builder::Docs</a> -- Additional documentation for Builder module<br>
+<a href="../.././PDF/Builder/FontManager.html">PDF::Builder::FontManager</a> -- Managing the font library for PDF::Builder<br>
+<a href="../.././PDF/Builder/Lite.html">PDF::Builder::Lite</a> -- Lightweight PDF creation methods (UNMAINTAINED)<br>
+<a href="../.././PDF/Builder/Matrix.html">PDF::Builder::Matrix</a> -- Matrix operations library<br>
+<a href="../.././PDF/Builder/NamedDestination.html">PDF::Builder::NamedDestination</a> -- Add named destinations (views) to a PDF<br>
+<a href="../.././PDF/Builder/Outline.html">PDF::Builder::Outline</a> -- Manage PDF outlines (a.k.a. <i>bookmarks</i>)<br>
+<a href="../.././PDF/Builder/Outlines.html">PDF::Builder::Outlines</a> -- Further Outline handling<br>
+<a href="../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../.././PDF/Builder/UniWrap.html">PDF::Builder::UniWrap</a> -- Support routines for finding line breakpoints with Unicode text<br>
+<a href="../.././PDF/Builder/Util.html">PDF::Builder::Util</a> -- Utility package for often-used methods across the package<br>
+<a href="../.././PDF/Builder/ViewerPreferences.html">PDF::Builder::ViewerPreferences</a> -- How the PDF should be displayed or printed<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

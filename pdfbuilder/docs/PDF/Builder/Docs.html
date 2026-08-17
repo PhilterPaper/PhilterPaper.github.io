@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Docs</title>
+<link rel="stylesheet" href="../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SOME-SPECIAL-NOTES">SOME SPECIAL NOTES</a>
+    <ul>
+      <li><a href="#Software-Development-Kit">Software Development Kit</a></li>
+      <li><a href="#Optional-Libraries">Optional Libraries</a></li>
+      <li><a href="#Strings-Character-Text">Strings (Character Text)</a></li>
+      <li><a href="#Supported-Perl-Versions">Supported Perl Versions</a>
+        <ul>
+          <li><a href="#Anticipated-Support-Cutoff-Dates">Anticipated Support Cutoff Dates</a></li>
+          <li><a href="#Some-Internal-Details">Some Internal Details</a></li>
+        </ul>
+      </li>
+      <li><a href="#Rendering-Order">Rendering Order</a>
+        <ul>
+          <li><a href="#Rendering-with-a-shared-mixed-object">Rendering with a shared (mixed) object</a></li>
+          <li><a href="#Graphics-state-left-by-existing-PDFs">Graphics state left by existing PDFs</a></li>
+        </ul>
+      </li>
+      <li><a href="#Notes-on-Reader-support-of-features">Notes on Reader support of features</a></li>
+      <li><a href="#PDF-Versions-Supported">PDF Versions Supported</a></li>
+      <li><a href="#History">History</a>
+        <ul>
+          <li><a href="#Thanks">Thanks...</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#DETAILED-NOTES-ON-METHODS">DETAILED NOTES ON METHODS</a>
+    <ul>
+      <li><a href="#After-saving-a-file">After saving a file...</a></li>
+      <li><a href="#IntegrityCheck">IntegrityCheck</a></li>
+      <li><a href="#Preferences---set-user-display-preferences">Preferences - set user display preferences</a>
+        <ul>
+          <li><a href="#Page-Mode-Options">Page Mode Options</a></li>
+          <li><a href="#Page-Layout-Options">Page Layout Options</a></li>
+          <li><a href="#Viewer-Options">Viewer Options</a></li>
+          <li><a href="#Page-Fit-Options">Page Fit Options</a></li>
+          <li><a href="#Initial-Page-Options">Initial Page Options</a></li>
+          <li><a href="#Example">Example</a></li>
+        </ul>
+      </li>
+      <li><a href="#info-Example">info Example</a></li>
+      <li><a href="#XMP-XML-example">XMP XML example</a></li>
+      <li><a href="#BOX-METHODS">&quot;BOX&quot; METHODS</a>
+        <ul>
+          <li><a href="#User-Units-userunit">User Units (userunit)</a></li>
+          <li><a href="#Media-Box-mediabox">Media Box (mediabox)</a></li>
+          <li><a href="#Crop-Box-cropbox">Crop Box (cropbox)</a></li>
+          <li><a href="#Bleed-Box-bleedbox">Bleed Box (bleedbox)</a></li>
+          <li><a href="#Trim-Box-trimbox">Trim Box (trimbox)</a></li>
+          <li><a href="#Art-Box-artbox">Art Box (artbox)</a></li>
+          <li><a href="#Suggested-Box-Usage">Suggested Box Usage</a></li>
+          <li><a href="#Box-Inheritance">Box Inheritance</a></li>
+        </ul>
+      </li>
+      <li><a href="#Outlines-Bookmarks">Outlines (Bookmarks)</a>
+        <ul>
+          <li><a href="#Simple-Single-Level-set-of-Outline">Simple Single-Level set of Outline</a></li>
+          <li><a href="#A-Multi-level-example-Outline">A Multi-level example Outline</a></li>
+        </ul>
+      </li>
+      <li><a href="#FONT-METHODS">FONT METHODS</a>
+        <ul>
+          <li><a href="#Core-Fonts">Core Fonts</a>
+            <ul>
+              <li><a href="#Examples">Examples</a></li>
+              <li><a href="#Notes-and-Limitations">Notes and Limitations</a></li>
+              <li><a href="#Should-you-use-TTF-instead">Should you use TTF instead?</a></li>
+            </ul>
+          </li>
+          <li><a href="#PS-Fonts">PS Fonts</a>
+            <ul>
+              <li><a href="#WARNING%3A-End-of-Adobe-Support">WARNING: End of Adobe Support</a></li>
+              <li><a href="#Examples1">Examples</a></li>
+              <li><a href="#Notes-and-Limitations1">Notes and Limitations</a></li>
+              <li><a href="#Should-you-use-TTF-instead1">Should you use TTF instead?</a></li>
+            </ul>
+          </li>
+          <li><a href="#TrueType-Fonts">TrueType Fonts</a>
+            <ul>
+              <li><a href="#Examples2">Examples</a></li>
+              <li><a href="#Notes-and-Limitations2">Notes and Limitations</a></li>
+              <li><a href="#Where-is-the-font-I-just-added">Where is the font I just added?</a></li>
+            </ul>
+          </li>
+          <li><a href="#CJK-Fonts">CJK Fonts</a></li>
+          <li><a href="#Synthetic-Fonts">Synthetic Fonts</a></li>
+        </ul>
+      </li>
+      <li><a href="#IMAGE-METHODS">IMAGE METHODS</a>
+        <ul>
+          <li><a href="#Why-is-my-image-flipped-or-rotated">Why is my image flipped or rotated?</a></li>
+          <li><a href="#TIFF-Images">TIFF Images</a></li>
+          <li><a href="#PNG-Images">PNG Images</a></li>
+        </ul>
+      </li>
+      <li><a href="#USING-SHAPER-HarfBuzz%3A%3AShaper-library">USING SHAPER (HarfBuzz::Shaper library)</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Docs - Additional documentation for Builder module</p>
+
+<h1 id="SOME-SPECIAL-NOTES">SOME SPECIAL NOTES</h1>
+
+<h2 id="Software-Development-Kit">Software Development Kit</h2>
+
+<p>There are four levels of involvement with PDF::Builder. Depending on what you want to do, different kinds of installs are recommended.</p>
+
+<ol>
+
+<li><p>Simply installing PDF::Builder as a prerequisite for running some other package. All you need to do is install the CPAN package for PDF::Builder, and it will load the .pm files into your Perl library. If the other package prereqs PDF::Builder, its installer may download and install PDF::Builder automatically.</p>
+
+<p>Note that PDF::Builder has a number of <i>optional</i> prerequisites. It will happily install and run without them, but advanced functionality (possibly including that needed by another package) will <b>not</b> be available unless you manually install the desired packages. See <a href="#Optional-Libraries">&quot;Optional Libraries&quot;</a> or the <code>README</code> file for the list of optional packages.</p>
+
+</li>
+<li><p>You want to write a Perl program that uses PDF::Builder functions. In addition to installing PDF::Builder from CPAN, you will want documentation on it. Obtain a copy of the product from GitHub (https://github.com/PhilterPaper/Perl-PDF-Builder) or as a gzipped tar file from CPAN. This includes a utility to build (from POD) a library of HTML documents, as well as examples (examples/ directory) and contributed sample programs (contrib/ directory).</p>
+
+</li>
+<li><p>You want to modify PDF::Builder files. In addition to the CPAN and GitHub distributions, you <i>may</i> choose to keep a local Git repository for tracking your changes. Depending on whether or not your PDF::Builder copy is being used for production purposes, you may want to do your editing and testing in the Perl library installation (<i>live</i>) or in a different place. The &quot;t&quot; tests (t/ directory) and examples provide good regression tests to ensure that you haven&#39;t broken anything. If you do your editing on the live code, don&#39;t forget when done to copy the changes back into the master version you keep!</p>
+
+</li>
+<li><p>You want to contribute to the development of PDF::Builder. You will need a local Git repository (and a GitHub account), so that when you&#39;ve got it all done, you can issue a &quot;Pull Request&quot; to bring it to our attention. We can&#39;t guarantee that your work will be incorporated into the project, but at least we will look at it. From time to time, a new CPAN version will be issued.</p>
+
+</li>
+</ol>
+
+<p>If you want to make substantial changes for public use, and can&#39;t come to a meeting of minds with us, you can even start your own GitHub project and register a new CPAN project (that&#39;s what we did, <i>forking</i> PDF::API2). Please don&#39;t just assume that we don&#39;t want your changes -- at least propose what you want to do in writing, so we can consider it. We&#39;re always looking for people to help out and expand PDF::Builder.</p>
+
+<h2 id="Optional-Libraries">Optional Libraries</h2>
+
+<p>PDF::Builder can make use of some optional libraries, which are not <i>required</i> for a successful installation. If you want improved speed and capabilities for certain functions, you may want to install and use these libraries. PDF::Builder&#39;s <code>README</code> file lists the minimum versions needed, and <code>INFO/Prereq_fixes</code> lists known updates needed for some.</p>
+
+<ul>
+
+<li><p>Perl::Critic</p>
+
+<p>Needed if running <code>tools/1_pc.pl</code> to check the library content.</p>
+
+</li>
+<li><p>Graphics::TIFF</p>
+
+<p>PDF::Builder inherited a rather slow, buggy, and limited TIFF image library from PDF::API2. If Graphics::TIFF (available on CPAN, uses libtiff.a) is installed, PDF::Builder will use that instead, unless you specify that it is to use the old, pure Perl library. The only time you might want to consider this is when you need to pass an open filehandle to <code>image_tiff</code> instead of a file name. See resolved bug reports RT 84665 and RT 118047, as well as <code>image_tiff</code>, for more information.</p>
+
+</li>
+<li><p>Image::PNG::Libpng</p>
+
+<p>PDF::Builder inherited a rather slow and buggy pure Perl PNG image library from PDF::API2. If Image::PNG::Libpng (available on CPAN, uses libpng.a) is installed, PDF::Builder will use that instead, unless you specify that it is to use the old, pure Perl library. Using the new library will give you improved speed, the ability to use 16 bit samples, and the ability to read interlaced PNG files. See resolved bug report RT 124349, as well as <code>image_png</code>, for more information.</p>
+
+</li>
+<li><p>HarfBuzz::Shaper</p>
+
+<p>This library enables PDF::Builder to handle complex scripts (Arabic, Devanagari, etc.) as well as non-LTR writing systems. It is also useful for Latin and other simple scripts, for ligatures and improved kerning. HarfBuzz::Shaper is based on a set of HarfBuzz libraries, which it will attempt to build if they are not found. See <code>textHS</code> for more information.</p>
+
+</li>
+<li><p>Text::Markdown</p>
+
+<p>This library is used if you want to format &quot;Markdown&quot; style code in PDF::Builder, via the <code>column()</code> method. It translates a certain dialect of Markdown into HTML, which is then further processed.</p>
+
+</li>
+<li><p>HTML::TreeBuilder</p>
+
+<p>This library is used to format HTML input into a data structure which PDF::Builder can interpret, via the <code>column()</code> method. Note that if Markdown input is used, it will also need HTML::TreeBuilder to handle the HTML the Markdown is translated to.</p>
+
+</li>
+<li><p>Pod::Simple::XHTML</p>
+
+<p>This library is used if you wish to generate the HTML documentation from the POD and PM source, using <code>docs/buildDoc.pl</code>. Note that the full set of documentation can also be found online at https://www.catskilltech.com/FreeSW/product/PDF-Builder/title/PDF%3A%3ABuilder/freeSW_full under the &quot;Documentation&quot; link. This online documentation is updated at every CPAN release, but not necessarily when the GitHub repository is updated.</p>
+
+</li>
+<li><p>SVGPDF</p>
+
+<p>This library is used to convert SVG image files into PDF primitives, so SVG images may be included in a PDF.</p>
+
+</li>
+</ul>
+
+<p>Note that the installation process will <b>not</b> attempt to install these libraries automatically. If you don&#39;t wish to use one or more of them, you are free to not install the optional librarie(s). If you may want to make use of one or more, consider installing them <i>before</i> installing PDF::Builder, so that any t-tests and/or examples that make use of these libraries may be run during installation and checkout of PDF::Builder. Remember, you can <i>always</i> install an optional library later, if you want to make use of it.</p>
+
+<h2 id="Strings-Character-Text">Strings (Character Text)</h2>
+
+<p>Perl, and hence PDF::Builder, use strings that support the full range of Unicode characters. When importing strings into a Perl program, for example by reading text from a file, you must be aware of what their character encoding is. Single-byte encodings (default is &#39;latin1&#39;), represented as bytes of value 0x00 through 0xFF (0..255), will produce different results if you do something that depends on the encoding, such as sorting, searching, or comparing any two non-ASCII characters. This also applies to any characters (text) hard coded into the Perl program.</p>
+
+<p>You can always decode the text from external encoding (ASCII, UTF-8, Latin-3, etc.) into the Perl (internal) UTF-8 multibyte encoding. This uses one to four bytes to represent each character. See pragma <code>utf8</code> and module <code>Encode</code> for details about decoding text. Note that only TrueType fonts (<code>ttfont</code>) can make direct use of UTF-8-encoded text. Other font types (core, T1, etc.) can only use single-byte encoded text. If your text is ASCII, Latin-1, or CP-1252, you <i>can</i> just leave the Perl strings as the default single-byte encoding.</p>
+
+<p>Then, there is the matter of encoding the <i>output</i> to match up with available font character sets. You&#39;re not actually <i>translating</i> the text on output, but are telling the output system (and Reader) what encoding the output byte stream represents, and what character glyphs they should generate.</p>
+
+<p>If you confine your text to plain ASCII (0x00 .. 0x7F byte values) or even Latin-1 or CP-1252 (0x00 .. 0xFF byte values), you can use default (non-UTF-8) Perl strings and use the default output encoding (WinAnsiEncoding), which is more-or-less Windows CP-1252 (a superset in turn, of ISO-8859-1 Latin-1). If your text uses any other characters, you will need to be aware of what encoding your text strings are (in the Perl string and for declaring output glyph generation). See <a href="#Core-Fonts">&quot;Core Fonts&quot;</a>, <a href="#PS-Fonts">&quot;PS Fonts&quot;</a> and <a href="#TrueType-Fonts">&quot;TrueType Fonts&quot;</a> in <a href="#FONT-METHODS">&quot;FONT METHODS&quot;</a> for additional information.</p>
+
+<h2 id="Supported-Perl-Versions">Supported Perl Versions</h2>
+
+<p>PDF::Builder intends to support all major Perl versions that were released in the past six years, plus one, in order to continue working for the life of most long-term-stable (LTS) server distributions. See the <a href="https://www.cpan.org/src/">https://www.cpan.org/src/</a> table <b>First release in each branch of Perl</b> x.xxxx0 &quot;Major&quot; release dates.</p>
+
+<p>For example, a version of PDF::Builder released on 2018-06-05 would support the last major version of Perl released <i>on or after</i> 2012-06-05 (5.18), and then one before that, which would be 5.16. Alternatively, the last major version of Perl released <i>before</i> 2012-06-05 is 5.16.</p>
+
+<p>The intent is to avoid expending unnecessary effort in supporting very old (obsolete) versions of Perl.</p>
+
+<h3 id="Anticipated-Support-Cutoff-Dates">Anticipated Support Cutoff Dates</h3>
+
+<p><b>Note</b> that these are <i>not</i> hard and fast dates. In particular, we develop on Strawberry Perl, which sometimes falls a little behind the official Perl release!</p>
+
+<p>Also, due to user requests to allow <i>new</i> releases of PDF::Builder to run on earlier versions of Perl, we will try to stretch the lifetime of earlier Perl versions. Eventually, some older Perl versions will have to be dropped if and when we start making use of newer Perl operators and constructs. Nevertheless, it is still <i>not</i> a good idea to continue to use very old Perl versions that are beyond their support cutoff dates -- they become vulnerable to security attacks, and bugs do not get fixed.</p>
+
+<ul>
+
+<li><p>5.28 current minimum supported version. Out of support, so use at your own risk.</p>
+
+</li>
+<li><p>5.30 future minimum supported version, until next PDF::Builder release after 20 June, 2026.</p>
+
+</li>
+<li><p>5.32 future minimum supported version, until next PDF::Builder release after 20 May, 2027.</p>
+
+</li>
+<li><p>5.34 not released under Strawberry Perl, expected to be skipped</p>
+
+</li>
+<li><p>5.36 future minimum supported version, until next PDF::Builder release after 28 May, 2028. This is currently our primary development version.</p>
+
+</li>
+<li><p>5.38 future minimum supported version, until next PDF::Builder release after 02 Jul, 2029.</p>
+
+</li>
+<li><p>5.40 future minimum supported version, until next PDF::Builder release after 09 June, 2030. This is currently the maximum tested version.</p>
+
+</li>
+<li><p>5.42 future minimum supported version, until next PDF::Builder release after 03 July, 2031.</p>
+
+</li>
+</ul>
+
+<p>If you need to use this module on a server with an extremely out-of-date version of Perl, consider using either plenv or Perlbrew to run a newer version of Perl without needing admin privileges.</p>
+
+<p>On the other hand, any feature in PDF::Builder should continue to work unchanged for the life of most long-term-stable (LTS) server distributions. Their lifetime is usually about six (6) years. Note that this does <b>not</b> constitute a statement of warranty, but that we <i>intend</i> to try to keep any particular release of PDF::Builder working for a period of years. Of course, it helps if you periodically update your Perl installation to something released in the recent past.</p>
+
+<h3 id="Some-Internal-Details">Some Internal Details</h3>
+
+<p>Some of the following may be a bit scary or confusing to beginners, so don&#39;t be afraid to skip over it until you&#39;re ready for it...</p>
+
+<p>Perl (and PDF::Builder) internally use strings which are either single-byte (ISO-8859-1/Latin-1) or multibyte UTF-8 encoded (there is an internal flag marking the string as UTF-8 or not). If you work <i>strictly</i> in ASCII or Latin-1 or CP-1252 (each a superset of the previous), you should be OK in not doing anything special about your string encoding. You can just use the default Perl single byte strings (internally marked as <i>not</i> UTF-8) and the default output encoding (WinAnsiEncoding).</p>
+
+<p>If you intend to use input from a variety of sources, you should consider decoding (converting) your text to UTF-8, which will provide an internally consistent representation (and your Perl code itself should be saved in UTF-8, in case you want to use any hard coded non-ASCII characters). In any string, non-ASCII characters (0x80 or higher) would be converted to the Perl UTF-8 internal representation, via <code>$string = Encode::decode(MY_ENCODING, $input);</code>. <code>MY_ENCODING</code> would be a string like &#39;latin1&#39;, &#39;cp-1252&#39;, &#39;utf8&#39;, etc. Similar capabilities are available for declaring a <i>file</i> to be in a certain encoding.</p>
+
+<p>Be aware that if you use UTF-8 encoding for your text, that only TrueType font output (<code>ttfont</code>) can handle it directly. Corefont and Type1 output will require that the text will have to be converted back into a single-byte encoding (using <code>Encode::encode</code>), which may need to be declared with <code>encode</code> (for <code>corefont</code> or <code>psfont</code>). If you have any characters <i>not</i> found in the selected single-byte <i>encoding</i> (but <i>are</i> found in the font itself), you will need to use <code>automap</code> to break up the font glyphs into 256 character planes, map such characters to 0x00 .. 0xFF in the appropriate plane, and switch between font planes as necessary.</p>
+
+<p>Core and Type1 fonts (output) use the byte values in the string (single-byte encoding only!) and provide a byte-to-glyph mapping record for each plane. TrueType outputs a group of four hexadecimal digits representing the &quot;CId&quot; (character ID) of each character. The CId does not correspond to either the single-byte or UTF-8 internal representations of the characters.</p>
+
+<p>The bottom line is that you need to know what the internal representation of your text is, so that the output routines can tell the PDF reader about it (via the PDF file). The text will not be translated upon output, but the PDF reader needs to know what the encoding in use is, so it knows what glyph to associate with each byte (or byte sequence).</p>
+
+<p>Note that some operating systems and Perl flavors are reputed to be strict about encoding names. For example, <b>latin1</b> (an alias) may be rejected as invalid, while <b>iso-8859-1</b> (a canonical value) will work.</p>
+
+<p>By the way, it is recommended that you be using <i>at least</i> Perl 5.10 if you are going to be using any non-ASCII characters. Perl 5.8 may be a little unpredictable in handling such text.</p>
+
+<h2 id="Rendering-Order">Rendering Order</h2>
+
+<p>For better or worse, for compatibility purposes, PDF::Builder continues the same rendering model as used by PDF::API2 (and possibly its predecessors). That is, all graphics <i>for one graphics object</i> are put into one record, and all text output <i>for one text object</i> goes into another record. Which one is output first, is whichever is declared first. This can lead to unexpected results, where items are rendered in (apparently) the wrong order. That is, text and graphics items are not necessarily output (rendered) in the same order as they were created in code. Two items in the same object (e.g., <code>$text</code>) <i>will</i> be rendered in the same order as they were coded, but items from different objects may not be rendered in the expected order. The following example (source code and annotated PDF excerpts) will hopefully illustrate the issue:</p>
+
+<pre><code> use strict;
+ use warnings;
+ use PDF::Builder;
+
+ # demonstrate text and graphics object order
+ # 
+ my $fname = &quot;objorder&quot;;
+
+ my $paper_size = &quot;Letter&quot;;
+
+ # see the text and graphics stream contents
+ my $pdf = PDF::Builder-&gt;new(compress =&gt; &#39;none&#39;);
+ $pdf-&gt;mediabox($paper_size);
+ my $page = $pdf-&gt;page();
+ # adjust path for your operating system
+ my $fontTR = $pdf-&gt;ttfont(&#39;C:\\Windows\\Fonts\\timesbd.ttf&#39;);
+    # or &#39;C:/Windows/Fonts/timesbd.ttf&#39; will also work on Windows</code></pre>
+
+<p>For the first group, you might expect the &quot;under&quot; line to be output, then the filled circle (disc) partly covering it, then the &quot;over&quot; line covering the disc, and finally a filled rectangle (bar) over both lines. What actually happened is that the <code>$grfx</code> graphics object was declared first, so everything in that object (the disc and bar) is output first, and the text object <code>$text</code> (both lines) comes afterwards. The result is that the text lines are on <i>top</i> of the graphics drawings.</p>
+
+<pre><code> # ----------------------------
+ # 1. text, orange ball over, text over, bar over
+
+ my $grfx1 = $page-&gt;gfx();
+ my $text1 = $page-&gt;text();
+ $text1-&gt;font($fontTR, 20);  # 20 pt Times Roman bold
+
+ $text1-&gt;fillcolor(&#39;black&#39;);
+ $grfx1-&gt;strokecolor(&#39;blue&#39;);
+ $grfx1-&gt;fillcolor(&#39;orange&#39;);
+
+ $text1-&gt;translate(50,700);
+ $text1-&gt;text_left(&quot;This text should be under everything.&quot;);
+
+ $grfx1-&gt;circle(100,690, 30);
+ $grfx1-&gt;fillstroke();
+
+ $text1-&gt;translate(50,670);
+ $text1-&gt;text_left(&quot;This text should be over the ball and under the bar.&quot;);
+
+ $grfx1-&gt;rect(160,660, 20,70);
+ $grfx1-&gt;fillstroke();
+
+ % ---------------- group 1: define graphics object first, then text
+ 11 0 obj &lt;&lt; /Length 690 &gt;&gt; stream   % obj 11 is graphics for (1)
+  0 0 1 RG    % stroke blue
+ 1 0.647059 0 rg   % fill orange
+ 130 690 m ... c h B   % draw and fill circle
+ 160 660 20 70 re B   % draw and fill bar
+ endstream endobj
+
+ 12 0 obj &lt;&lt; /Length 438 &gt;&gt; stream   % obj 12 is text for (1)
+   BT  
+ /TiCBA 20 Tf   % Times Roman Bold 20pt
+ 0 0 0 rg   % fill black
+ 1 0 0 1 50 700 Tm   % position text
+ &lt;0037 ... 0011&gt; Tj   % &quot;under&quot; line
+ 1 0 0 1 50 670 Tm   % position text
+ &lt;0037 ... 0011&gt; Tj   % &quot;over&quot; line
+   ET   
+ endstream endobj</code></pre>
+
+<p>The second group is the same as the first, with the only difference being that the text object was declared first, and then the graphics object. The result is that the two text lines are rendered first, and then the disc and bar are drawn <i>over</i> them.</p>
+
+<pre><code> # ----------------------------
+ # 2. (1) again, with graphics and text order reversed
+
+ my $text2 = $page-&gt;text();
+ my $grfx2 = $page-&gt;gfx();
+ $text2-&gt;font($fontTR, 20);  # 20 pt Times Roman bold
+
+ $text2-&gt;fillcolor(&#39;black&#39;);
+ $grfx2-&gt;strokecolor(&#39;blue&#39;);
+ $grfx2-&gt;fillcolor(&#39;orange&#39;);
+
+ $text2-&gt;translate(50,600);
+ $text2-&gt;text_left(&quot;This text should be under everything.&quot;);
+
+ $grfx2-&gt;circle(100,590, 30);
+ $grfx2-&gt;fillstroke();
+
+ $text2-&gt;translate(50,570);
+ $text2-&gt;text_left(&quot;This text should be over the ball and under the bar.&quot;);
+
+ $grfx2-&gt;rect(160,560, 20,70);
+ $grfx2-&gt;fillstroke();
+
+ % ---------------- group 2: define text object first, then graphics
+ 13 0 obj &lt;&lt; /Length 438 &gt;&gt; stream    % obj 13 is text for (2)
+   BT  
+ /TiCBA 20 Tf   % Times Roman Bold 20pt
+ 0 0 0 rg   % fill black
+ 1 0 0 1 50 600 Tm   % position text
+ &lt;0037 ... 0011&gt; Tj   % &quot;under&quot; line
+ 1 0 0 1 50 570 Tm   % position text
+ &lt;0037 ... 0011&gt; Tj   % &quot;over&quot; line
+   ET   
+ endstream endobj
+
+ 14 0 obj &lt;&lt; /Length 690 &gt;&gt; stream   % obj 14 is graphics for (2)
+  0 0 1 RG   % stroke blue
+ 1 0.647059 0 rg   % fill orange
+ 130 590 m ... h B   % draw and fill circle
+ 160 560 20 70 re B   % draw and fill bar
+ endstream endobj</code></pre>
+
+<p>The third group defines two text and two graphics objects, in the order that they are expected in. The &quot;under&quot; text line is output first, then the orange disc graphics is output, partly covering the text. The &quot;over&quot; text line is now output -- it&#39;s actually <i>over</i> the disc, but is orange because the previous object stream (first graphics object) left the fill color (also used for text) as orange, because we didn&#39;t explicitly set the fill color before outputting the second text line. This is not &quot;inheritance&quot; so much as it is whatever the graphics (drawing) state (used for both &quot;graphics&quot; and &quot;text&quot;) is left in at the end of one object, it&#39;s the state at the beginning of the next object. If you wish to control this, consider surrounding the graphics or text calls with <code>save()</code> and <code>restore()</code> calls to save and restore (push and pop) the graphics state to what it was at the <code>save()</code>. Finally, the bar is drawn over everything.</p>
+
+<pre><code> # ----------------------------
+ # 3. (2) again, with two graphics and two text objects
+
+ my $text3 = $page-&gt;text();
+ my $grfx3 = $page-&gt;gfx();
+ $text3-&gt;font($fontTR, 20);  # 20 pt Times Roman bold
+ my $text4 = $page-&gt;text();
+ my $grfx4 = $page-&gt;gfx();
+ $text4-&gt;font($fontTR, 20);  # 20 pt Times Roman bold
+
+ $text3-&gt;fillcolor(&#39;black&#39;);
+ $grfx3-&gt;strokecolor(&#39;blue&#39;);
+ $grfx3-&gt;fillcolor(&#39;orange&#39;);
+ # $text4-&gt;fillcolor(&#39;yellow&#39;);
+ # $grfx4-&gt;strokecolor(&#39;red&#39;);
+ # $grfx4-&gt;fillcolor(&#39;purple&#39;);
+
+ $text3-&gt;translate(50,500);
+ $text3-&gt;text_left(&quot;This text should be under everything.&quot;);
+
+ $grfx3-&gt;circle(100,490, 30);
+ $grfx3-&gt;fillstroke();
+
+ $text4-&gt;translate(50,470);
+ $text4-&gt;text_left(&quot;This text should be over the ball and under the bar.&quot;);
+
+ $grfx4-&gt;rect(160,460, 20,70);
+ $grfx4-&gt;fillstroke();
+
+ % ---------------- group 3: define text1, graphics1, text2, graphics2
+ 15 0 obj &lt;&lt; /Length 206 &gt;&gt; stream   % obj 15 is text1 for (3)
+   BT  
+ /TiCBA 20 Tf   % Times Roman Bold 20pt
+ 0 0 0 rg  % fill black
+ 1 0 0 1 50 500 Tm   % position text
+ &lt;0037 ... 0011&gt; Tj   % &quot;under&quot; line
+   ET   
+ endstream endobj
+
+ 16 0 obj &lt;&lt; /Length 671 &gt;&gt; stream   % obj 16 is graphics1 for (3) circle
+  0 0 1 RG   % stroke blue
+ 1 0.647059 0 rg   % fill orange
+ 130 490 m ... h B   % draw and fill circle
+ endstream endobj
+
+ 17 0 obj &lt;&lt; /Length 257 &gt;&gt; stream   % obj 17 is text2 for (3)
+   BT  
+ /TiCBA 20 Tf   % Times Roman Bold 20pt
+ 1 0 0 1 50 470 Tm   % position text
+ &lt;0037 ... 0011&gt; Tj   % &quot;over&quot; line
+   ET   
+ endstream endobj
+
+ 18 0 obj &lt;&lt; /Length 20 &gt;&gt; stream   % obj 18 is graphics for (3) bar
+  160 460 20 70 re B   % draw and fill bar
+ endstream endobj</code></pre>
+
+<p>The fourth group is the same as the third, except that we define the fill color for the text in the second line. This makes it clear that the &quot;over&quot; line (in yellow) was written <i>after</i> the orange disc, and still before the bar.</p>
+
+<pre><code> # ----------------------------
+ # 4. (3) again, a new set of colors for second group
+
+ my $text3 = $page-&gt;text();
+ my $grfx3 = $page-&gt;gfx();
+ $text3-&gt;font($fontTR, 20);  # 20 pt Times Roman bold
+ my $text4 = $page-&gt;text();
+ my $grfx4 = $page-&gt;gfx();
+ $text4-&gt;font($fontTR, 20);  # 20 pt Times Roman bold
+
+ $text3-&gt;fillcolor(&#39;black&#39;);
+ $grfx3-&gt;strokecolor(&#39;blue&#39;);
+ $grfx3-&gt;fillcolor(&#39;orange&#39;);
+ $text4-&gt;fillcolor(&#39;yellow&#39;);
+ $grfx4-&gt;strokecolor(&#39;red&#39;);
+ $grfx4-&gt;fillcolor(&#39;purple&#39;);
+
+ $text3-&gt;translate(50,400);
+ $text3-&gt;text_left(&quot;This text should be under everything.&quot;);
+
+ $grfx3-&gt;circle(100,390, 30);
+ $grfx3-&gt;fillstroke();
+
+ $text4-&gt;translate(50,370);
+ $text4-&gt;text_left(&quot;This text should be over the ball and under the bar.&quot;);
+
+ $grfx4-&gt;rect(160,360, 20,70);
+ $grfx4-&gt;fillstroke();
+
+ % ---------------- group 4: define text1, graphics1, text2, graphics2 with colors for 2
+ 19 0 obj &lt;&lt; /Length 206 &gt;&gt; stream   % obj 19 is text1 for (4)
+   BT  
+ /TiCBA 20 Tf   % Times Roman Bold 20pt
+ 0 0 0 rg  % fill black
+ 1 0 0 1 50 400 Tm   % position text
+ &lt;0037 ... 0011&gt; Tj   % &quot;under&quot; line
+   ET   
+ endstream endobj
+
+ 20 0 obj &lt;&lt; /Length 671 &gt;&gt; stream   % obj 20 is graphics1 for (4) circle
+  0 0 1 RG   % stroke blue
+ 1 0.647059 0 rg   % fill orange
+ 130 390 m ... h B   % draw and fill circle
+ endstream endobj
+
+ 21 0 obj &lt;&lt; /Length 266 &gt;&gt; stream   % obj 21 is text2 for (4)
+   BT  
+ /TiCBA 20 Tf   % Times Roman Bold 20pt
+ 1 1 0 rg   % fill yellow
+ 1 0 0 1 50 370 Tm   % position text
+ &lt;0037 ... 0011&gt; Tj   % &quot;over&quot; line
+   ET   
+ endstream endobj
+
+ 22 0 obj &lt;&lt; /Length 52 &gt;&gt; stream   % obj 22 is graphics for (4) bar
+  1 0 0 RG   % stroke red
+ 0.498039 0 0.498039 rg   % fill purple
+ 160 360 20 70 re B   % draw and fill rectangle (bar)
+ endstream endobj
+
+ # ----------------------------
+ $pdf-&gt;saveas(&quot;$fname.pdf&quot;);</code></pre>
+
+<p>The separation of text and graphics means that only some text methods are available in a graphics object, and only some graphics methods are available in a text object. There is much overlap, but they differ. There&#39;s really no reason the code couldn&#39;t have been written (in PDF::API2, or earlier) as outputting to a single object, which would keep everything in the same order as the method calls. An advantage would be less object and stream overhead in the PDF file. The only drawback might be that an object might more easily overflow and require splitting into multiple objects, but that should be rare.</p>
+
+<p>You should always be able to manually split an object by simply ending output to the first object, and picking up with output to the second object, <i>so long as it was created immediately after the first object.</i> The graphics state at the end of the first object should be the initial state at the beginning of the second object. <b>However,</b> use caution when dealing with text objects -- the PDF specification states that the Text matrices are <i>not</i> carried over from one object to the next (<b>BT</b> resets them), so you may need to reset some settings.</p>
+
+<pre><code> $grfx1 = $page-&gt;gfx();
+ $grfx2 = $page-&gt;gfx();
+ # write a huge amount of stuff to $grfx1
+ # write a huge amount of stuff to $grfx2, picking up where $grfx1 left off</code></pre>
+
+<h3 id="Rendering-with-a-shared-mixed-object">Rendering with a shared (mixed) object</h3>
+
+<p>In any case, now that you understand the rendering order and how the order of object declarations affects it, how text and graphics are drawn can now be completely controlled as desired. There is really no need to add another &quot;both&quot; type object that will handle all graphics and text objects, as that would probably be a major code bloat for very little benefit. However, it could be considered in the future if there is a demonstrated need for it, such as serious PDF file size bloat due to the extra object overhead when interleaving text and graphics output.</p>
+
+<p>There is not currently a general facility for mixed-use objects, but a limited example is the current implementation of underline, line-through, and overline text (within <code>column()</code> markup); which are performed within the text object, temporarily exiting (ET) to graphics mode to draw the lines, and then returning (BT) to text mode. This was done so that baseline coordinate adjustments could be easily made. Since &quot;BT&quot; resets some text settings, this needs to be done with care!</p>
+
+<p>A number of PDF-producing products out there mix their text and graphics into a single object. So long as PDF::Builder is <i>not</i> expecting to pick apart a &quot;text&quot; or &quot;graphics&quot; stream from an existing PDF file, in order to look inside it, this should not be expected to cause any problems. However, if you add a new text-only or graphics-only object to an existing PDF via PDF::Builder, you need to be aware of the rendering order. Presumably the new object(s) will be <i>after</i> the original one, but you should be aware of what&#39;s going on. A text, graphics, or mixed object is all the same to a PDF reader, which cares only for who has the lower object number (to be rendered first).</p>
+
+<h3 id="Graphics-state-left-by-existing-PDFs">Graphics state left by existing PDFs</h3>
+
+<p>There was a problem recently reported (ticket 231) which suggested that the expected rendering order of output wasn&#39;t being respected. What it turned out to be was that a utility (&quot;Canva&quot;) used to generate a template PDF, was writing graphics commands to a single stream (a mixed graphics and text stream, rather than separate streams, but that&#39;s not important here). Apparently it was leaving the PDF it created with a graphics state of <b>transparent</b> &quot;fill&quot; mode. Further text (as well as filled graphics draws) added by the user in PDF::Builder (open PDF, open_page, add graphics and text in new streams) was still being drawn, but was made invisible when rendered! Remember that text is by default (render mode 0) drawn only with fill, not outlined. The solution was to first use the <code>egstate()</code> call to set transparency back to 0 (off), making &quot;fill&quot; opaque again. See <code>examples/060_transparency</code> for a code sample, or ticket 231.</p>
+
+<h2 id="Notes-on-Reader-support-of-features">Notes on Reader support of features</h2>
+
+<p>PDF Readers are complex pieces of software, written by different groups at different times. Thus, they may differ in how they support features and handle non-standard (i.e., not quite meeting standards) content! Most Readers out there support all or most features up through PDF 1.7, and some support PDF 2.x features. Note that PDF::Builder supports PDF 1.4 for the most part, with a few PDF 1.5 features added. Most any Reader out there <i>should</i> (in theory) support any PDF produced with PDF::Builder.</p>
+
+<p>There is no official <i>reference implementation</i> of a Reader, although Adobe&#39;s Acrobat Reader (<i>AAR</i>, a free download) is so prevalent that it is almost a <i>de facto</i> standard. At least, we <i>try</i> to get PDF::Builder and its tests and examples to run on AAR. Sometimes it can be difficult, as, for example, the handling of save (<b>q</b>) and restore (<b>Q</b>) operators (commands) within a text stream. The PDF standard sort of suggests that these apply only to the Graphics Stream, and possibly shouldn&#39;t appear in a Text Stream. Most Readers appear to just ignore q and Q within a text stream, and AAR usually seems to, but certain combinations of stream size and compression seem to trigger a warning in AAR upon load! This particular case is now a moot point, as <code>save()</code> and <code>restore()</code> have been reverted to being no-ops (with a single warning message given if found) in a Text Stream.</p>
+
+<p>We have been advised that certain stream operators may not be strictly allowed within certain parts of a stream (particularly certain graphics state operators after path construction has started). No Reader seems to give problems with this at the moment, but users should be aware that the ordering of their PDF::Builder calls <i>may</i> need to be updated at some point, to get PDFs usable on all Readers. If necessary, we will add code to enforce this (or at least, warn of potential problems). Please feel free to report if you find such restrictions are necessary.</p>
+
+<p>Also note that not all <i>filters</i> (including compression methods) may be supported on all Readers. For example, at this time, AAR (and a number of other Readers) apparently do not support CCITT Group 4 Fax compression (for some TIFF images). This remains under investigation.</p>
+
+<h2 id="PDF-Versions-Supported">PDF Versions Supported</h2>
+
+<p>When creating a PDF file using the functions in PDF::Builder, the output is marked as PDF 1.4. This does not mean that all <i>PDF</i> functionality up through 1.4 is supported! There are almost surely features missing as far back as the PDF 1.0 standard.</p>
+
+<p>The big problem is when a PDF of version 1.5 or higher is imported or opened in PDF::Builder. If it contains content that is actually unsupported by this software, there is a chance that something will break. This does not guarantee that a PDF marked as &quot;1.7&quot; will go down in flames when read by PDF::Builder, or that a PDF written back out will break in a Reader, but the possibility is there. Much PDF writer software simply marks its output as the highest version of PDF at the time (usually 1.7), even if there is no content beyond, say, 1.2. There is <i>some</i> handling of PDF 1.5 items in PDF::Builder, such as cross reference streams, but support beyond 1.4 is very limited. All we can say is to be careful when handling PDFs whose version is above 1.4, and test thoroughly, as they may break at some point.</p>
+
+<p>PDF::Builder includes a simple version control mechanism, where the initial PDF version to be output (default 1.4) can be set by the programmer. Input PDFs greater than 1.4 (current output level) will receive a warning (can be suppressed) that the output level will be raised to that level. The use of PDF features greater than the current output level will likewise trigger a warning that the output level is to be raised to the necessary level. If this is not desired, you should avoid using those PDF features which are higher than the desired PDF output level.</p>
+
+<h2 id="History">History</h2>
+
+<p>PDF::API2 was originally written by Alfred Reibenschuh, derived from Martin Hosken&#39;s Text::PDF via the Text::PDF::API wrapper. In 2009, Otto Hirr started the PDF::API3 fork, but it never went anywhere. In 2011, PDF::API2 maintenance was taken over by Steve Simms. In 2017, PDF::Builder was forked by Phil M. Perry, who desired a more aggressive schedule of new features and bug fixes than Simms was providing, although some of Simms&#39;s work <i>has</i> been ported from PDF::API2.</p>
+
+<p>According to Alfred Reibenschuh&#39;s 2005 presentation &quot;pdfapi2_for_fun_and_profit_APW2005.pdf&quot; (on http://pdfapi2.sourceforge.net, an unmaintained site), the history of PDF::API2 (the predecessor to PDF::Builder) goes as such:</p>
+
+<ul>
+
+<li><p>First Code implemented based on PDFlib-0.6 (AFPL)</p>
+
+</li>
+<li><p>Changed to Text::PDF with a total rewrite as Text::PDF::API (procedural)</p>
+
+</li>
+<li><p>Unmaintainable Code triggered rewrite into new Namespace PDF::API2 (object-oriented, LGPL)</p>
+
+</li>
+<li><p>Object-Structure streamlined in 0.4x</p>
+
+</li>
+</ul>
+
+<p>At Simms&#39;s request, the name of the new offering was changed from PDF::API4 to PDF::Builder, to reduce the chance of confusion due to parallel development. Perry&#39;s intent is to keep all internal methods as upwardly compatible with PDF::API2 as possible, although it is likely that there will be some drift (incompatibilities) over time. At least initially, any program written based on PDF::API2 should be convertible to PDF::Builder simply by changing &quot;API2&quot; anywhere it occurs to &quot;Builder&quot;. See the INFO/KNOWN_INCOMP known incompatibilities file for further information.</p>
+
+<h3 id="Thanks">Thanks...</h3>
+
+<p>Many users have helped out by reporting bugs and requesting enhancements. A special shout out goes to those who have contributed code and tests, or coordinated their package development with the needs of PDF::Builder: Ben Bullock, Cary Gravel, Gregor Herrmann, Petr Pisar, Jeffrey Ratcliffe, Steve Simms (via PDF::API2 fixes), and Johan Vromans. Drop me a line if I&#39;ve overlooked your contribution!</p>
+
+<h1 id="DETAILED-NOTES-ON-METHODS">DETAILED NOTES ON METHODS</h1>
+
+<p><b>Note:</b> older versions of this package named various (hash element) options with leading dashes (hyphens) in the name, e.g., &#39;-encode&#39;. The use of a dash is now optional, and options are documented with names <i>not</i> using dashes. While the use of dashed option names is deprecated and discouraged, they will remain legal for some time to come. At some point in the future, it is possible that support for dashed names will be withdrawn, so it would be good practice to start using undashed names in new and revised code.</p>
+
+<h2 id="After-saving-a-file">After saving a file...</h2>
+
+<p>Note that a PDF object such as <code>$pdf</code> cannot continue to be used after saving an output PDF file or string with $pdf-&gt;<code>save()</code>, <code>saveas()</code>, or <code>stringify()</code>. There is some cleanup and other operations done internally which make the object unusable for further operations. You will likely receive an error message about <b>can&#39;t call method new_obj on an undefined value</b> if you try to keep using a PDF object.</p>
+
+<h2 id="IntegrityCheck">IntegrityCheck</h2>
+
+<p>The PDF::Builder methods that open an existing PDF file, pass it by the integrity checker method, <code>$self-&gt;IntegrityCheck(level, content)</code>. This method servers two purposes: 1) to find any <code>/Version</code> settings that override the PDF version found in the PDF heading, and 2) perform some basic validations on the contents of the PDF.</p>
+
+<p>The <code>level</code> parameter accepts the following values:</p>
+
+<dl>
+
+<dt>0</dt>
+<dd>
+
+<p>Do not output any diagnostic messages; just return any version override.</p>
+
+</dd>
+<dt>1</dt>
+<dd>
+
+<p>Output error-level (serious) diagnostic messages, as well as returning any version override.</p>
+
+<p>Errors include, in no place was the /Root object specified, or if it was, the indicated object was not found. An object claims another object as its child (/Kids list), but another object has already claimed that child. An object claims a child, but that child does not list a Parent, or the child lists a different Parent.</p>
+
+</dd>
+<dt>2</dt>
+<dd>
+
+<p>Output error- (serious) and warning- (less serious) level diagnostic messages, as well as returning any version override. <b>This is the default.</b></p>
+
+</dd>
+<dt>3</dt>
+<dd>
+
+<p>Output error- (serious), warning- (less serious), and note- (informational) level diagnostic messages, as well as returning any version override.</p>
+
+<p>Notes include, in no place was the (optional) /Info object specified, or if it was, the indicated object was not found. An object was referenced, but no entry for it was found among the objects. (This may be OK if the object is not defined, or is on the free list, as the reference will then be ignored.) An object is defined, but it appears that no other object is referencing it.</p>
+
+</dd>
+<dt>4</dt>
+<dd>
+
+<p>Output error-, warning-, and note-level diagnostic messages, as well as returning any version override. Also dump the diagnostic data structure.</p>
+
+</dd>
+<dt>5</dt>
+<dd>
+
+<p>Output error-, warning-, and note-level diagnostic messages, as well as returning any version override. Also dump the diagnostic data structure and the <code>$self</code> data structure (generally useful only if you have already read in the PDF file).</p>
+
+</dd>
+</dl>
+
+<p>The version is a string (e.g., &#39;1.5&#39;) if found, otherwise <code>undef</code> (undefined value) is returned.</p>
+
+<p>For controlling the &quot;automatic&quot; call to IntegrityCheck (via opens), the level may be given with the option (flag) <code>diaglevel =&gt; <i>n</i></code>, where <code>n</code> is between 0 and 5.</p>
+
+<h2 id="Preferences---set-user-display-preferences">Preferences - set user display preferences</h2>
+
+<dl>
+
+<dt>$pdf-&gt;preferences(%options)</dt>
+<dd>
+
+<p>Controls viewing preferences for the PDF.</p>
+
+</dd>
+</dl>
+
+<h3 id="Page-Mode-Options">Page Mode Options</h3>
+
+<dl>
+
+<dt>fullscreen</dt>
+<dd>
+
+<p>Full-screen mode, with no menu bar, window controls, or any other window visible.</p>
+
+</dd>
+<dt>thumbs</dt>
+<dd>
+
+<p>Thumbnail images visible.</p>
+
+</dd>
+<dt>outlines</dt>
+<dd>
+
+<p>Document outline visible.</p>
+
+</dd>
+</dl>
+
+<h3 id="Page-Layout-Options">Page Layout Options</h3>
+
+<dl>
+
+<dt>singlepage</dt>
+<dd>
+
+<p>Display one page at a time.</p>
+
+</dd>
+<dt>onecolumn</dt>
+<dd>
+
+<p>Display the pages in one column.</p>
+
+</dd>
+<dt>twocolumnleft</dt>
+<dd>
+
+<p>Display the pages in two columns, with odd-numbered pages on the left.</p>
+
+</dd>
+<dt>twocolumnright</dt>
+<dd>
+
+<p>Display the pages in two columns, with odd-numbered pages on the right.</p>
+
+</dd>
+</dl>
+
+<h3 id="Viewer-Options">Viewer Options</h3>
+
+<dl>
+
+<dt>hidetoolbar</dt>
+<dd>
+
+<p>Specifying whether to hide tool bars.</p>
+
+</dd>
+<dt>hidemenubar</dt>
+<dd>
+
+<p>Specifying whether to hide menu bars.</p>
+
+</dd>
+<dt>hidewindowui</dt>
+<dd>
+
+<p>Specifying whether to hide user interface elements.</p>
+
+</dd>
+<dt>fitwindow</dt>
+<dd>
+
+<p>Specifying whether to resize the document&#39;s window to the size of the displayed page.</p>
+
+</dd>
+<dt>centerwindow</dt>
+<dd>
+
+<p>Specifying whether to position the document&#39;s window in the center of the screen.</p>
+
+</dd>
+<dt>displaytitle</dt>
+<dd>
+
+<p>Specifying whether the window&#39;s title bar should display the document title taken from the Title entry of the document information dictionary.</p>
+
+</dd>
+<dt>afterfullscreenthumbs</dt>
+<dd>
+
+<p>Thumbnail images visible after Full-screen mode.</p>
+
+</dd>
+<dt>afterfullscreenoutlines</dt>
+<dd>
+
+<p>Document outline visible after Full-screen mode.</p>
+
+</dd>
+<dt>printscalingnone</dt>
+<dd>
+
+<p>Set the default print setting for page scaling to none.</p>
+
+</dd>
+<dt>simplex</dt>
+<dd>
+
+<p>Print single-sided by default.</p>
+
+</dd>
+<dt>duplexflipshortedge</dt>
+<dd>
+
+<p>Print duplex by default and flip on the short edge of the sheet.</p>
+
+</dd>
+<dt>duplexfliplongedge</dt>
+<dd>
+
+<p>Print duplex by default and flip on the long edge of the sheet.</p>
+
+</dd>
+</dl>
+
+<h3 id="Page-Fit-Options">Page Fit Options</h3>
+
+<p>These options are used for the <code>firstpage</code> layout, as well as for Annotations, Named Destinations and Outlines. For Annotations and Named Destinations, the first form given is for the fit as a hash element (option), while the second is as given as a list (before any options).</p>
+
+<dl>
+
+<dt>&#39;fit&#39; =&gt; 1</dt>
+<dd>
+
+</dd>
+<dt>&#39;fit&#39;</dt>
+<dd>
+
+<p>Display the page designated by <code>$page</code>, with its contents magnified just enough to fit the entire page within the window both horizontally and vertically. If the required horizontal and vertical magnification factors are different, use the smaller of the two, centering the page within the window in the other dimension. Bottom line: the entire page is shown, as large as possible.</p>
+
+</dd>
+<dt>&#39;fith&#39; =&gt; $top</dt>
+<dd>
+
+</dd>
+<dt>&#39;fith&#39;, $top</dt>
+<dd>
+
+<p>Display the page designated by <code>$page</code>, with the vertical coordinate <code>$top</code> positioned at the top edge of the window and the contents of the page magnified just enough to fit the entire width of the page within the window. Bottom line: like &#39;fit&#39;, but scrolled vertically to put desired y coordinate at the very top edge.</p>
+
+</dd>
+<dt>&#39;fitv&#39; =&gt; $left</dt>
+<dd>
+
+</dd>
+<dt>&#39;fitv&#39;, $left</dt>
+<dd>
+
+<p>Display the page designated by <code>$page</code>, with the horizontal coordinate <code>$left</code> positioned at the left edge of the window and the contents of the page magnified just enough to fit the entire height of the page within the window. Bottom line: like &#39;fit&#39;, but scrolled horizontally to put desired x coordinate at the very left edge.</p>
+
+</dd>
+<dt>&#39;fitr&#39; =&gt; [ $left, $bottom, $right, $top ]</dt>
+<dd>
+
+</dd>
+<dt>&#39;fitr&#39;, $left, $bottom, $right, $top</dt>
+<dd>
+
+<p>Display the page designated by <code>$page</code>, with its contents magnified just enough to fit the rectangle specified by the coordinates <code>$left</code>, <code>$bottom</code>, <code>$right</code>, and <code>$top</code> entirely within the window both horizontally and vertically. If the required horizontal and vertical magnification factors are different, use the smaller of the two, centering the rectangle within the window in the other dimension. Bottom line: defines a <i>viewport</i> into the page by giving its corners. Cf. &#39;xyz&#39;, but all 4 corners of the viewport rectangle are given.</p>
+
+</dd>
+<dt>&#39;fitb&#39; =&gt; 1</dt>
+<dd>
+
+</dd>
+<dt>&#39;fitb&#39;</dt>
+<dd>
+
+<p>Display the page designated by <code>$page</code>, with its contents magnified just enough to fit its bounding box entirely within the window both horizontally and vertically. If the required horizontal and vertical magnification factors are different, use the smaller of the two, centering the bounding box within the window in the other dimension. Similar to &#39;fit&#39;.</p>
+
+</dd>
+<dt>&#39;fitbh&#39; =&gt; $top</dt>
+<dd>
+
+</dd>
+<dt>&#39;fitbh&#39;, $top</dt>
+<dd>
+
+<p>Display the page designated by <code>$page</code>, with the vertical coordinate <code>$top</code> positioned at the top edge of the window and the contents of the page magnified just enough to fit the entire width of its bounding box within the window. Like &#39;fitb&#39;, but scrolled vertically so that <code>$top</code> is at the top edge of the display.</p>
+
+</dd>
+<dt>&#39;fitbv&#39; =&gt; $left</dt>
+<dd>
+
+</dd>
+<dt>&#39;fitbv&#39;, $left</dt>
+<dd>
+
+<p>Display the page designated by <code>$page</code>, with the horizontal coordinate <code>$left</code> positioned at the left edge of the window and the contents of the page magnified just enough to fit the entire height of its bounding box within the window. Like &#39;fitb&#39;, but scrolled horizontally so that <code>$left</code> is at the left edge of the display.</p>
+
+</dd>
+<dt>&#39;xyz&#39; =&gt; [ $left, $top, $zoom ]</dt>
+<dd>
+
+</dd>
+<dt>&#39;xyz&#39;, $left, $top, $zoom</dt>
+<dd>
+
+<p>Display the page designated by <code>$page</code>, with the coordinates <code>[$left, $top]</code> positioned at the <b>top-left corner</b> of the viewport and the contents of the page <b>magnified</b> by the factor <code>$zoom</code>. An <code>undef</code> value for any of the parameters <code>$left</code>, <code>$top</code>, or <code>$zoom</code> specifies that the current value of that parameter is to be retained unchanged. So, if you are viewing a page at a certain location and zoom factor, your new page should be positioned at the same x,y and be at the same zoom (if all three are <code>undef</code>). Cf. &#39;fitr&#39;, but only one corner is given, along with the magnification.</p>
+
+</dd>
+</dl>
+
+<h3 id="Initial-Page-Options">Initial Page Options</h3>
+
+<dl>
+
+<dt>firstpage =&gt; [ $page, %options ]</dt>
+<dd>
+
+<p>Specifying the page (either a page number or a page object) to be displayed, plus one of the location options listed above in <a href="#Page-Fit-Options">&quot;Page Fit Options&quot;</a>.</p>
+
+</dd>
+</dl>
+
+<h3 id="Example">Example</h3>
+
+<pre><code>    $pdf-&gt;preferences(
+        fullscreen =&gt; 1,
+        onecolumn =&gt; 1,
+        afterfullscreenoutlines =&gt; 1,
+        firstpage =&gt; [$page, fit =&gt; 1],
+    );</code></pre>
+
+<h2 id="info-Example">info Example</h2>
+
+<pre><code>    %h = $pdf-&gt;info(
+        &#39;Author&#39;       =&gt; &quot;Alfred Reibenschuh&quot;,
+        &#39;CreationDate&#39; =&gt; &quot;D:20020911000000+01&#39;00&#39;&quot;,
+        &#39;ModDate&#39;      =&gt; &quot;D:YYYYMMDDhhmmssOHH&#39;mm&#39;&quot;,
+        &#39;Creator&#39;      =&gt; &quot;fredos-script.pl&quot;,
+        &#39;Producer&#39;     =&gt; &quot;PDF::Builder&quot;,
+        &#39;Title&#39;        =&gt; &quot;some Publication&quot;,
+        &#39;Subject&#39;      =&gt; &quot;perl ?&quot;,
+        &#39;Keywords&#39;     =&gt; &quot;all good things are pdf&quot;
+    );
+    print &quot;Author: $h{&#39;Author&#39;}\n&quot;;</code></pre>
+
+<h2 id="XMP-XML-example">XMP XML example</h2>
+
+<pre><code>    $xml = $pdf-&gt;xmpMetadata();
+    print &quot;PDFs Metadata reads: $xml\n&quot;;
+    $xml=&lt;&lt;EOT;
+    &lt;?xpacket begin=&#39;&#39; id=&#39;W5M0MpCehiHzreSzNTczkc9d&#39;?&gt;
+    &lt;?adobe-xap-filters esc=&quot;CRLF&quot;?&gt;
+    &lt;x:xmpmeta
+      xmlns:x=&#39;adobe:ns:meta/&#39;
+      x:xmptk=&#39;XMP toolkit 2.9.1-14, framework 1.6&#39;&gt;
+        &lt;rdf:RDF
+          xmlns:rdf=&#39;http://www.w3.org/1999/02/22-rdf-syntax-ns#&#39;
+          xmlns:iX=&#39;http://ns.adobe.com/iX/1.0/&#39;&gt;
+            &lt;rdf:Description
+              rdf:about=&#39;uuid:b8659d3a-369e-11d9-b951-000393c97fd8&#39;
+              xmlns:pdf=&#39;http://ns.adobe.com/pdf/1.3/&#39;
+              pdf:Producer=&#39;Acrobat Distiller 6.0.1 for Macintosh&#39;&gt;&lt;/rdf:Description&gt;
+            &lt;rdf:Description
+              rdf:about=&#39;uuid:b8659d3a-369e-11d9-b951-000393c97fd8&#39;
+              xmlns:xap=&#39;http://ns.adobe.com/xap/1.0/&#39;
+              xap:CreateDate=&#39;2004-11-14T08:41:16Z&#39;
+              xap:ModifyDate=&#39;2004-11-14T16:38:50-08:00&#39;
+              xap:CreatorTool=&#39;FrameMaker 7.0&#39;
+              xap:MetadataDate=&#39;2004-11-14T16:38:50-08:00&#39;&gt;&lt;/rdf:Description&gt;
+            &lt;rdf:Description
+              rdf:about=&#39;uuid:b8659d3a-369e-11d9-b951-000393c97fd8&#39;
+              xmlns:xapMM=&#39;http://ns.adobe.com/xap/1.0/mm/&#39;
+              xapMM:DocumentID=&#39;uuid:919b9378-369c-11d9-a2b5-000393c97fd8&#39;/&gt;&lt;/rdf:Description&gt;
+            &lt;rdf:Description
+              rdf:about=&#39;uuid:b8659d3a-369e-11d9-b951-000393c97fd8&#39;
+              xmlns:dc=&#39;http://purl.org/dc/elements/1.1/&#39;
+              dc:format=&#39;application/pdf&#39;&gt;
+                &lt;dc:description&gt;
+                  &lt;rdf:Alt&gt;
+                    &lt;rdf:li xml:lang=&#39;x-default&#39;&gt;Adobe Portable Document Format (PDF)&lt;/rdf:li&gt;
+                  &lt;/rdf:Alt&gt;
+                &lt;/dc:description&gt;
+                &lt;dc:creator&gt;
+                  &lt;rdf:Seq&gt;
+                    &lt;rdf:li&gt;Adobe Systems Incorporated&lt;/rdf:li&gt;
+                  &lt;/rdf:Seq&gt;
+                &lt;/dc:creator&gt;
+                &lt;dc:title&gt;
+                  &lt;rdf:Alt&gt;
+                    &lt;rdf:li xml:lang=&#39;x-default&#39;&gt;PDF Reference, version 1.6&lt;/rdf:li&gt;
+                  &lt;/rdf:Alt&gt;
+                &lt;/dc:title&gt;
+            &lt;/rdf:Description&gt;
+        &lt;/rdf:RDF&gt;
+    &lt;/x:xmpmeta&gt;
+    &lt;?xpacket end=&#39;w&#39;?&gt;
+    EOT
+
+    $xml = $pdf-&gt;xmpMetadata($xml);
+    print &quot;PDF metadata now reads: $xml\n&quot;;</code></pre>
+
+<h2 id="BOX-METHODS">&quot;BOX&quot; METHODS</h2>
+
+<p><b>A general note:</b> Use care if specifying a different Media Box (or other &quot;box&quot;) for a page, than the global &quot;box&quot; setting, to define the whole &quot;chain&quot; of boxes on the page, to avoid surprises. For example, to define a global Media Box (paper size) and a global Crop Box, and then define a new page-level Media Box <i>without</i> defining a new page-level Crop Box, may give odd results in the resultant cropping. Such combinations are not well defined.</p>
+
+<p>All dimensions in boxes default to the default User Unit, which is points (1/72 inch). Note that the PDF specification limits sizes and coordinates to 14400 User Units (200 inches, for the default User Unit of one point), and Adobe products (so far) follow this limit for Acrobat and Distiller. It is worth noting that other PDF writers and readers may choose to ignore the 14400 unit limit, with or without the use of a specified User Unit. Therefore, PDF::Builder does not enforce any limits on coordinates -- it&#39;s <i>your</i> responsibility to consider what readers and other PDF tools may be used with a PDF you produce! Also note that earlier Acrobat readers had coordinate limits as small as 3240 User Units (45 inches), and <i>minimum</i> media size of 72 or 3 User Units.</p>
+
+<h3 id="User-Units-userunit">User Units (userunit)</h3>
+
+<pre><code>    $pdf-&gt;userunit($number)</code></pre>
+
+<blockquote>
+
+<p>The default User Unit in the PDF coordinate system is one point (1/72 inch). You can think of it as a scale factor to enable larger (or even, smaller) documents. This method may be used (for PDF 1.6 and higher) to set the User Unit to some number of points. For example, <code>userunit(72)</code> will set the scale multiplier to 72.0 points per User Unit, or 1 inch to the User Unit. Any number greater than zero is acceptable, although some readers and tools may not handle User Units of less than 1.0 very well.</p>
+
+<p>Not all readers respect the User Unit, if you give one, or handle it in exactly the same way. Adobe Distiller, for one, does not use it. How User Units are handled may vary from reader to reader. Adobe Acrobat, at this writing, respects User Unit in version 7.0 and up, but limits it to 75000 (giving a maximum document size of 15 million inches or 236.7 miles or 381 km). Other readers and PDF tools may allow a larger (or smaller) limit.</p>
+
+<p><b>Your Mileage May Vary:</b> Some readers ignore a global User Unit setting and do <i>not</i> have pages inherit it (PDF::Builder duplicates it on each page to simulate inheritance). Some readers may give spurious warnings about truncated content when a Media Box is changed while User Units are being used. Some readers do strange things with Crop Boxes when a User Unit is in effect.</p>
+
+<p>Depending on the reader used, the effect of a larger User Unit (greater than 1) may mean lower resolution (chunkier or coarser appearance) in the rendered document. If you&#39;re printing something the size of a highway billboard, this may not matter to you, but you should be aware of the possibility (even with fractional coordinates). Conversely, a User Unit of less than 1.0 (if permitted) reduces the allowable size of your document, but <i>may</i> result in greater resolution.</p>
+
+<p>A global (PDF level) User Unit setting is inherited by each page (an action by PDF::Builder, not necessarily automatically done by the reader), or can be overridden by calling userunit in the page. Do not give more than one global userunit setting, as only the last one will be used. Setting a page&#39;s User Unit (if <code>$page-&gt;</code> instead) is permitted (overriding the global setting for this page). However, many sources recommend against doing this, as results may not be as expected (once again, depending on the quirks of the reader).</p>
+
+<p>Remember to call <code>userunit</code> <i>before</i> calling anything having to do with page or box sizes, or coordinates. Especially when setting &#39;named&#39; box sizes, the methods need to know the current User Unit so that named page sizes (in points) may be scaled down to the current User Unit.</p>
+
+</blockquote>
+
+<h3 id="Media-Box-mediabox">Media Box (mediabox)</h3>
+
+<pre><code>    $pdf-&gt;mediabox($name)
+
+    $pdf-&gt;mediabox($name, orient =&gt; &#39;orientation&#39; )
+
+    $pdf-&gt;mediabox($w,$h)
+
+    $pdf-&gt;mediabox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;mediabox()</code></pre>
+
+<blockquote>
+
+<p>Sets the global Media Box (or page&#39;s Media Box, if <code>$page-&gt;</code> instead). This defines the width and height (or by corner coordinates, or by standard name) of the output page itself, such as the physical paper size. This is normally the largest of the &quot;boxes&quot;. If any subsidiary box (within it) exceeds the media box, the portion of the material or boxes outside of the Media Box will be ignored. That is, the Media Box is the One Box to Rule Them All, and is the overall limit for other boxes (some documentation refers to the Media Box as &quot;clipping&quot; other boxes). In addition, the Media Box defines the overall <i>coordinate system</i> for text and graphics operations.</p>
+
+<p>If no arguments are given, the current Media Box (global or page) coordinates are returned instead. The former <code>get_mediabox</code> (page only) function was <b>deprecated</b> and has been removed. In addition, when <i>setting</i> the Media Box, the resulting coordinates are returned. This permits you to specify the page size by a name (alias) and get the dimensions back, all in one call.</p>
+
+<p>Note that many printers can <b>not</b> print all the way to the physical edge of the paper, so you should plan to leave some blank margin, even outside of any crop marks and bleeds. Printers and on-screen readers are free to discard any content found outside the Media Box, and printers may discard some material just inside the Media Box.</p>
+
+<p>A <i>global</i> Media Box is <b>required</b> by the PDF spec; if not explicitly given, PDF::Builder will set the global Media Box to US Letter size (8.5in x 11in). This is the media size that will be used for all pages if you do not specify a <code>mediabox</code> call on a page. That is, a global (PDF level) mediabox setting is inherited by each page, or can be overridden by setting mediabox in the page. Do not give more than one global mediabox setting, as only the last one will be used.</p>
+
+<p>If you give a single string name (e.g., &#39;A4&#39;), you may optionally add an orientation to turn the page 90 degrees into Landscape mode: <code>orient =&gt; &#39;L&#39;</code> or <code>orient =&gt; &#39;l&#39;</code>. <code>orient</code> is the only option recognized, and a string beginning with an &#39;L&#39; or &#39;l&#39; (for Landscape) is the only value of interest (anything else is treated as Portrait mode). The <i>y</i> axis still runs from 0 at the bottom of the page to what used to be the page <i>width</i> (now, <i>height</i>) at the top, and likewise for the <i>x</i> axis: 0 at left to (former) <i>height</i> at the right. That is, the coordinate system is the same as before, except that the height and width are different.</p>
+
+<p>The lower left corner does not <i>have</i> to be 0,0. It can be any values you want, including negative values (so long as the resulting media&#39;s sides are at least one point long). <code>mediabox</code> sets the coordinate system (including the origin) of the graphics and text that will be drawn, as well as for subsequent &quot;boxes&quot;. It&#39;s even possible to give any two opposite corners (such as upper left and lower right). The coordinate system will be rearranged (by the Reader) to still be the conventional minimum <code>x</code> and <code>y</code> in the lower left (i.e., you can&#39;t make <code>y</code> <i>increase</i> from top to bottom!).</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    $pdf = PDF::Builder-&gt;new();
+    $pdf-&gt;mediabox(&#39;A4&#39;); # A4 size (595 Pt wide by 842 Pt high)
+    ...
+    $pdf-&gt;saveas(&#39;our/new.pdf&#39;);
+
+    $pdf = PDF::Builder-&gt;new();
+    $pdf-&gt;mediabox(595, 842); # A4 size, with implicit 0,0 LL corner
+    ...
+    $pdf-&gt;saveas(&#39;our/new.pdf&#39;);
+
+    $pdf = PDF::Builder-&gt;new;
+    $pdf-&gt;mediabox(0, 0, 595, 842); # A4 size, with explicit 0,0 LL corner
+    ...
+    $pdf-&gt;saveas(&#39;our/new.pdf&#39;);</code></pre>
+
+<blockquote>
+
+<p>See the <a href="../../PDF/Builder/Resource/PaperSizes.html">PDF::Builder::Resource::PaperSizes</a> source code for the full list of supported names (aliases) and their dimensions in points. You are free to add additional paper sizes to this file, if you wish. You might want to do this if you frequently use a standard page size in rotated (Landscape) mode. See also the <code>getPaperSizes</code> call in <a href="../../PDF/Builder/Util.html">PDF::Builder::Util</a>. These names (aliases) are also usable in other &quot;box&quot; calls, although useful only if the &quot;box&quot; is the same size as the full media (Media Box), and you don&#39;t mind their starting at 0,0.</p>
+
+</blockquote>
+
+<h3 id="Crop-Box-cropbox">Crop Box (cropbox)</h3>
+
+<pre><code>    $pdf-&gt;cropbox($name)
+
+    $pdf-&gt;cropbox($name, orient =&gt; &#39;orientation&#39;)
+
+    $pdf-&gt;cropbox($w,$h)
+
+    $pdf-&gt;cropbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;cropbox()</code></pre>
+
+<blockquote>
+
+<p>Sets the global Crop Box (or page&#39;s Crop Box, if <code>$page-&gt;</code> instead). This will define the media size to which the output will later be <i>clipped</i>. Note that this does <b>not</b> itself output any crop marks to guide cutting of the paper! PDF Readers should consider this to be the <i>visible</i> portion of the page, and anything found outside it <i>may</i> be clipped (invisible). By default, it is equal to the Media Box, but may be defined to be smaller, in the coordinate system set by the Media Box. A global setting will be inherited by each page, but can be overridden on a per-page basis.</p>
+
+<p>A Reader or Printer may choose to discard any clipped (invisible) part of the page, and show only the area <i>within</i> the Crop Box. For example, if your page Media Box is A4 (0,0 to 595,842 Points), and your Crop Box is (100,100 to 495,742), a reader such as Adobe Acrobat Reader may show you a page 395 by 642 Points in size (i.e., just the visible area of your page). Other Readers may show you the full media size (Media Box) and a 100 Point wide blank area (in this example) around the visible content.</p>
+
+<p>If no arguments are given, the current Crop Box (global or page) coordinates are returned instead. The former <code>get_cropbox</code> (page only) function was <b>deprecated</b> and has been removed. If a Crop Box has not been defined, the Media Box coordinates (which always exist) will be returned instead. In addition, when <i>setting</i> the Crop Box, the resulting coordinates are returned. This permits you to specify the crop box by a name (alias) and get the dimensions back, all in one call.</p>
+
+<p>Do not confuse the Crop Box with the <code>Trim Box</code>, which shows where printed paper is expected to actually be <i>cut</i>. Some PDF Readers may reduce the visible &quot;paper&quot; background to the size of the crop box; others may simply omit any content outside it. Either way, you would lose any trim or crop marks, printer instructions, color alignment dots, or other content outside the Crop Box. <i>A good use of the Crop Box</i> would be limit printing to the area where a printer <i>can</i> reliably put down ink, and leave white the edge areas where paper-handling mechanisms prevent ink or toner from being applied. This would keep you from accidentally putting valuable content in an area where a printer will refuse to print, yet permit you to include a bleed area and space for printer&#39;s marks and instructions. Needless to say, if your printer cannot print to the very edge of the paper, you will need to trim (cut) the printed sheets to get true bleeds.</p>
+
+<p>A global (PDF level) cropbox setting is inherited by each page, or can be overridden by setting cropbox in the page. As with <code>mediabox</code>, only one crop box may be set at this (PDF) level. As with <code>mediabox</code>, a named media size may have an orientation (l or L) for Landscape mode. Note that the PDF level global Crop Box will be used <i>even if</i> the page gets its own Media Box. That is, the page&#39;s Crop Box inherits the global Crop Box, not the page Media Box, even if the page has its own media size! If you set the page&#39;s own Media Box, you should consider also explicitly setting the page Crop Box (and other boxes).</p>
+
+</blockquote>
+
+<h3 id="Bleed-Box-bleedbox">Bleed Box (bleedbox)</h3>
+
+<pre><code>    $pdf-&gt;bleedbox($name)
+
+    $pdf-&gt;bleedbox($name, orient =&gt; &#39;orientation&#39;)
+
+    $pdf-&gt;bleedbox($w,$h)
+
+    $pdf-&gt;bleedbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;bleedbox()</code></pre>
+
+<blockquote>
+
+<p>Sets the global Bleed Box (or page&#39;s Bleed Box, if <code>$page-&gt;</code> instead). This is typically used in printing on paper, where you want ink or color (such as thumb tabs) to be printed a bit beyond the final paper size, to ensure that the cut paper <i>bleeds</i> (the cut goes <i>through</i> the ink), rather than accidentally leaving some white paper visible outside. Allow enough &quot;bleed&quot; over the expected trim line to account for minor variations in paper handling, folding, and cutting; to avoid showing white paper at the edge. The Bleed Box is where <i>printing</i> could actually extend to; the Trim Box is normally within it, where the paper would actually be <i>cut</i>. The default value is equal to the Crop Box, but is often a bit smaller. The space between the Bleed Box and the Crop Box is available for printer instructions, color alignment dots, etc., while crop marks (trim guides) are at least partly within the bleed area (and should be printed after content is printed).</p>
+
+<p>If no arguments are given, the current Bleed Box (global or page) coordinates are returned instead. The former <code>get_bleedbox</code> (page only) function was <b>deprecated</b> and has been removed. If a Bleed Box has not been defined, the Crop Box coordinates (if defined) will be returned, otherwise the Media Box coordinates (which always exist) will be returned. In addition, when <i>setting</i> the Bleed Box, the resulting coordinates are returned. This permits you to specify the bleed box by a name (alias) and get the dimensions back, all in one call.</p>
+
+<p>A global (PDF level) bleedbox setting is inherited by each page, or can be overridden by setting bleedbox in the page. As with <code>mediabox</code>, only one bleed box may be set at this (PDF) level. As with <code>mediabox</code>, a named media size may have an orientation (l or L) for Landscape mode. Note that the PDF level global Bleed Box will be used <i>even if</i> the page gets its own Crop Box. That is, the page&#39;s Bleed Box inherits the global Bleed Box, not the page Crop Box, even if the page has its own media size! If you set the page&#39;s own Media Box or Crop Box, you should consider also explicitly setting the page Bleed Box (and other boxes).</p>
+
+</blockquote>
+
+<h3 id="Trim-Box-trimbox">Trim Box (trimbox)</h3>
+
+<pre><code>    $pdf-&gt;trimbox($name)
+
+    $pdf-&gt;trimbox($name, orient =&gt; &#39;orientation&#39;)
+
+    $pdf-&gt;trimbox($w,$h)
+
+    $pdf-&gt;trimbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;trimbox()</code></pre>
+
+<blockquote>
+
+<p>Sets the global Trim Box (or page&#39;s Trim Box, if <code>$page-&gt;</code> instead). This is supposed to be the actual dimensions of the finished page (after trimming of the paper). In some production environments, it is useful to have printer&#39;s instructions, cut marks, and so on outside of the trim box. The default value is equal to Crop Box, but is often a bit smaller than any Bleed Box, to allow the desired &quot;bleed&quot; effect.</p>
+
+<p>If no arguments are given, the current Trim Box (global or page) coordinates are returned instead. The former <code>get_trimbox</code> (page only) function was <b>deprecated</b> and has been removed. If a Trim Box has not been defined, the Crop Box coordinates (if defined) will be returned, otherwise the Media Box coordinates (which always exist) will be returned. In addition, when <i>setting</i> the Trim Box, the resulting coordinates are returned. This permits you to specify the trim box by a name (alias) and get the dimensions back, all in one call.</p>
+
+<p>A global (PDF level) trimbox setting is inherited by each page, or can be overridden by setting trimbox in the page. As with <code>mediabox</code>, only one trim box may be set at this (PDF) level. As with <code>mediabox</code>, a named media size may have an orientation (l or L) for Landscape mode. Note that the PDF level global Trim Box will be used <i>even if</i> the page gets its own Crop Box. That is, the page&#39;s Trim Box inherits the global Trim Box, not the page Crop Box, even if the page has its own media size! If you set the page&#39;s own Media Box or Crop Box, you should consider also explicitly setting the page Trim Box (and other boxes).</p>
+
+</blockquote>
+
+<h3 id="Art-Box-artbox">Art Box (artbox)</h3>
+
+<pre><code>    $pdf-&gt;artbox($name)
+
+    $pdf-&gt;artbox($name, orient =&gt; &#39;orientation&#39;)
+
+    $pdf-&gt;artbox($w,$h)
+
+    $pdf-&gt;artbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;artbox()</code></pre>
+
+<blockquote>
+
+<p>Sets the global Art Box (or page&#39;s Art Box, if <code>$page-&gt;</code> instead). This is supposed to define &quot;the extent of the page&#39;s <i>meaningful</i> content (including [margins])&quot;. It might exclude some content, such as Headlines or headings. Any binding or punched-holes margin would typically be outside of the Art Box, as would be page numbers and running headers and footers. The default value is equal to the Crop Box, although normally it would be no larger than any Trim Box. The Art Box may often be used for defining &quot;important&quot; content (e.g., <i>excluding</i> advertisements) that may or may not be brought over to another page (e.g., N-up printing).</p>
+
+<p>If no arguments are given, the current Art Box (global or page) coordinates are returned instead. The former <code>get_artbox</code> (page only) function was <b>deprecated</b> and has been removed. If an Art Box has not been defined, the Crop Box coordinates (if defined) will be returned, otherwise the Media Box coordinates (which always exist) will be returned. In addition, when <i>setting</i> the Art Box, the resulting coordinates are returned. This permits you to specify the art box by a name (alias) and get the dimensions back, all in one call.</p>
+
+<p>A global (PDF level) artbox setting is inherited by each page, or can be overridden by setting artbox in the page. As with <code>mediabox</code>, only one art box may be set at this (PDF) level. As with <code>mediabox</code>, a named media size may have an orientation (l or L) for Landscape mode. Note that the PDF level global Art Box will be used <i>even if</i> the page gets its own Crop Box. That is, the page&#39;s Art Box inherits the global Art Box, not the page Crop Box, even if the page has its own media size! If you set the page&#39;s own Media Box or Crop Box, you should consider also explicitly setting the page Art Box (and other boxes).</p>
+
+</blockquote>
+
+<h3 id="Suggested-Box-Usage">Suggested Box Usage</h3>
+
+<p>See <code>examples/Boxes.pl</code> for an example of using boxes.</p>
+
+<p>How you define your boxes (or let them default) is up to you, depending on whether you&#39;re duplex printing US Letter or A4 on your laser printer, to be spiral bound on the bind margin, or engaging a professional printer. In the latter case, discuss in advance with the print firm what capabilities (and limitations) they have and what information they need from a PDF file. For instance, they may not want a Crop Box defined, and may call for very specific box sizes. For large press runs, they may print multiple pages (N-up) duplexed on large web roll &quot;signatures&quot;, which are then intricately folded and guillotined (trimmed) and bound together into books or magazines. You would usually just supply a PDF with all the pages; they would take care of the signature layout (which includes offsets and 180 degree rotations).</p>
+
+<p>(As an aside, don&#39;t count on a commercial printer having any particular font available, so be sure to ask. Usually they will want you to embed all fonts used, but ask first, and double-check before handing over the print job! TTF/OTF fonts (<code>ttfont()</code>) are embedded by default, but other fonts (core, ps, bdf, cjk) are not! A printer <i>may</i> have a core font collection, but they are free to substitute a &quot;workalike&quot; font for any given core font, and the results may not match what you saw on your PC!)</p>
+
+<p>On the assumption that you&#39;re using a single sheet (US Letter or A4) laser or inkjet printer, are you planning to trim each sheet down to a smaller final size? If so, you can do true bleeds by defining a Trim Box and a slightly larger Bleed Box. You would print bleeds (all the way to the finished edge) out to the Bleed Box, but nothing is enforced about the Bleed Box. At the other end of the spectrum, you would define the Media Box to be the physical paper size being printed on. Most printers reserve a little space on the sides (and possibly top and bottom) for paper handling, so it is often good to define your Crop Box as the printable area. Remember that the Media Box sets the coordinate system used, so you still need to avoid going outside the Crop Box with content (most readers and printers will not show any ink outside of the Crop Box). Whether or not you define a Crop Box, you&#39;re going to almost always end up with white paper on at least the sides.</p>
+
+<p>For small in-house jobs, you probably won&#39;t need color alignment dots and other such professional instructions and information between the Bleed Box and the Crop Box, but crop marks for trimming (if used) should go just outside the Trim Box (partly or wholly within the Bleed Box), and be drawn <i>after</i> all content. If you&#39;re <i>not</i> trimming the paper, don&#39;t try to do any bleed effects (including solid background color pages/covers), as you will usually have a white edge around the sheet anyway (printers leave a clean, dry route for the feed rollers). Don&#39;t count on a PDF document <i>never</i> being physically printed, and not just displayed (where you can do things like bleed all the way to the media edge). Finally, for single sheet printing, an Art Box is probably unnecessary, but if you&#39;re combining pages into N-up prints, or doing other manipulations, it may be useful.</p>
+
+<h3 id="Box-Inheritance">Box Inheritance</h3>
+
+<p>What Media, Crop, Bleed, Trim, and Art Boxes a page gets can be a little complicated. Note that usually, only the Media and Crop Boxes will have a clear visual effect. The visual effect of the other boxes (if any) may be very subtle.</p>
+
+<p>First, everything is set at the global (PDF) level. The Media Box is always defined, and defaults to US Letter (8.5 inches wide by 11 inches high). The global Crop Box inherits the Media Box, unless explicitly defined. The Bleed, Trim, and Art Boxes inherit the Crop Box, unless explicitly defined. A global box should only be defined once, as the last one defined is the one that will be written to the PDF!</p>
+
+<p>Second, a page inherits the global boxes, for its initial settings. You may call any of the box set methods (<code>cropbox</code>, <code>trimbox</code>, etc.) to explicitly set (override) any box for <i>this</i> page. Note that setting a new Media Box for the page does <b>not</b> reset the page&#39;s Crop Box -- it still uses whatever it inherited from the global Crop Box. You would need to explicitly set the page&#39;s Crop Box if you want a different setting. Likewise, the page&#39;s Bleed, Trim, and Art Boxes will not be reset by a new page Crop Box -- they will still inherit from the global (PDF) settings.</p>
+
+<p>Third, the page Media Box (the one actually used for output pages), clips or limits all the other boxes to extend no larger than its size. For example, if the Media Box is US Letter, and you set a Crop Box of A4 size, the smaller of the two heights (11 inches) would be effective, and the smaller of the two widths (8.26 inches, 595 Points) would be effective. The <i>given</i> dimensions of a box are returned on query (get), not the <i>effective</i> dimensions clipped by the Media Box.</p>
+
+<h2 id="Outlines-Bookmarks">Outlines (Bookmarks)</h2>
+
+<p>It is possible to create <i>outlines</i> (a.k.a. <i>bookmarks</i>) in a PDF document. You are not limited to entire pages as targets, but can adjust the destination <code>dest()</code> to bring up a specific part of a page.</p>
+
+<h3 id="Simple-Single-Level-set-of-Outline">Simple Single-Level set of Outline</h3>
+
+<p>Inserts three outlines (at the same level) in a simple list of 12 pages (055_outlines example):</p>
+
+<pre><code>    my $doc = PDF::Builder-&gt; open($infile);
+
+    $doc-&gt; outlines
+        -&gt; outline
+            -&gt; dest( $doc-&gt; openpage( 1 ))
+            -&gt; title( &#39;1st page (i)&#39; );
+
+    $doc-&gt; outlines
+        -&gt; outline
+            -&gt; dest( $doc-&gt; openpage( 4 ))
+            -&gt; title( &#39;4th page (1)&#39; );
+
+    $doc-&gt; outlines
+        -&gt; outline
+            -&gt; dest( $doc-&gt; openpage( 11 ))
+            -&gt; title( &#39;11th page (7)&#39; );</code></pre>
+
+<p><code>dest()</code> by default is a link to an entire page (given as the ordinal page number, <i>not</i> the document&#39;s formatted page number). The <code>title()</code> is what you see in the Outline or Bookmark section of your PDF Reader.</p>
+
+<h3 id="A-Multi-level-example-Outline">A Multi-level example Outline</h3>
+
+<p>It is also possible to define nested (multiple level) outlines. For the same set of pages as above, we will add two pages nested under <b>page i</b> and three pages nested under <b>page 1</b>. Note that it is common practice to make the top level <i>sections</i> (e.g., <i>preface, body, end matter</i>) and put all the real pages under them, but you still need to have each section &quot;heading&quot; map to a real page. Thus <i>preface</i> might point to page <b>i</b>, and have outlines to <b>i, ii,</b> and <b>iii</b> nested below it.</p>
+
+<pre><code>    my $doc = PDF::Builder-&gt; open($infile);
+    my $root =  # Outlines object (root of whole thing)
+        $doc-&gt; outlines();
+
+    my $top0 =  # Outline object at top level, initially collapsed (closed)
+    $root -&gt; outline($root)
+            -&gt; is_open(0)        
+            -&gt; dest( $doc-&gt; openpage( 1 ))
+            -&gt; title( &#39;1st page (i)&#39; );
+
+    my $top1 =  # Outline object at top level
+    $root -&gt; outline($root)
+            -&gt; dest( $doc-&gt; openpage( 4 ))
+            -&gt; title( &#39;4th page (1)&#39; );
+
+    my $top2 =  # Outline object at top level. no children
+    $root -&gt; outline($root)
+            -&gt; dest( $doc-&gt; openpage( 11 ))
+            -&gt; title( &#39;11th page (7)&#39; );
+
+    # add lower level bookmarks here. there&#39;s no reason that they couldn&#39;t be
+    # mixed in with the higher levels above, provided that they come after
+    # their parent is defined.
+
+    # two pages under the first top-level page (i)
+    $top0 -&gt; outline($top0)
+              -&gt; dest( $doc-&gt; openpage( 2 ))
+              -&gt; title( &#39;2nd page (ii)&#39; );
+ 
+    $top0 -&gt; outline($top0)
+              -&gt; dest( $doc-&gt; openpage( 3 ))
+              -&gt; title( &#39;3rd page (iii)&#39; );
+
+    # three pages under the second top-level page (1). the third is
+    # inserted after the first and before the second.
+    my $first =
+    $top1 -&gt; outline($top1)
+              -&gt; dest( $doc-&gt; openpage( 5 ))
+              -&gt; title( &#39;5th page (2)&#39; );
+ 
+    $top1 -&gt; outline($top1)
+              -&gt; dest( $doc-&gt; openpage( 6 ))
+              -&gt; title( &#39;6th page (3)&#39; );
+ 
+    $first -&gt; insert_after()
+              -&gt; dest( $doc-&gt; openpage( 7 ))
+              -&gt; title( &#39;7th page (4)&#39; );
+ </code></pre>
+
+<p>It is possible to define a single outline (link) as <b>closed</b>, in which case all the outlines nested under it will be hidden (with a &quot;closed&quot; twistor). Try to avoid going more than two levels deep (one level of nesting), as the Outlines/Bookmarks column is usually fairly narrow.</p>
+
+<h2 id="FONT-METHODS">FONT METHODS</h2>
+
+<h3 id="Core-Fonts">Core Fonts</h3>
+
+<p>These are the &quot;built-in&quot; fonts, in the sense that any PDF Reader is guaranteed to supply and support them. The <i>metrics</i> for the supported fonts are shipped with PDF::Builder, but not the fonts themselves.</p>
+
+<p>Core fonts are limited to <b>single byte encodings</b>. The default encoding for the core fonts is WinAnsiEncoding (roughly the CP-1252/Windows-1252 superset of ISO-8859-1/Latin-1). See the <code>encode</code> option below to change this encoding.</p>
+
+<p>There are some 14 core fonts (regular, <i>italic</i>, <b>bold</b>, and <b><i>bold-italic</i></b> variants) for Times [serif], Helvetica [sans serif], Courier [fixed pitch]; plus two symbol fonts, Symbol and Zapf Dingbats) that are supposed to be available on any PDF Reader, <b>although other fonts with very similar metrics are often substituted.</b></p>
+
+<p>Windows machines have an additional 14 &quot;core&quot; fonts (15 if you count Bank Gothic): Georgia [serif], Verdana [sans serif], and Trebuchet [sans serif] in 4 variants each, along with Webdings and Wingdings). These are <i>usually</i> available on a Windows platform (but not guaranteed!). They are usually not installed by default on Linux, Mac, and other non-Windows platforms, so use caution if specifying these fonts.</p>
+
+<p>PDF::Builder <i>does</i> supply the <b>metrics</b> for the Windows core fonts (as well as the standard ones), so it should be possible to use PDF::Builder to generate documents (PDF files) containing these fonts, even if your platform may not be able to <i>display</i> them. For instance, Font Manager will load the Windows core fonts on all platforms. It is up to the user to take care in selecting fonts, if they plan to be able to view documents using those fonts! On the other hand, the 020_corefonts example will not attempt to create listings of Windows core fonts unless it is run on a Windows platform.</p>
+
+<h4 id="Examples">Examples</h4>
+
+<pre><code>    $font1 = $pdf-&gt;corefont(&#39;Times-Roman&#39;, encode =&gt; &#39;latin2&#39;);
+    $font2 = $pdf-&gt;corefont(&#39;Times-Bold&#39;);
+    $font3 = $pdf-&gt;corefont(&#39;Helvetica&#39;);
+    $font4 = $pdf-&gt;corefont(&#39;ZapfDingbats&#39;);</code></pre>
+
+<p>Core fonts can also be requested via the <code>font()</code> method</p>
+
+<pre><code>    $font5 = $pdf-&gt;font(&#39;Courier-Oblique&#39;);</code></pre>
+
+<p>as well as being built into FontManager</p>
+
+<pre><code>    $font6 = $pdf-&gt;get_font(&#39;face&#39;=&gt;&#39;Times&#39;, &#39;italic&#39;=&gt;1, &#39;bold&#39;=&gt;0);</code></pre>
+
+<h4 id="Notes-and-Limitations">Notes and Limitations</h4>
+
+<ul>
+
+<li><p>You <b>cannot</b> use UTF-8 or other multibyte encodings with core fonts, <i>only</i> single byte encodings (256 characters maximum). A PDF Reader simply does not know what to do with a multibyte character, and likely will render it as a sequence of single characters (producing gibberish). Although most single-byte encodings, at least for European languages, are supported, it is possible that you might encounter an encoding that includes a character <i>not</i> found in a given font file, or vice-versa (the font includes characters that the encoding does not give you access to).</p>
+
+</li>
+<li><p>Do not confuse Unicode character points (such as given with an HTML entity) with single byte values or multibyte characters. The only way to access a character defined for a given encoding is with a <i>single</i> byte value in the range 0 to 255. For example, if you can&#39;t directly type a &quot;Euro&quot; symbol, it is <code>\x80</code> in many encodings -- you would use that instead of the Unicode <code>\x{20AC}</code> code point or <code>x\{E282AC}</code> UTF-8 byte string. It&#39;s a matter of giving a single byte value that the PDF Reader can look up in its font definition to get the desired glyph. If the &quot;Euro&quot; symbol is not found in the encoding you&#39;re using, well, you&#39;re out of luck.</p>
+
+</li>
+<li><p>Be aware of what a given platform (operating system) and editor is using for its code page when it creates a file with your text to be turned into a PDF! If you typed a &quot;Euro&quot; but it&#39;s, say, a UTF-8 byte string in the file, you probably won&#39;t get a &quot;Euro&quot; in your PDF.</p>
+
+</li>
+<li><p>Note that core fonts use fixed lists of expected glyphs, along with metrics such as their widths. This may not exactly match up with whatever local font file is used by the PDF Reader. It&#39;s usually pretty close, but many cases have been found where the list of glyphs is different between the core fonts and various local font files, so be aware of this. There is no guarantee that all glyphs (code points) found in one single-byte encoding will be found in another, nor that font metrics are available for all glyphs covered by a given singe-byte encoding. If you are writing in English, or even in most Western European languages, this is usually not a problem with core fonts, but for other languages and alphabets, it might be.</p>
+
+</li>
+<li><p>Also be aware that a PDF Reader is free to substitute another font which is similar (but not necessarily identical) to the requested core font. For example, Windows machines often substitute <i>Arial</i> for the requested <i>Helvetica</i>. The metrics (widths) are the same, but the glyphs are a little different.</p>
+
+</li>
+<li><p>Core fonts are supposed to be available on all PDF Readers, so they are not embeddable in the PDF (as TTF fonts are). This is not believed to be a problem for archival (PDF/A) documents, but may become one at some point, so you should be aware.</p>
+
+</li>
+</ul>
+
+<p>See <a href="../../PDF/Builder/Resource/Font.html#font-automap">&quot;font automap&quot; in PDF::Builder::Resource::Font</a> method for information on accessing more than 256 glyphs in a font, using <b>planes</b>, <i>although there is no guarantee that future changes to font files will permit consistent results</i>.</p>
+
+<h4 id="Should-you-use-TTF-instead">Should you use TTF instead?</h4>
+
+<p>If you need to reliably access certain characters not found in common encodings, please consider using TrueType (TTF) or OpenType (OTF) fonts via the <code>ttfont()</code> method. Note that you will be responsible for specifying the exact path and full file name of the TTF file, and making sure the font file is available on the PDF Writer, and possibly on the Reader (if not embedded).</p>
+
+<p>This would enable you to use UTF-8 text, with extended glyph usability, as well as permitting the font itself to be embedded in the PDF, ensuring that you get <i>exactly</i> the glyphs you want, without any substitutions. Kerning and ligature support (via HarfBuzz::Shaper) may be more available for TTF fonts. There are tools, such as <i>FontForge</i>, which can do a fairly good (though, not perfect) job of converting a Type1 font library (if that&#39;s what your core fonts are, internally) to OTF.</p>
+
+<p>See also <a href="../../PDF/Builder/Resource/Font/CoreFont.html">PDF::Builder::Resource::Font::CoreFont</a>.</p>
+
+<h3 id="PS-Fonts">PS Fonts</h3>
+
+<p>PostScript fonts are also known as &quot;Type 1&quot; fonts. These are not &quot;built-in&quot; fonts, and both the PDF Writer and any PDF Reader would need to provide the desired font files. PostScript fonts used to be very commonly used, but have fallen out of favor.</p>
+
+<p>PS (Type 1) fonts are <i>not</i> shipped with PDF::Builder, but are expected to be found on the machine with the PDF reader. Most PDF readers do <i>not</i> install PS fonts, and it is up to the user of the PDF reader to install the needed fonts. Unlike TrueType fonts, PS (T1) fonts are not embedded in the PDF, and must be supplied on the Reader end.</p>
+
+<p>PS fonts are limited to <b>single byte encodings</b>. The default encoding for the PS fonts is WinAnsiEncoding (roughly the CP-1252/Windows-1252 superset of ISO-8859-1/Latin-1). See the <code>encode</code> option below to change this encoding.</p>
+
+<p>One characteristic of PS font usage is that <i>two</i> files are used for each font: a glyph file (<code>.pfa</code> for ASCII format, <code>.pfb</code> for binary format, or <code>.t1</code> for an extended format), and a metrics file (<code>.afm</code> for an ASCII format, or <code>.pfm</code> for binary format). A binary glyph file may be used with an ASCII metrics file, and vice-versa, if desired or needed. The ASCII and binary files have the same content, just in different formats.</p>
+
+<p><b>Caution:</b> the file name given for the glyph file (first argument to <code>psfont</code>) <i>must</i> have a file extension of .pfa, .pfb, or .t1; as the extension will be checked to see how to parse the file.</p>
+
+<h4 id="WARNING:-End-of-Adobe-Support">WARNING: End of Adobe Support</h4>
+
+<p><b>Adobe has announced an end to support for Type 1 (Postscript/T1) fonts in its products. The announcement wordings are a bit vague, sometimes referring to &quot;all products&quot; and other times just to &quot;authoring software&quot;. Presumably, Adobe PDF Readers (as well as Readers supplied by other parties) will continue to display PDFs with Type 1 fonts for quite some time, although this is by no means absolutely certain. Note that this does NOT mean that PDF::Builder or other Third Party authoring tools may not continue to support Type 1 fonts. This termination by Adobe of support of a now old and obsolete font format does not affect the use of PDF::Builder for authoring PDFs, nor is it binding on other non-Adobe readers and authoring tools. However, using Adobe products for editing of PDFs with Type 1 fonts, and possibly of displaying them, may no longer be possible. At any rate, users may want to consider starting to move away from Type 1 font usage and switch to TTF/OTF or even core fonts, although it is unknown how long Type 1 Reader support will continue.</b></p>
+
+<h4 id="Examples1">Examples</h4>
+
+<pre><code>    $font1 = $pdf-&gt;psfont(&#39;Times-Book.pfa&#39;, afmfile =&gt; &#39;Times-Book.afm&#39;);
+    $font2 = $pdf-&gt;psfont(&#39;/fonts/Synest-FB.pfb&#39;, pfmfile =&gt; &#39;/fonts/Synest-FB.pfm&#39;);</code></pre>
+
+<p>PS fonts can also be requested via the <code>font()</code> method</p>
+
+<pre><code>    $font3 = $pdf-&gt;font(&#39;/fonts/Times-Book.t1&#39;, afmfile =&gt; &#39;/fonts/Times-Book.afm&#39;);</code></pre>
+
+<p>as well as being capable of being loaded into FontManager</p>
+
+<pre><code>    $font4 = $pdf-&gt;get_font(&#39;face&#39;=&gt;&#39;Times-Book&#39;, &#39;italic&#39;=&gt;0, &#39;bold&#39;=&gt;0);</code></pre>
+
+<h4 id="Notes-and-Limitations1">Notes and Limitations</h4>
+
+<ul>
+
+<li><p>You <b>cannot</b> use UTF-8 or other multibyte encodings with PS fonts, <i>only</i> single byte encodings (256 characters maximum). A PDF Reader (or Writer!) simply does not know what to do with a multibyte character, and likely will render it as a sequence of single characters (producing gibberish). Although most single-byte encodings, at least for European languages, are supported, it is possible that you might encounter an encoding that includes a character <i>not</i> found in a given font file, or vice-versa (the font includes characters that the encoding does not give you access to).</p>
+
+</li>
+<li><p>Do not confuse Unicode character points (such as given with an HTML entity) with single byte values or multibyte characters. The only way to access a character defined for a given encoding is with a <i>single</i> byte value in the range 0 to 255. For example, if you can&#39;t directly type a &quot;Euro&quot; symbol, it is <code>\x80</code> in many encodings -- you would use that instead of the Unicode <code>\x{20AC}</code> code point or <code>x\{E282AC}</code> UTF-8 byte string. It&#39;s a matter of giving a single byte value that the PDF Reader can look up in its font definition to get the desired glyph. If the &quot;Euro&quot; symbol is not found in the encoding you&#39;re using, well, you&#39;re out of luck.</p>
+
+</li>
+<li><p>Be aware of what a given platform (operating system) and editor is using for its code page when it creates a file with your text to be turned into a PDF! If you typed a &quot;Euro&quot; but it&#39;s, say, a UTF-8 byte string in the file, you probably won&#39;t get a &quot;Euro&quot; in your PDF.</p>
+
+</li>
+</ul>
+
+<p>See <a href="../../PDF/Builder/Resource/Font.html#font-automap">&quot;font automap&quot; in PDF::Builder::Resource::Font</a> method for information on accessing more than 256 glyphs in a font, using <b>planes</b>, <i>although there is no guarantee that future changes to font files will permit consistent results</i>.</p>
+
+<h4 id="Should-you-use-TTF-instead1">Should you use TTF instead?</h4>
+
+<p>If you need to reliably access certain characters not found in common encodings, please consider using TrueType (TTF) or OpenType (OTF) fonts via the <code>ttfont()</code> method. Note that you will be responsible for specifying the exact path and full file name of the TTF file, and making sure the font file is available on the PDF Writer, and possibly on the Reader (if not embedded).</p>
+
+<p>This would enable you to use UTF-8 text, with extended glyph usability, as well as permitting the font itself to be embedded in the PDF, ensuring that you get <i>exactly</i> the glyphs you want, without any substitutions or failures due to lack of the desired files on the Reader. Kerning and ligature support (via HarfBuzz::Shaper) may be more available for TTF fonts. There are tools, such as <i>FontForge</i>, which can do a fairly good (though, not perfect) job of converting a Type1 font library to OTF.</p>
+
+<p>See also <a href="../../PDF/Builder/Resource/Font/Postscript.html">PDF::Builder::Resource::Font::Postscript</a>.</p>
+
+<h3 id="TrueType-Fonts">TrueType Fonts</h3>
+
+<p>TrueType (TTF) fonts and their close cousins, OpenType (OTF) fonts, are widely used. These are often included with many operating systems, although they are not &quot;built-in&quot; to PDF, and both the PDF Writer and any PDF Reader (if the font is <b>not</b> embedded) would need to provide the desired font files.</p>
+
+<p>TTF and OTF fonts are <i>not</i> shipped with PDF::Builder, but are expected to be found on the machine with the PDF Writer (and if needed, the Reader). Most PDF readers do <i>not</i> install TTF/OTF fonts, and it is up to the user of the PDF reader to install the needed fonts (if they were not embedded). Note that the default behavior <i>is</i> to embed the font subset (glyphs actually used) into the PDF file, so that there is no chance of not having the correct font available on the reader.</p>
+
+<p>TTF and OTF fonts are <b>not</b> limited to single byte encodings, but can use multibyte encodings such as UTF-8. The default encoding for these fonts is WinAnsiEncoding (roughly the CP-1252/Windows-1252 superset of ISO-8859-1/Latin-1). See the <code>encode</code> option below to change this encoding.</p>
+
+<h4 id="Examples2">Examples</h4>
+
+<pre><code>    $font1 = $pdf-&gt;ttfont(&#39;Times.ttf&#39;);
+    $font2 = $pdf-&gt;ttfont(&#39;Georgia.otf&#39;);</code></pre>
+
+<p>TTF/OTF fonts can also be requested via the <code>font()</code> method</p>
+
+<pre><code>    $font3 = $pdf-&gt;font(&#39;/fonts/Sanskrit.ttf&#39;);</code></pre>
+
+<p>as well as being capable of being loaded into FontManager</p>
+
+<pre><code>    $font4 = $pdf-&gt;get_font(&#39;face&#39;=&gt;&#39;BrushScript&#39;, &#39;italic&#39;=&gt;0, &#39;bold&#39;=&gt;0);</code></pre>
+
+<h4 id="Notes-and-Limitations2">Notes and Limitations</h4>
+
+<ul>
+
+<li><p><b>CAUTION:</b> There is a &quot;gotcha&quot; with TrueType fonts that you need to be aware of when using them. PDF::Builder outputs to the text stream a list of <i>glyph IDs</i> as four-digit hex codes, rather than the list of character byte codes used by other font types. The intent is to allow more than the standard Unicode points (alternate glyphs for ligatures and other uses). Don&#39;t count on it as encryption to hide your content (the PDF Reader will just display it anyway!), even though it <i>does</i> make it hard to find specific text in a PDF using a text editor.</p>
+
+</li>
+<li><p>The <b>Tw</b> operator, if used (<code>$text-&gt;wordspace(n)</code>) to adjust inter-word spacing, <b>will be ignored</b> by most, if not all, PDF Readers (including Adobe products). This is because this operator is looking for actual ASCII spaces (x20 bytes) in the stream, to apply the width change to. Note that only ASCII spaces are affected (not other spaces), and not at all for TrueType and OpenType fonts (because they have 4-digit glyph IDs, not x20 bytes)! PDF::Builder has been updated to attempt to respect the <b>Tw</b> operator when using TTF/OTF fonts. If the <code>Tw</code> amount is non-zero, it will split up sentences on ASCII spaces (x20) and individually place words on the page. This necessarily bloats the PDF file size, but is the only way to adjust word spacing via the <code>wordspace()</code> method. Note that again, <i>only</i> ASCII spaces (x20) are affected (to match the behavior of the <b>Tw</b> operator for other font types), and other spaces (xA0 required/non-breaking space, thin space, etc.) are not handled.</p>
+
+</li>
+<li><p><b>Warning:</b> BaseEncoding is <i>not</i> set by default for TrueType fonts, so <b>text in the PDF isn&#39;t searchable</b> (by the PDF reader) unless a ToUnicode CMap is included. A ToUnicode CMap <i>is</i> included by default (unicodemap set to 1) by PDF::Builder, but allows it to be disabled (for performance and file size reasons) by setting unicodemap to 0. This will produce non-searchable text, which, besides being annoying to users, may prevent screen readers and other aids to disabled users from working correctly!</p>
+
+</li>
+<li><p>Do not confuse Unicode character points (such as given with an HTML entity) with single byte values or multibyte characters. The only way to access a character defined for a given encoding is with a <i>single</i> code value in the allowable range. For example, if you can&#39;t directly type a &quot;Euro&quot; symbol, it is <code>\x80</code> in many encodings -- you would use that for a single-byte encoding, or for UTF-8, the Unicode <code>\x{20AC}</code> code point. You would never give the UTF-8 byte string <code>x\{E282AC}</code>. It needs to be understandable in the context of the current encoding, so that the 4-digit glyph code can be output.</p>
+
+</li>
+<li><p>Be aware of what a given platform (operating system) and editor is using for its code page when it creates a file with your text to be turned into a PDF! If you typed a &quot;Euro&quot; but it&#39;s, say, a UTF-8 byte string in the file, and you are using a single-byte encoding, you probably won&#39;t get a &quot;Euro&quot; in your PDF.</p>
+
+</li>
+</ul>
+
+<h4 id="Where-is-the-font-I-just-added">Where is the font I just added?</h4>
+
+<p>Well, sometimes you get lucky and can specify the exact directory that the <code>.ttf</code> or <code>.otf</code> file will reside in, making it easy to specify the path to the font file (for uses such as <code>ttfont()</code>, <code>font()</code>, or Font Manager calls). Other times, the operating system will play hide and seek with you, leaving you to expend much time and energy to track down where the file is. Linux distributions tend to have their own favorite hiding places for font files, but at least they tend to be consistent! On the other hand, Windows often decides that it knows better than you, and will put files in an unexpected place, and under an unexpected name!</p>
+
+<p>To find out where your TTF or OTF file ended up, if you don&#39;t see an obvious entry in /Windows/Fonts (even if you drag and dropped the font file there), you need to look in /Users/XXXX/AppData/Local/Microsoft/Windows/Fonts, depending on what user name you were signed on as when you installed the font. Even then, you may not be done, as the name may have been changed to something unrecognizable. You may need to look at Windows&#39; mapping of font name to filename.</p>
+
+<p>In the command shell (command line), or whatever equivalent you like to use, enter &quot;regedit&quot; to bring up the registry editor. For the top level, choose (click on) either <code>HKEY_LOCAL_MACHINE</code> (for global font settings, in /Windows/Fonts) or <code>HKEY_CURRENT_USER</code> (for fonts installed by whoever is currently signed on, in /Users/XXXX/AppData...). From there, both have the same path: <code>SOFTWARE &gt; Microsoft &gt; Windows NT &gt; CurrentVersion &gt; Fonts</code>. This should bring up a listing of all the installed fonts (full name, e.g. &quot;Papyrus Regular&quot;) and their actual filename (&quot;PAPYRUS.TTF&quot;). For instance, I just installed (drag and drop into /Windows/Fonts) a blackletter &quot;Gothic&quot; font named <i>English Towne Medium</i>. It ended up in my /Users/XXXX... directory as <code>EnglishTowne.ttf</code>.</p>
+
+<p>You don&#39;t need to change anything in the registry, just look. You <i>do</i> have the capability to change things, including hiding/showing the font, if you care to get into those things.</p>
+
+<p>See also <a href="../../PDF/Builder/Resource/CIDFont/TrueType.html">PDF::Builder::Resource::CIDFont::TrueType</a></p>
+
+<h3 id="CJK-Fonts">CJK Fonts</h3>
+
+<p><b>Examples:</b></p>
+
+<pre><code>    $font = $pdf-&gt;cjkfont(&#39;korean&#39;);
+    $font = $pdf-&gt;cjkfont(&#39;traditional&#39;);</code></pre>
+
+<p><b>Warning:</b> Unlike <code>ttfont()</code>, the font file is <i>not</i> embedded in the output PDF file. This is evidently behavior left over from the early days of CJK fonts, where the <code>Cmap</code> and <code>Data</code> were always external files, rather than internal tables. If you need a CJK-using PDF file to embed the font, for portability, you can create a PDF using <code>cjkfont</code>, and then use an external utility (e.g., <code>pdfcairo</code>) to embed the font in the PDF. It may also be possible to use <code>ttfont()</code> instead, to produce the PDF, provided you can deduce the correct font file name from examining the PDF file (e.g., on my Windows system, the &quot;Ming&quot; font would be <code>$font = $pdf-&gt;ttfont(&quot;C:/Program Files/Adobe/Acrobat DC/Resource/CIDFont/AdobeMingStd-Light.otf&quot;)</code>. Of course, the font file used would have to be <code>.ttf</code> or <code>.otf</code>. It may act a little differently than <code>cjkfont</code> (due a a different Cmap), but you <i>should</i> be able to embed the font file into the PDF.</p>
+
+<p>See also <a href="../../PDF/Builder/Resource/CIDFont/CJKFont.html">PDF::Builder::Resource::CIDFont::CJKFont</a></p>
+
+<p>Due to the lack of ongoing support for CJK fonts, and the apparent &quot;arrested development&quot; of PDF support for them at an early stage of life, we <i>strongly</i> recommend that you attempt to directly use TTF or OTF fonts for Far-Eastern (CJK) text support (via <code>ttfont()</code>) before resorting to <code>cjkfont()</code> usage! Also, CJK fonts appear to be unusable as input for synthetic fonts, and normally aren&#39;t embedded in the PDF file (requiring the font file to be installed on the Reader).</p>
+
+<h3 id="Synthetic-Fonts">Synthetic Fonts</h3>
+
+<p><b>Warning:</b> BaseEncoding is <i>not</i> set by default for these fonts, so text in the PDF isn&#39;t searchable (by the PDF reader) unless a ToUnicode CMap is included. A ToUnicode CMap <i>is</i> included by default (unicodemap set to 1) by PDF::Builder, but allows it to be disabled (for performance and file size reasons) by setting unicodemap to 0. This will produce non-searchable text, which, besides being annoying to users, may prevent screen readers and other aids to disabled users from working correctly!</p>
+
+<p><b>Examples:</b></p>
+
+<pre><code>    $cf  = $pdf-&gt;corefont(&#39;Times-Roman&#39;, encode =&gt; &#39;latin1&#39;);
+    $sf  = $pdf-&gt;synfont($cf, condense =&gt; 0.85);   # compressed 85%
+    $sfb = $pdf-&gt;synfont($cf, bold =&gt; 1);          # embolden by 10em
+    $sfi = $pdf-&gt;synfont($cf, oblique =&gt; -12);     # italic at -12 degrees</code></pre>
+
+<p>Note that <i>CJK</i> fonts (created with the <code>cjkfont</code> method) do <b>not</b> work properly with <code>synfont</code>. This is due to a different internal structure of the <i>CJK</i> fonts, as compared to <i>corefont</i>, <i>ttfont</i>, and <i>psfont</i> base fonts. If you require a synthesized (modified) CJK font, you might try finding the TTF or OTF original, use <code>ttfont</code> to create the base font, and running <code>synfont</code> against that, in the manner described for embedding <a href="#CJK-Fonts">&quot;CJK Fonts&quot;</a>.</p>
+
+<p>See also <a href="../../PDF/Builder/Resource/Font/SynFont.html">PDF::Builder::Resource::Font::SynFont</a></p>
+
+<h2 id="IMAGE-METHODS">IMAGE METHODS</h2>
+
+<p>This is additional information on enhanced libraries available for TIFF and PNG images. See specific information listings for GD, GIF, JPEG, and PNM image formats. In addition, see <code>examples/Content.pl</code> for an example of placing an image on a page, as well as using in a &quot;Form&quot;.</p>
+
+<h3 id="Why-is-my-image-flipped-or-rotated">Why is my image flipped or rotated?</h3>
+
+<p>Something not uncommonly seen when using JPEG photos in a PDF is that the images will be rotated and/or mirrored (flipped). This may happen when using TIFF images too. What happens is that the camera stores an image just as it comes off the CCD sensor, regardless of the camera orientation, and does not rotate it to the correct orientation! It <i>does</i> store a separate &quot;orientation&quot; flag to suggest how the image might be corrected, but not all image processing obeys this flag (PDF::Builder does <b>not</b>.). For example, if you take a &quot;portrait&quot; (tall) photo of a tree (with the phone held vertically), and then use it in a PDF, the tree may appear to have been cut down! (appears in landscape mode)</p>
+
+<p>I have found some code that should allow the <code>image_jpeg</code> or <code>image</code> routine to auto-rotate to (supposedly) the correct orientation, by looking for the Exif metadata &quot;Orientation&quot; tag in the file. However, three problems arise:</p>
+
+<ol>
+
+<li><p>If a photo has been edited, and rotated or flipped in the process, there is no guarantee that the Orientation tag has been corrected.</p>
+
+</li>
+<li><p>More than one Orientation tag may exist (e.g., in the binary APP1/Exif header, <i>and</i> in XML data), and they may not agree with each other -- which should be used?</p>
+
+</li>
+<li><p>The code would need to uncompress the raster data, swap and/or transpose rows and/or columns, and recompress the raster data for inclusion into the PDF. This is costly and error-prone. In any case, the user would need to be able to override any auto-rotate function.</p>
+
+</li>
+</ol>
+
+<p>For the time being, PDF::Builder will simply leave it up to the user of the library to take care of rotating and/or flipping an image which displays incorrectly. It is possible that we will consider adding some sort of query or warning that the image appears to <i>not</i> be &quot;normally&quot; oriented (Orientation value 1 or &quot;Top-left&quot;), according to the Orientation flag. You can consider either (re-)saving the photo in an editor such as PhotoShop or GIMP, or using PDF::Builder code similar to the following (for images rotated 180 degrees):</p>
+
+<pre><code>    $pW = 612; $pH = 792;  # page dimensions (US Letter)
+    my $img = $pdf-&gt;image_jpeg(&quot;AliceLake.jpeg&quot;);
+    # raw size WxH 4032x3024, scaled down to 504x378
+    $sW = 4032/8; $sH = 3024/8;
+    # intent is to center on US Letter sized page (LL at 54,207)
+    # Orientation flag on this image is 3 (rotated 180 degrees). 
+    # if naively displayed (just $gfx-&gt;image call), it will be upside down
+
+    $gfx-&gt;save();
+    
+    ## method 0: simple display, is rotated 180 degrees!
+    #$gfx-&gt;image($img, ($pW-$sW)/2,($pH-$sH)/2, $sW,$sH);
+
+    ## method 1: translate, then rotate
+    #$gfx-&gt;translate($pW,$pH);             # to new origin (media UR corner)
+    #$gfx-&gt;rotate(180);                    # rotate around new origin
+    #$gfx-&gt;image($img, ($pW-$sW)/2,($pH-$sH)/2, $sW,$sH); 
+                                           # image&#39;s UR corner, not LL
+
+    # method 2: rotate, then translate
+    $gfx-&gt;rotate(180);                     # rotate around current origin
+    $gfx-&gt;translate(-$sW,-$sH);            # translate in rotated coordinates
+    $gfx-&gt;image($img, -($pW-$sW)/2,-($pH-$sH)/2, $sW,$sH); 
+                                           # image&#39;s UR corner, not LL
+
+    ## method 3: flip (mirror) twice
+    #$scale = 1;  # not rescaling here
+    #$size_page = $pH/$scale;
+    #$invScale = 1.0/$scale;
+    #$gfx-&gt;add(&quot;-$invScale 0 0 -$invScale 0 $size_page cm&quot;);
+    #$gfx-&gt;image($img, -($pW-$sW)/2-$sW,($pH-$sH)/2, $sW,$sH);
+
+    $gfx-&gt;restore();</code></pre>
+
+<p>If your image is also mirrored (flipped about an axis), simple rotation will not suffice. You could do something with a reversal of the coordinate system, as in &quot;method 3&quot; above (see <a href="../../PDF/Builder/Content.html#Advanced-Methods">&quot;Advanced Methods&quot; in PDF::Builder::Content</a>). To mirror only left/right, the second <code>$invScale</code> would be positive; to mirror only top/bottom, the first would be positive. If all else fails, you could save a mirrored copy in a photo editor. 90 or 270 degree rotations will require a <code>rotate</code> call, possibly with &quot;cm&quot; usage to reverse mirroring. Incidentally, do not confuse this issue with the coordinate flipping performed by some Chrome browsers when printing a page to PDF.</p>
+
+<p>Note that TIFF images may have the same rotation/mirroring problems as JPEG, which is not surprising, as the Exif format was lifted from TIFF for use in JPEG. The cure will be similar to JPEG&#39;s.</p>
+
+<h3 id="TIFF-Images">TIFF Images</h3>
+
+<p>Note that the Graphics::TIFF support library does <b>not</b> currently permit a filehandle for <code>$file</code>.</p>
+
+<p>PDF::Builder will use the Graphics::TIFF support library for TIFF functions, if it is available, unless explicitly told not to. Your code can test whether Graphics::TIFF is available by examining <code>$tiff-&gt;usesLib()</code> or <code>$pdf-&gt;LA_GT()</code>.</p>
+
+<p>Note that the first query is only available once the <code>$tiff</code> object has been created. This may or may not be too late for your purposes.</p>
+
+<dl>
+
+<dt>= -1</dt>
+<dd>
+
+<p>Graphics::TIFF <i>is</i> installed, but your code has specified <code>nouseGT</code>, to <i>not</i> use it. The old, pure Perl, code (buggy!) will be used instead, as if Graphics::TIFF was not installed.</p>
+
+</dd>
+<dt>= 0</dt>
+<dd>
+
+<p>Graphics::TIFF is <i>not</i> installed. Not all systems are able to successfully install this package, as it requires libtiff.a.</p>
+
+</dd>
+<dt>= 1</dt>
+<dd>
+
+<p>Graphics::TIFF is installed and is being used.</p>
+
+</dd>
+</dl>
+
+<p>Options:</p>
+
+<dl>
+
+<dt>nouseGT =&gt; 1</dt>
+<dd>
+
+<p>Do <b>not</b> use the Graphics::TIFF library, even if it&#39;s available. Normally you <i>would</i> want to use this library, but there may be cases where you don&#39;t, such as when you want to use a file <i>handle</i> instead of a <i>name</i>.</p>
+
+</dd>
+<dt>silent =&gt; 1</dt>
+<dd>
+
+<p>Do not give the message that Graphics::TIFF is not <b>installed</b>. This message will be given only once, but you may want to suppress it, such as during t-tests.</p>
+
+</dd>
+</dl>
+
+<h3 id="PNG-Images">PNG Images</h3>
+
+<p>PDF::Builder will use the Image::PNG::Libpng support library for PNG functions, if it is available, unless explicitly told not to. Your code can test whether Image::PNG::Libpng is available by examining <code>$png-&gt;usesLib()</code> or <code>$pdf-&gt;LA_IPL()</code>.</p>
+
+<p>Note that the first query is only available once the <code>$png</code> object has been created. This may or may not be too late for your purposes.</p>
+
+<dl>
+
+<dt>= -1</dt>
+<dd>
+
+<p>Image::PNG::Libpng <i>is</i> installed, but your code has specified <code>nouseIPL</code>, to <i>not</i> use it. The old, pure Perl, code (slower and less capable) will be used instead, as if Image::PNG::Libpng was not installed.</p>
+
+</dd>
+<dt>= 0</dt>
+<dd>
+
+<p>Image::PNG::Libpng is <i>not</i> installed. Not all systems are able to successfully install this package, as it requires libpng.a.</p>
+
+</dd>
+<dt>= 1</dt>
+<dd>
+
+<p>Image::PNG::Libpng is installed and is being used.</p>
+
+</dd>
+</dl>
+
+<p>Options:</p>
+
+<dl>
+
+<dt>nouseIPL =&gt; 1</dt>
+<dd>
+
+<p>Do <b>not</b> use the Image::PNG::Libpng library, even if it&#39;s available. Normally you <i>would</i> want to use this library, when available, but there may be cases where you don&#39;t.</p>
+
+</dd>
+<dt>silent =&gt; 1</dt>
+<dd>
+
+<p>Do not give the message that Image::PNG::Libpng is not <b>installed</b>. This message will be given only once, but you may want to suppress it, such as during t-tests.</p>
+
+</dd>
+<dt>notrans =&gt; 1</dt>
+<dd>
+
+<p>No transparency -- ignore tRNS chunk if provided, ignore Alpha channel if provided.</p>
+
+</dd>
+</dl>
+
+<h2 id="USING-SHAPER-HarfBuzz::Shaper-library">USING SHAPER (HarfBuzz::Shaper library)</h2>
+
+<pre><code>    # if HarfBuzz::Shaper is not installed, either bail out, or try to
+    # use regular TTF calls instead
+    my $rc;
+    $rc = eval {
+        require HarfBuzz::Shaper;
+        1;
+    };
+    if (!defined $rc) { $rc = 0; }
+    if ($rc == 0) {
+        # bail out in some manner
+    } else {
+        # can use Shaper
+    }
+
+    my $fontfile = &#39;/WINDOWS/Fonts/times.ttf&#39;; # used by both Shaper and textHS
+    my $fontsize = 15;                         # used by both Shaper and textHS
+    my $font = $pdf-&gt;ttfont($fontfile);
+    $text-&gt;font($font, $fontsize);
+    
+    my $hb = HarfBuzz::Shaper-&gt;new(); # only need to set up once
+    my %settings; # for textHS(), not Shaper
+    $settings{&#39;dump&#39;} = 1; # see the diagnostics
+    $settings{&#39;script&#39;} = &#39;Latn&#39;;
+    $settings(&#39;dir&#39;} = &#39;L&#39;;  # LTR
+    $settings{&#39;features&#39;} = ();  # required
+
+    # -- set language (override automatic setting)
+    #$settings{&#39;language&#39;} = &#39;en&#39;;
+    #$hb-&gt;set_language( &#39;en_US&#39; );
+    # -- turn OFF ligatures
+    #push @{ $settings{&#39;features&#39;} }, &#39;liga&#39;;
+    #$hb-&gt;add_features( &#39;liga&#39; );
+    # -- turn OFF kerning
+    #push @{ $settings{&#39;features&#39;} }, &#39;kern&#39;; 
+    #$hb-&gt;add_features( &#39;kern&#39; );
+    $hb-&gt;set_font($fontfile);
+    $hb-&gt;set_size($fontsize);
+    $hb-&gt;set_text(&quot;Let&#39;s eat waffles in the field for brunch.&quot;);
+      # expect ffl and fi ligatures, and perhaps some kerning
+
+    my $info = $hb-&gt;shaper();
+    $text-&gt;textHS($info, \%settings); # strikethru, underline allowed</code></pre>
+
+<p>The package HarfBuzz::Shaper may be optionally installed in order to use the text-shaping capabilities of the HarfBuzz library. These include kerning and ligatures in Western scripts (such as the Latin alphabet). More complex scripts can be handled, such as Arabic family and Indic scripts, where multiple forms of a character may be automatically selected, characters may be reordered, and other modifications made. The examples/HarfBuzz.pl script gives some examples of what may be done.</p>
+
+<p>Keep in mind that HarfBuzz works only with TrueType (.ttf) and OpenType (.otf) font files. It will not work with PostScript (Type1), core, bitmapped, or CJK fonts. Not all .ttf fonts have the instructions necessary to guide HarfBuzz, but most proper .otf fonts do. In other words, there are no guarantees that a particular font file will work with Shaper!</p>
+
+<p>The basic idea is to break up text into &quot;chunks&quot; which are of the same script (alphabet), language, direction, font face, font size, and variant (italic, bold, etc.). These could range from a single character to paragraph-length strings of text. These are fed to HarfBuzz::Shaper, along with flags, the font file to be used, and other supporting information, to create an array of output glyphs. Each element is a hash describing the glyph to be output, including its name (if available), its glyph ID (number) in the selected font, its x and y displacement (usually 0), and its &quot;advance&quot; x and y values, all in points. For horizontal languages (LTR and RTL), the y advance is normally 0 and the x advance is the font&#39;s character width, less any kerning amount.</p>
+
+<p>Shaper will attempt to figure out the script used and the text direction, based on the Unicode range; and a reasonable guess at the language used. The language can be overridden, but currently the script and text direction cannot be overridden.</p>
+
+<p><b>An important note:</b> the number of glyphs (array elements) may not be equal to the number of Unicode points (characters) given in the chunk&#39;s text string! Sometimes a character will be decomposed into several pieces (multiple glyphs); sometimes multiple characters may be combined into a single ligature glyph; and characters may be reordered (especially in Indic and Southeast Asian languages). As well, for Right-to-Left (bidirectional) scripts such as Hebrew and Arabic families, the text is output in Left-to-Right order (reversed from the input).</p>
+
+<p>With due care, a Shaper array can be manipulated in code. The elements are more or less independent of each other, so elements can be modified, rearranged, inserted, or deleted. You might adjust the position of a glyph with &#39;dx&#39; and &#39;dy&#39; hash elements. The &#39;ax&#39; value should be left alone, so that the wrong kerning isn&#39;t calculated, but you might need to adjust the &quot;advance x&quot; value by means of one of the following:</p>
+
+<dl>
+
+<dt><b>axs</b></dt>
+<dd>
+
+<p>is a value to be <i>substituted</i> for &#39;ax&#39; (points)</p>
+
+</dd>
+<dt><b>axsp</b></dt>
+<dd>
+
+<p>is a <i>substituted</i> value (<i>percentage</i>) of the original &#39;ax&#39;</p>
+
+</dd>
+<dt><b>axr</b></dt>
+<dd>
+
+<p><i>reduces</i> &#39;ax&#39; by the value (points). If negative, increase &#39;ax&#39;</p>
+
+</dd>
+<dt><b>axrp</b></dt>
+<dd>
+
+<p><i>reduces</i> &#39;ax&#39; by the given <i>percentage</i>. Again, negative increases &#39;ax&#39;</p>
+
+</dd>
+</dl>
+
+<p><b>Caution:</b> a given character&#39;s glyph ID is <i>not</i> necessarily going to be the same between any two fonts! For example, an ASCII space (U+0020) might be <code>&lt;0001&gt;</code> in one font, and <code>&lt;0003&gt;</code> in another font (even one closely related!). A U+00A0 required blank (non-breaking space) may be output as a regular ASCII space U+0020. Take care if you need to find a particular glyph in the array, especially if the number of elements don&#39;t match. Consider making a text string of &quot;marker&quot; characters (space, nbsp, hyphen, soft hyphen, etc.) and processing it through HarfBuzz::Shaper to get the corresponding glyph numbers. You may have to count spaces, say, to see where you could break a glyph array to fit a line.</p>
+
+<p>The <code>advancewidthHS()</code> method uses the same inputs as does <code>textHS()</code>. Like <code>advancewidth()</code>, it returns the chunk length in points. Unlike <code>advancewidth()</code>, you cannot override the glyph array&#39;s font, font size, etc.</p>
+
+<p>Once you have your (possibly modified) array of glyphs, you feed it to the <code>textHS()</code> method to render it to the page. Remember that this method handles only a single line of text; it does not do line splitting or fitting -- that <i>you</i> currently need to do manually. For Western scripts (e.g., Latin), that might not be too difficult, but for other scripts that involve extensive modification of the raw characters, it may be quite difficult to split <i>words</i>, but you still may be able to split at inter-word spaces.</p>
+
+<p>A useful, but not exhaustive, set of functions are allowed by <code>textHS()</code> use. Support includes direction setting (top-to-bottom and bottom-to-top directions, e.g., for Far Eastern languages in traditional orientation), and explicit script names and language (depending on what support HarfBuzz itself gives). <b>Not yet</b> supported are features such as discretionary ligatures and manual selection of glyphs (e.g., swashes and alternate forms).</p>
+
+<p>Currently, <code>textHS()</code> can only handle a single text string. We are looking at how fitting to a line length (splitting up an array) could be done, as well as how words might be split on hard and soft hyphens. At some point, full paragraph and page shaping could be possible.</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../Builder_index.html">Master Index</a><br>
+<a href="../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../.././PDF/Builder/Annotation.html">PDF::Builder::Annotation</a> -- Add annotations to a PDF<br>
+<a href="../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+<a href="../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+<a href="../.././PDF/Builder/FontManager.html">PDF::Builder::FontManager</a> -- Managing the font library for PDF::Builder<br>
+<a href="../.././PDF/Builder/Lite.html">PDF::Builder::Lite</a> -- Lightweight PDF creation methods (UNMAINTAINED)<br>
+<a href="../.././PDF/Builder/Matrix.html">PDF::Builder::Matrix</a> -- Matrix operations library<br>
+<a href="../.././PDF/Builder/NamedDestination.html">PDF::Builder::NamedDestination</a> -- Add named destinations (views) to a PDF<br>
+<a href="../.././PDF/Builder/Outline.html">PDF::Builder::Outline</a> -- Manage PDF outlines (a.k.a. <i>bookmarks</i>)<br>
+<a href="../.././PDF/Builder/Outlines.html">PDF::Builder::Outlines</a> -- Further Outline handling<br>
+<a href="../.././PDF/Builder/Page.html">PDF::Builder::Page</a> -- Methods to interact with individual pages<br>
+<a href="../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../.././PDF/Builder/UniWrap.html">PDF::Builder::UniWrap</a> -- Support routines for finding line breakpoints with Unicode text<br>
+<a href="../.././PDF/Builder/Util.html">PDF::Builder::Util</a> -- Utility package for often-used methods across the package<br>
+<a href="../.././PDF/Builder/ViewerPreferences.html">PDF::Builder::ViewerPreferences</a> -- How the PDF should be displayed or printed<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

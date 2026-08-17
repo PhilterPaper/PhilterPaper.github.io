@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::XObject::Image::GIF</title>
+<link rel="stylesheet" href="../../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a>
+    <ul>
+      <li><a href="#History">History</a></li>
+    </ul>
+  </li>
+  <li><a href="#Supported-Formats">Supported Formats</a>
+    <ul>
+      <li><a href="#Options">Options</a></li>
+    </ul>
+  </li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::XObject::Image::GIF - Support routines for GIF image library</p>
+
+<p>Inherits from <a href="../../../../../PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a></p>
+
+<h2 id="History">History</h2>
+
+<p>GIF89a Specification: https://www.w3.org/Graphics/GIF/spec-gif89a.txt</p>
+
+<p>A fairly thorough description of the GIF format may be found in <a href="http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html">http://giflib.sourceforge.net/whatsinagif/bits_and_bytes.html</a>.</p>
+
+<p>Code originally from PDF::Create, PDF::Image::GIFImage - GIF image support Author: Michael Gross &lt;mdgrosse@sboxtugraz.at&gt;</p>
+
+<h1 id="Supported-Formats">Supported Formats</h1>
+
+<p>GIF87a and GIF89a headers are supported. The Image block (x2C) is supported.</p>
+
+<p>The Graphic Control Extension block (x21 + xF9) is supported for transparency control. Animation is not supported.</p>
+
+<p>The Comment Extension block (x21 + xFE), Plain Text Extension block (x21 + x01), and Application Extension block (x21 + xFF) are read, but ignored. Any other block or Extension block will be flagged as an error.</p>
+
+<p>If given, Local Color Tables are read and used, supposedly permitting more than 256 colors to be used overall in the image (despite the 8 bit color table depth).</p>
+
+<h2 id="Options">Options</h2>
+
+<dl>
+
+<dt>notrans</dt>
+<dd>
+
+<p>When defined and not 0, <code>notrans</code> suppresses the use of transparency if such is defined in the GIF file.</p>
+
+</dd>
+<dt>name =&gt; &#39;string&#39;</dt>
+<dd>
+
+<p>This is the name you can give for the GIF image object. The default is Gxnnnn.</p>
+
+</dd>
+<dt>multi</dt>
+<dd>
+
+<p>When defined and not 0, <code>multi</code> continues processing past the end of the first Image Block. The old behavior, which is now the default, is to stop processing at the end of the first Image Block.</p>
+
+</dd>
+</dl>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>     PDF::Builder::Resource::XObject::Image::GIF-&gt;new()</code></pre>
+
+<blockquote>
+
+<p>Create an image object from a GIF input file. Remember that this should be invoked via the Builder.pm method!</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../../Builder_index.html">Master Index</a><br>
+<a href="../../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a> -- Base class for external raster image objects<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/GD.html">PDF::Builder::Resource::XObject::Image::GD</a> -- Support routines for Graphics Development image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/JPEG.html">PDF::Builder::Resource::XObject::Image::JPEG</a> -- Support routines for JPEG image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNG.html">PDF::Builder::Resource::XObject::Image::PNG</a> -- Support routines for PNG image library (using pure Perl code)<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNG_IPL.html">PDF::Builder::Resource::XObject::Image::PNG_IPL</a> -- Support routines for PNG image library (using Image::PNG::Libpng)<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNM.html">PDF::Builder::Resource::XObject::Image::PNM</a> -- Support routines for PNM (Portable aNy Map) image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/SVG.html">PDF::Builder::Resource::XObject::Image::SVG</a> -- Support routines for SVG (Scalable Vector Graphics) image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF.html">PDF::Builder::Resource::XObject::Image::TIFF</a> -- TIFF image support<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF_GT.html">PDF::Builder::Resource::XObject::Image::TIFF_GT</a> -- TIFF image support (Graphics::TIFF enabled)<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

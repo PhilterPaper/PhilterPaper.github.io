@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::XObject::Image</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+      <li><a href="#Down-Children">Down (Children)</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#width">width</a></li>
+      <li><a href="#height">height</a></li>
+      <li><a href="#smask">smask</a></li>
+      <li><a href="#mask">mask</a></li>
+      <li><a href="#colorspace">colorspace</a></li>
+      <li><a href="#bits_per_component">bits_per_component</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::XObject::Image - Base class for external raster image objects</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $image = PDF::Builder::Resource::XObject::Image-&gt;new($pdf, $name)</code></pre>
+
+<blockquote>
+
+<p>Returns an image resource object.</p>
+
+</blockquote>
+
+<h2 id="width">width</h2>
+
+<pre><code>    $width = $image-&gt;width()</code></pre>
+
+<blockquote>
+
+<p>Get the width (in points) of the image object.</p>
+
+<p><b>Note</b> that this function also has the ability to <i>set</i> the width, by giving the new width (in points), but it appears that it never worked correctly. The <i>set</i> capability has been <b>deprecated</b>, and may be removed soon, unless it is found to be needed for an &lt;img&gt; tag in <code>column()</code>. If you are using the <code>width()</code> method in some manner to <i>set</i> the image width, please let us know, so we can plan to keep it enabled!</p>
+
+</blockquote>
+
+<h2 id="height">height</h2>
+
+<pre><code>    $height = $image-&gt;height()</code></pre>
+
+<blockquote>
+
+<p>Get the height (in points) of the image object.</p>
+
+<p><b>Note</b> that this function also has the ability to <i>set</i> the height, by giving the new height (in points), but it appears that it never worked correctly. The <i>set</i> capability has been <b>deprecated</b>, and may be removed soon, unless it is found to be needed for an &lt;img&gt; tag in <code>column()</code>. If you are using the <code>height()</code> method in some manner to <i>set</i> the image height, please let us know, so we can plan to keep it enabled!</p>
+
+</blockquote>
+
+<h2 id="smask">smask</h2>
+
+<pre><code>    $image-&gt;smask($xobject)</code></pre>
+
+<blockquote>
+
+<p>Set the soft-mask image object.</p>
+
+</blockquote>
+
+<h2 id="mask">mask</h2>
+
+<pre><code>    $image-&gt;mask(@color_range)
+
+    $image-&gt;mask($xobject)</code></pre>
+
+<blockquote>
+
+<p>Set the mask to an image mask XObject or an array containing a range of colors to be applied as a color key mask.</p>
+
+</blockquote>
+
+<h2 id="colorspace">colorspace</h2>
+
+<pre><code>    $image-&gt;colorspace($name)
+
+    $image-&gt;colorspace($array)</code></pre>
+
+<blockquote>
+
+<p>Set the color space used by the image. Depending on the color space, this will either be just the name of the color space, or it will be an array containing the color space and any required parameters.</p>
+
+<p>If passing an array, parameters must already be encoded as PDF objects. The array itself may also be a PDF object. If not, one will be created.</p>
+
+</blockquote>
+
+<h2 id="bits_per_component">bits_per_component</h2>
+
+<pre><code>    $image-&gt;bits_per_component($integer)</code></pre>
+
+<blockquote>
+
+<p>Set the number of bits used to represent each color component.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/XObject/Form.html">PDF::Builder::Resource::XObject::Form</a> -- Base class for external form objects<br>
+</p>
+
+<h2 id="Down-Children">Down (Children)</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image/GD.html">PDF::Builder::Resource::XObject::Image::GD</a> -- Support routines for Graphics Development image library<br>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image/GIF.html">PDF::Builder::Resource::XObject::Image::GIF</a> -- Support routines for GIF image library<br>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image/JPEG.html">PDF::Builder::Resource::XObject::Image::JPEG</a> -- Support routines for JPEG image library<br>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image/PNG.html">PDF::Builder::Resource::XObject::Image::PNG</a> -- Support routines for PNG image library (using pure Perl code)<br>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image/PNG_IPL.html">PDF::Builder::Resource::XObject::Image::PNG_IPL</a> -- Support routines for PNG image library (using Image::PNG::Libpng)<br>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image/PNM.html">PDF::Builder::Resource::XObject::Image::PNM</a> -- Support routines for PNM (Portable aNy Map) image library<br>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image/SVG.html">PDF::Builder::Resource::XObject::Image::SVG</a> -- Support routines for SVG (Scalable Vector Graphics) image library<br>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image/TIFF.html">PDF::Builder::Resource::XObject::Image::TIFF</a> -- TIFF image support<br>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image/TIFF_GT.html">PDF::Builder::Resource::XObject::Image::TIFF_GT</a> -- TIFF image support (Graphics::TIFF enabled)<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

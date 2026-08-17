@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Lite</title>
+<link rel="stylesheet" href="../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#page">page</a></li>
+      <li><a href="#mediabox">mediabox</a></li>
+      <li><a href="#saveas">saveas</a></li>
+      <li><a href="#corefont">corefont</a></li>
+      <li><a href="#ttfont">ttfont</a></li>
+      <li><a href="#psfont">psfont</a></li>
+      <li><a href="#create_egs">create_egs</a></li>
+      <li><a href="#image_jpeg">image_jpeg</a></li>
+      <li><a href="#image_png">image_png</a></li>
+      <li><a href="#image_tiff">image_tiff</a></li>
+      <li><a href="#image_pnm">image_pnm</a></li>
+      <li><a href="#savestate">savestate</a></li>
+      <li><a href="#restorestate">restorestate</a></li>
+      <li><a href="#egstate">egstate</a></li>
+      <li><a href="#fillcolor">fillcolor</a></li>
+      <li><a href="#strokecolor">strokecolor</a></li>
+      <li><a href="#linedash">linedash</a></li>
+      <li><a href="#linewidth">linewidth</a></li>
+      <li><a href="#transform">transform</a></li>
+      <li><a href="#move">move</a></li>
+      <li><a href="#line">line</a></li>
+      <li><a href="#curve">curve</a></li>
+      <li><a href="#arc">arc</a></li>
+      <li><a href="#ellipse">ellipse</a></li>
+      <li><a href="#circle">circle</a></li>
+      <li><a href="#rect">rect</a></li>
+      <li><a href="#rectxy">rectxy</a></li>
+      <li><a href="#poly">poly</a></li>
+      <li><a href="#close">close</a></li>
+      <li><a href="#stroke">stroke</a></li>
+      <li><a href="#fill">fill</a></li>
+      <li><a href="#fillstroke">fillstroke</a></li>
+      <li><a href="#image">image</a></li>
+      <li><a href="#textstart">textstart</a></li>
+      <li><a href="#textfont">textfont</a></li>
+      <li><a href="#textleading">textleading</a></li>
+      <li><a href="#text">text</a></li>
+      <li><a href="#nl">nl</a></li>
+      <li><a href="#textend">textend</a></li>
+      <li><a href="#print">print</a></li>
+    </ul>
+  </li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Lite - Lightweight PDF creation methods (UNMAINTAINED)</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    $pdf = PDF::Builder::Lite-&gt;new();
+    $pdf-&gt;page(595,842);
+    $img = $pdf-&gt;image(&#39;some.jpg&#39;);
+    $font = $pdf-&gt;corefont(&#39;Times-Roman&#39;);
+    $font = $pdf-&gt;ttfont(&#39;TimesNewRoman.ttf&#39;);</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>=======================================================================</p>
+
+<p>This class is unmaintained (since 2007) and should not be used in new code. It combines many of the methods from <a href="../../PDF/Builder.html">PDF::Builder</a> and <a href="../../PDF/Builder/Content.html">PDF::Builder::Content</a> into a single class but isn&#39;t really otherwise any easier to use.</p>
+
+<p>There have been many improvements and clarifications made to the rest of the distribution that aren&#39;t reflected here, so the term &quot;Lite&quot; no longer applies. It remains solely for compatibility with existing legacy code.</p>
+
+<p><b>As it is unmaintained, we <i>strongly</i> suggest that you not use &quot;Lite&quot;. If you have old applications that make use of it, we suggest that you consider upgrading them to use current, supported, PDF::Builder facilities. Although we try to maintain backwards compatibility for calls made by &quot;Lite&quot;, there is no guarantee that something may break when called by &quot;Lite&quot;!</b></p>
+
+<p>=======================================================================</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $pdf = PDF::Builder::Lite-&gt;new(%opts)
+
+    $pdf = PDF::Builder::Lite-&gt;new()</code></pre>
+
+<h2 id="page">page</h2>
+
+<pre><code>    $pdf-&gt;page()
+
+    $pdf-&gt;page($width,$height)
+
+    $pdf-&gt;page($llx,$lly, $urx,$ury)</code></pre>
+
+<blockquote>
+
+<p>Opens a new page.</p>
+
+</blockquote>
+
+<h2 id="mediabox">mediabox</h2>
+
+<pre><code>    $pdf-&gt;mediabox($w,$h)
+
+    $pdf-&gt;mediabox($llx,$lly, $urx,$ury)</code></pre>
+
+<blockquote>
+
+<p>Sets the global mediabox.</p>
+
+</blockquote>
+
+<h2 id="saveas">saveas</h2>
+
+<pre><code>    $pdf-&gt;saveas($file)</code></pre>
+
+<blockquote>
+
+<p>Saves the document (may <b>not</b> be modified later) and deallocates the PDF structures.</p>
+
+<p>If <code>$file</code> is just a hyphen &#39;-&#39;, the stringified copy is returned, otherwise the file is saved, and <code>$self</code> is returned (for chaining calls).</p>
+
+</blockquote>
+
+<h2 id="corefont">corefont</h2>
+
+<pre><code>    $font = $pdf-&gt;corefont($fontname)</code></pre>
+
+<blockquote>
+
+<p>Returns a new or existing Adobe core font object.</p>
+
+<p><b>Examples:</b></p>
+
+<pre><code>    $font = $pdf-&gt;corefont(&#39;Times-Roman&#39;);
+    $font = $pdf-&gt;corefont(&#39;Times-Bold&#39;);
+    $font = $pdf-&gt;corefont(&#39;Helvetica&#39;);
+    $font = $pdf-&gt;corefont(&#39;ZapfDingbats&#39;);</code></pre>
+
+</blockquote>
+
+<h2 id="ttfont">ttfont</h2>
+
+<pre><code>    $font = $pdf-&gt;ttfont($ttfile)</code></pre>
+
+<blockquote>
+
+<p>Returns a new or existing TrueType font object.</p>
+
+<p><b>Examples:</b></p>
+
+<pre><code>    $font = $pdf-&gt;ttfont(&#39;TimesNewRoman.ttf&#39;);
+    $font = $pdf-&gt;ttfont(&#39;/fonts/Univers-Bold.ttf&#39;);
+    $font = $pdf-&gt;ttfont(&#39;../Democratica-SmallCaps.ttf&#39;);</code></pre>
+
+</blockquote>
+
+<h2 id="psfont">psfont</h2>
+
+<pre><code>    $font = $pdf-&gt;psfont($ps_file, %options)
+
+    $font = $pdf-&gt;psfont($ps_file)</code></pre>
+
+<blockquote>
+
+<p>Returns a new Type1 (PS) font object.</p>
+
+<p><b>Examples:</b></p>
+
+<pre><code>    $font = $pdf-&gt;psfont(&#39;TimesRoman.pfa&#39;, &#39;afmfile&#39; =&gt; &#39;TimesRoman.afm&#39;, &#39;encode&#39; =&gt; &#39;latin1&#39;);
+    $font = $pdf-&gt;psfont(&#39;/fonts/Univers.pfb&#39;, &#39;pfmfile&#39; =&gt; &#39;/fonts/Univers.pfm&#39;, &#39;encode&#39; =&gt; &#39;latin2&#39;);</code></pre>
+
+</blockquote>
+
+<h2 id="create_egs">create_egs</h2>
+
+<pre><code>    $egs = $pdf-&gt;create_egs()</code></pre>
+
+<blockquote>
+
+<p>Returns a new extended-graphics-state object.</p>
+
+<p><b>Examples:</b></p>
+
+<pre><code>    $egs = $pdf-&gt;create_egs();</code></pre>
+
+</blockquote>
+
+<h2 id="image_jpeg">image_jpeg</h2>
+
+<pre><code>    $img = $pdf-&gt;image_jpeg($file)</code></pre>
+
+<blockquote>
+
+<p>Returns a new JPEG image object.</p>
+
+</blockquote>
+
+<h2 id="image_png">image_png</h2>
+
+<pre><code>    $img = $pdf-&gt;image_png($file)</code></pre>
+
+<blockquote>
+
+<p>Returns a new PNG image object.</p>
+
+</blockquote>
+
+<h2 id="image_tiff">image_tiff</h2>
+
+<pre><code>    $img = $pdf-&gt;image_tiff($file, %opts)
+
+    $img = $pdf-&gt;image_tiff($file)</code></pre>
+
+<blockquote>
+
+<p>Returns a new TIFF image object.</p>
+
+</blockquote>
+
+<h2 id="image_pnm">image_pnm</h2>
+
+<pre><code>    $img = $pdf-&gt;image_pnm($file)</code></pre>
+
+<blockquote>
+
+<p>Returns a new PNM image object.</p>
+
+</blockquote>
+
+<h2 id="savestate">savestate</h2>
+
+<pre><code>    $pdf-&gt;savestate()</code></pre>
+
+<blockquote>
+
+<p>Saves the state of the page.</p>
+
+</blockquote>
+
+<h2 id="restorestate">restorestate</h2>
+
+<pre><code>    $pdf-&gt;restorestate()</code></pre>
+
+<blockquote>
+
+<p>Restores the state of the page.</p>
+
+</blockquote>
+
+<h2 id="egstate">egstate</h2>
+
+<pre><code>    $pdf-&gt;egstate($egs)</code></pre>
+
+<blockquote>
+
+<p>Sets extended-graphics state.</p>
+
+</blockquote>
+
+<h2 id="fillcolor">fillcolor</h2>
+
+<pre><code>    $pdf-&gt;fillcolor($color)</code></pre>
+
+<blockquote>
+
+<p>Sets the fill color. See <code>strokecolor</code> for color names and specifications.</p>
+
+</blockquote>
+
+<h2 id="strokecolor">strokecolor</h2>
+
+<pre><code>    $pdf-&gt;strokecolor($color)</code></pre>
+
+<blockquote>
+
+<p>Sets the stroke color.</p>
+
+<p><b>Defined color-names are:</b></p>
+
+<pre><code>    aliceblue, antiquewhite, aqua, aquamarine, azure, beige, bisque, black, blanchedalmond,
+    blue, blueviolet, brown, burlywood, cadetblue, chartreuse, chocolate, coral, cornflowerblue,
+    cornsilk, crimson, cyan, darkblue, darkcyan, darkgoldenrod, darkgray, darkgreen, darkgrey,
+    darkkhaki, darkmagenta, darkolivegreen, darkorange, darkorchid, darkred, darksalmon,
+    darkseagreen, darkslateblue, darkslategray, darkslategrey, darkturquoise, darkviolet,
+    deeppink, deepskyblue, dimgray, dimgrey, dodgerblue, firebrick, floralwhite, forestgreen,
+    fuchsia, gainsboro, ghostwhite, gold, goldenrod, gray, grey, green, greenyellow, honeydew,
+    hotpink, indianred, indigo, ivory, khaki, lavender, lavenderblush, lawngreen, lemonchiffon,
+    lightblue, lightcoral, lightcyan, lightgoldenrodyellow, lightgray, lightgreen, lightgrey,
+    lightpink, lightsalmon, lightseagreen, lightskyblue, lightslategray, lightslategrey,
+    lightsteelblue, lightyellow, lime, limegreen, linen, magenta, maroon, mediumaquamarine,
+    mediumblue, mediumorchid, mediumpurple, mediumseagreen, mediumslateblue, mediumspringgreen,
+    mediumturquoise, mediumvioletred, midnightblue, mintcream, mistyrose, moccasin, navajowhite,
+    navy, oldlace, olive, olivedrab, orange, orangered, orchid, palegoldenrod, palegreen,
+    paleturquoise, palevioletred, papayawhip, peachpuff, peru, pink, plum, powderblue, purple,
+    red, rosybrown, royalblue, saddlebrown, salmon, sandybrown, seagreen, seashell, sienna,
+    silver, skyblue, slateblue, slategray, slategrey, snow, springgreen, steelblue, tan, teal,
+    thistle, tomato, turquoise, violet, wheat, white, whitesmoke, yellow, yellowgreen</code></pre>
+
+<p>or the rgb-hex-notation:</p>
+
+<pre><code>    #rgb, #rrggbb, #rrrgggbbb and #rrrrggggbbbb</code></pre>
+
+<p>or the cmyk-hex-notation:</p>
+
+<pre><code>    %cmyk, %ccmmyykk, %cccmmmyyykkk and %ccccmmmmyyyykkkk</code></pre>
+
+<p>or the hsl-hex-notation:</p>
+
+<pre><code>    &amp;hsl, &amp;hhssll, &amp;hhhssslll and &amp;hhhhssssllll</code></pre>
+
+<p>or the hsv-hex-notation:</p>
+
+<pre><code>    !hsv, !hhssvv, !hhhsssvvv and !hhhhssssvvvv</code></pre>
+
+</blockquote>
+
+<h2 id="linedash">linedash</h2>
+
+<pre><code>    $pdf-&gt;linedash(@dash)</code></pre>
+
+<blockquote>
+
+<p>Sets the line dash pattern.</p>
+
+</blockquote>
+
+<h2 id="linewidth">linewidth</h2>
+
+<pre><code>    $pdf-&gt;linewidth($width)</code></pre>
+
+<blockquote>
+
+<p>Sets the line width.</p>
+
+</blockquote>
+
+<h2 id="transform">transform</h2>
+
+<pre><code>    $pdf-&gt;transform(%opts)</code></pre>
+
+<blockquote>
+
+<p>Sets transformations (i.e., translate, rotate, scale, skew) in PDF-canonical order.</p>
+
+<p><b>Example:</b></p>
+
+<pre><code>    $pdf-&gt;transform(
+        &#39;translate&#39; =&gt; [$x,$y],
+        &#39;rotate&#39;    =&gt; $rot,
+        &#39;scale&#39;     =&gt; [$sx,$sy],
+        &#39;skew&#39;      =&gt; [$sa,$sb],
+    )</code></pre>
+
+</blockquote>
+
+<h2 id="move">move</h2>
+
+<pre><code>    $pdf-&gt;move($x,$y)</code></pre>
+
+<blockquote>
+
+<p>Move to a new drawing location at C[$x,$y].</p>
+
+</blockquote>
+
+<h2 id="line">line</h2>
+
+<pre><code>    $pdf-&gt;line($x,$y)</code></pre>
+
+<blockquote>
+
+<p>Draw a line to C[$x,$y].</p>
+
+</blockquote>
+
+<h2 id="curve">curve</h2>
+
+<pre><code>    $pdf-&gt;curve($x1,$y1, $x2,$y2, $x3,$y3)</code></pre>
+
+<blockquote>
+
+<p>Draw a Bezier curve with three control points.</p>
+
+</blockquote>
+
+<h2 id="arc">arc</h2>
+
+<pre><code>    $pdf-&gt;arc($xc,$yc, $rx,$ry, $alpha,$beta, $move, $dir)
+
+    $pdf-&gt;arc($xc,$yc, $rx,$ry, $alpha,$beta, $move)</code></pre>
+
+<blockquote>
+
+<p>Draw an arc centered at C[$xc,$yc], with x radius C[$rx] and y radius C[$ry], from C[$alpha] degrees to C[$beta] degrees. If C[$move] is <i>true</i>, do <b>not</b> draw a line to the start of the arc. C[$dir] defaults to 0 for counter-clockwise sweep, and may be set to 1 for a clockwise sweep.</p>
+
+</blockquote>
+
+<h2 id="ellipse">ellipse</h2>
+
+<pre><code>    $pdf-&gt;ellipse($xc,$yc, $rx,$ry)</code></pre>
+
+<blockquote>
+
+<p>Draw an ellipse centered at C[$xc,$yc], with x radius C[$rx] and y radius C[$ry].</p>
+
+</blockquote>
+
+<h2 id="circle">circle</h2>
+
+<pre><code>    $pdf-&gt;circle($xc,$yc, $r)</code></pre>
+
+<blockquote>
+
+<p>Draw a circle centered at C[$xc,$yc], of radius C[$r].</p>
+
+</blockquote>
+
+<h2 id="rect">rect</h2>
+
+<pre><code>    $pdf-&gt;rect($x,$y, $w,$h)</code></pre>
+
+<blockquote>
+
+<p>Draw a rectangle with lower left corner at C[$x,$y], width (+x) C[$w] and height (+y) C[$h].</p>
+
+</blockquote>
+
+<h2 id="rectxy">rectxy</h2>
+
+<pre><code>    $pdf-&gt;rectxy($x1,$y1, $x2,$y2)</code></pre>
+
+<blockquote>
+
+<p>Draw a rectangle with opposite corners C[$x1,$y1] and C[$x2,$y2].</p>
+
+</blockquote>
+
+<h2 id="poly">poly</h2>
+
+<pre><code>    $pdf-&gt;poly($x1,$y1, ..., $xn,$yn)</code></pre>
+
+<blockquote>
+
+<p>Draw a polyline (multiple line segments) starting at (<i>move</i> to) C[$x1,$y1] and continuing on to C[$x2,$y2], ..., C[$xn,$yn].</p>
+
+</blockquote>
+
+<h2 id="close">close</h2>
+
+<pre><code>    $pdf-&gt;close()</code></pre>
+
+<blockquote>
+
+<p>Close a shape (draw a line back to the beginning).</p>
+
+</blockquote>
+
+<h2 id="stroke">stroke</h2>
+
+<pre><code>    $pdf-&gt;stroke()</code></pre>
+
+<blockquote>
+
+<p>Stroke (actually draw) a shape whose path has already been laid out, using the requested <code>strokecolor</code>.</p>
+
+</blockquote>
+
+<h2 id="fill">fill</h2>
+
+<pre><code>    $pdf-&gt;fill()</code></pre>
+
+<blockquote>
+
+<p>Fill in a closed geometry (path), using the requested <code>fillcolor</code>. The <i>non-zero winding rule</i> is used if the path crosses itself.</p>
+
+</blockquote>
+
+<h2 id="fillstroke">fillstroke</h2>
+
+<pre><code>    $pdf-&gt;fillstroke()</code></pre>
+
+<blockquote>
+
+<p>Fill (using <code>fillcolor</code>) <i>and</i> stroke (using <code>strokecolor</code>) a closed path. The <i>non-zero winding rule</i> is used if the path crosses itself.</p>
+
+</blockquote>
+
+<h2 id="image">image</h2>
+
+<pre><code>    $pdf-&gt;image($imgobj, $x,$y, $w,$h)
+
+    $pdf-&gt;image($imgobj, $x,$y, $scale)
+
+    $pdf-&gt;image($imgobj, $x,$y)</code></pre>
+
+<blockquote>
+
+<p><b>Please Note:</b> The width/height or scale given is in user-space coordinates, which are subject to transformations which may have been specified beforehand.</p>
+
+<p>Per default this has a 72dpi resolution, so if you want an image to have a 150 or 300dpi resolution, you should specify a scale of 72/150 (or 72/300) or adjust width/height accordingly.</p>
+
+</blockquote>
+
+<h2 id="textstart">textstart</h2>
+
+<pre><code>    $pdf-&gt;textstart()</code></pre>
+
+<blockquote>
+
+<p>Forces the start of text mode while in graphics.</p>
+
+</blockquote>
+
+<h2 id="textfont">textfont</h2>
+
+<pre><code>    $pdf-&gt;textfont($fontobj, $size)</code></pre>
+
+<blockquote>
+
+<p>Define the current font to be an (already defined) font object at the given size.</p>
+
+</blockquote>
+
+<h2 id="textleading">textleading</h2>
+
+<pre><code>    $txt-&gt;textleading($leading)</code></pre>
+
+<blockquote>
+
+<p>Set the baseline-to-baseline &quot;leading&quot; to be used for text lines.</p>
+
+</blockquote>
+
+<h2 id="text">text</h2>
+
+<pre><code>    $pdf-&gt;text($string)</code></pre>
+
+<blockquote>
+
+<p>Applies (writes out) the given text at the current text location, using the already-specified font.</p>
+
+</blockquote>
+
+<h2 id="nl">nl</h2>
+
+<pre><code>    $pdf-&gt;nl()</code></pre>
+
+<blockquote>
+
+<p>Write a newline (drop down to the next line).</p>
+
+</blockquote>
+
+<h2 id="textend">textend</h2>
+
+<pre><code>    $pdf-&gt;textend()</code></pre>
+
+<blockquote>
+
+<p>Force an end to text output and return to graphics.</p>
+
+</blockquote>
+
+<h2 id="print">print</h2>
+
+<pre><code>    $pdf-&gt;print($font, $size, $x,$y, $rot, $just, $text)</code></pre>
+
+<blockquote>
+
+<p>Convenience wrapper for shortening the textstart..textend sequence.</p>
+
+<p>Go into text mode, set the font to the object and size, go to the location, set any rotation, set justification, and write the array of text. Justification is 0 for left, 1 for center, and 2 for right.</p>
+
+</blockquote>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>This module was originally written by Alfred Reibenschuh. It has had some minor updates over time, but otherwise is mostly unchanged.</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../Builder_index.html">Master Index</a><br>
+<a href="../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../.././PDF/Builder/Annotation.html">PDF::Builder::Annotation</a> -- Add annotations to a PDF<br>
+<a href="../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+<a href="../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+<a href="../.././PDF/Builder/Docs.html">PDF::Builder::Docs</a> -- Additional documentation for Builder module<br>
+<a href="../.././PDF/Builder/FontManager.html">PDF::Builder::FontManager</a> -- Managing the font library for PDF::Builder<br>
+<a href="../.././PDF/Builder/Matrix.html">PDF::Builder::Matrix</a> -- Matrix operations library<br>
+<a href="../.././PDF/Builder/NamedDestination.html">PDF::Builder::NamedDestination</a> -- Add named destinations (views) to a PDF<br>
+<a href="../.././PDF/Builder/Outline.html">PDF::Builder::Outline</a> -- Manage PDF outlines (a.k.a. <i>bookmarks</i>)<br>
+<a href="../.././PDF/Builder/Outlines.html">PDF::Builder::Outlines</a> -- Further Outline handling<br>
+<a href="../.././PDF/Builder/Page.html">PDF::Builder::Page</a> -- Methods to interact with individual pages<br>
+<a href="../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../.././PDF/Builder/UniWrap.html">PDF::Builder::UniWrap</a> -- Support routines for finding line breakpoints with Unicode text<br>
+<a href="../.././PDF/Builder/Util.html">PDF::Builder::Util</a> -- Utility package for often-used methods across the package<br>
+<a href="../.././PDF/Builder/ViewerPreferences.html">PDF::Builder::ViewerPreferences</a> -- How the PDF should be displayed or printed<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

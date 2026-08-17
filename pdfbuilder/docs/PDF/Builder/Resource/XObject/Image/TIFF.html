@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::XObject::Image::TIFF</title>
+<link rel="stylesheet" href="../../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+      <li><a href="#Down-Children">Down (Children)</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#usesLib">usesLib</a></li>
+      <li><a href="#tiffTag">tiffTag</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::XObject::Image::TIFF - TIFF image support</p>
+
+<p>Inherits from <a href="../../../../../PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $res = PDF::Builder::Resource::XObject::Image::TIFF-&gt;new($pdf, $file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a TIFF-image object.</p>
+
+<p>If the Graphics::TIFF package is installed, the TIFF_GT library will be used instead of the TIFF library. In such a case, use of the TIFF library may be forced via the <code>nouseGT</code> flag (see Builder documentation for <code>image_tiff()</code>).</p>
+
+<p>Options:</p>
+
+<dl>
+
+<dt>&#39;name&#39; =&gt; &#39;string&#39;</dt>
+<dd>
+
+<p>This is the name you can give for the TIFF image object. The default is Ixnnnn.</p>
+
+</dd>
+</dl>
+
+<p>Remember that you need to use the Builder.pm method image_tiff in order to display a TIFF file.</p>
+
+</blockquote>
+
+<h2 id="usesLib">usesLib</h2>
+
+<pre><code>    $mode = $tif-&gt;usesLib()</code></pre>
+
+<blockquote>
+
+<p>Returns 1 if Graphics::TIFF installed and used, 0 if not installed, or -1 if installed but not used (nouseGT option given to <code>image_tiff</code>).</p>
+
+<p><b>Caution:</b> this method can only be used <i>after</i> the image object has been created. It can&#39;t tell you whether Graphics::TIFF is available in advance of actually using it, in case you want to use some functionality available only in TIFF_GT. See the &lt;PDF::Builder&gt; LA_GT() call if you need to know in advance.</p>
+
+</blockquote>
+
+<h2 id="tiffTag">tiffTag</h2>
+
+<pre><code>    $value = $tif-&gt;tiffTag($tag)</code></pre>
+
+<blockquote>
+
+<p>returns the value of the internal tiff-tag.</p>
+
+<p><b>Useful Tags:</b></p>
+
+<pre><code>    imageDescription, imageId (strings)
+    xRes, yRes (dpi; pixel/cm if resUnit==3)
+    resUnit</code></pre>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../../Builder_index.html">Master Index</a><br>
+<a href="../../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a> -- Base class for external raster image objects<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/GD.html">PDF::Builder::Resource::XObject::Image::GD</a> -- Support routines for Graphics Development image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/GIF.html">PDF::Builder::Resource::XObject::Image::GIF</a> -- Support routines for GIF image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/JPEG.html">PDF::Builder::Resource::XObject::Image::JPEG</a> -- Support routines for JPEG image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNG.html">PDF::Builder::Resource::XObject::Image::PNG</a> -- Support routines for PNG image library (using pure Perl code)<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNG_IPL.html">PDF::Builder::Resource::XObject::Image::PNG_IPL</a> -- Support routines for PNG image library (using Image::PNG::Libpng)<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNM.html">PDF::Builder::Resource::XObject::Image::PNM</a> -- Support routines for PNM (Portable aNy Map) image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/SVG.html">PDF::Builder::Resource::XObject::Image::SVG</a> -- Support routines for SVG (Scalable Vector Graphics) image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF_GT.html">PDF::Builder::Resource::XObject::Image::TIFF_GT</a> -- TIFF image support (Graphics::TIFF enabled)<br>
+</p>
+
+<h2 id="Down-Children">Down (Children)</h2>
+<p>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF/File.html">PDF::Builder::Resource::XObject::Image::TIFF::File</a> -- Support routines for TIFF image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF/File_GT.html">PDF::Builder::Resource::XObject::Image::TIFF::File_GT</a> -- Support routines for TIFF image library (Graphics::TIFF enabled)<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

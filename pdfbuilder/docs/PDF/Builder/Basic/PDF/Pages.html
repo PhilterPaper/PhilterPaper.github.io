@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Basic::PDF::Pages</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#find_page">find_page</a></li>
+      <li><a href="#add_page">add_page</a></li>
+      <li><a href="#get_pages">get_pages</a></li>
+      <li><a href="#find_prop">find_prop</a></li>
+      <li><a href="#add_font">add_font</a></li>
+      <li><a href="#bbox">bbox</a></li>
+      <li><a href="#proc_set">proc_set</a></li>
+      <li><a href="#get_top">get_top</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Basic::PDF::Pages - PDF pages hierarchical element</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Basic/PDF/Dict.html">PDF::Builder::Basic::PDF::Dict</a></p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>A Pages object is the parent to other pages objects or to page objects themselves.</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    PDF::Builder::Basic::PDF::Pages-&gt;new($pdf, $parent)</code></pre>
+
+<blockquote>
+
+<p>This creates a new Pages object in a PDF. Notice that the <code>$parent</code> here is not the file context for the object, but the parent pages object for these pages. If we are using this class to create a root node, <code>$parent</code> should point to the file context, which is identified by <i>not</i> having a Type of <i>Pages</i>. <code>$pdf</code> is the file object (or a reference to an array of <i>one</i> file object [3.016 and later, or multiple file objects earlier]) in which to create the new Pages object.</p>
+
+</blockquote>
+
+<h2 id="find_page">find_page</h2>
+
+<pre><code>    $p-&gt;find_page($page_number)</code></pre>
+
+<blockquote>
+
+<p>Returns the given page, using the page count values in the pages tree. Pages start at 0.</p>
+
+</blockquote>
+
+<h2 id="add_page">add_page</h2>
+
+<pre><code>    $p-&gt;add_page($page, $page_number)</code></pre>
+
+<blockquote>
+
+<p>Inserts the page before the given <code>$page_number</code>. <code>$page_number</code> can be negative to count backwards from the END of the document. -1 is after the last page. Likewise <code>$page_number</code> can be greater than the number of pages currently in the document, to append.</p>
+
+<p>This method only guarantees to provide a reasonable pages tree if pages are appended or prepended to the document. Pages inserted in the middle of the document may simply be inserted in the appropriate leaf in the pages tree without adding any new branches or leaves, leaving it unbalanced (slower performance, but still usable).</p>
+
+</blockquote>
+
+<h2 id="get_pages">get_pages</h2>
+
+<pre><code>    @objects = $p-&gt;get_pages()</code></pre>
+
+<blockquote>
+
+<p>Returns a list of page objects in the document, in page order.</p>
+
+</blockquote>
+
+<h2 id="find_prop">find_prop</h2>
+
+<pre><code>    $p-&gt;find_prop($key)</code></pre>
+
+<blockquote>
+
+<p>Searches up through the inheritance tree to find a property (key).</p>
+
+</blockquote>
+
+<h2 id="add_font">add_font</h2>
+
+<pre><code>    $p-&gt;add_font($pdf, $font)</code></pre>
+
+<blockquote>
+
+<p>Creates or edits the resource dictionary at this level in the hierarchy. If the font is already supported, even through the hierarchy, then it is not added.</p>
+
+<p><b>CAUTION:</b> if this method was used in older releases, the code may have swapped the order of <code>$pdf</code> and <code>$font</code>, requiring ad hoc swapping of parameters in user code, contrary to the POD definition above. Now the code matches the documentation.</p>
+
+</blockquote>
+
+<h2 id="bbox">bbox</h2>
+
+<pre><code>    $p-&gt;bbox($xmin,$ymin, $xmax,$ymax, $param)
+
+    $p-&gt;bbox($xmin,$ymin, $xmax,$ymax)</code></pre>
+
+<blockquote>
+
+<p>Specifies the bounding box for this and all child pages. If the values are identical to those inherited, no change is made. <code>$param</code> specifies the attribute name so that other &#39;bounding box&#39;es can be set with this method.</p>
+
+</blockquote>
+
+<h2 id="proc_set">proc_set</h2>
+
+<pre><code>    $p-&gt;proc_set(@entries)</code></pre>
+
+<blockquote>
+
+<p>Ensures that the current resource contains all the entries in the proc_sets listed. If necessary, it creates a local resource dictionary to achieve this.</p>
+
+</blockquote>
+
+<h2 id="get_top">get_top</h2>
+
+<pre><code>    $p-&gt;get_top()</code></pre>
+
+<blockquote>
+
+<p>Returns the top of the pages tree.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Basic/PDF/Array.html">PDF::Builder::Basic::PDF::Array</a> -- Corresponds to a PDF array<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Bool.html">PDF::Builder::Basic::PDF::Bool</a> -- Holds the strings <b>true</b> or <b>false</b><br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Dict.html">PDF::Builder::Basic::PDF::Dict</a> -- PDF Dictionaries and Streams<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/File.html">PDF::Builder::Basic::PDF::File</a> -- Holds the trailers and cross-reference tables for a PDF file<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Filter.html">PDF::Builder::Basic::PDF::Filter</a> -- Abstract superclass for PDF stream filters<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Literal.html">PDF::Builder::Basic::PDF::Literal</a> -- Literal PDF Object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Name.html">PDF::Builder::Basic::PDF::Name</a> -- Stores PDF names (things beginning with /)<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Null.html">PDF::Builder::Basic::PDF::Null</a> -- PDF Null type object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Number.html">PDF::Builder::Basic::PDF::Number</a> -- Numbers in PDF<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Objind.html">PDF::Builder::Basic::PDF::Objind</a> -- PDF indirect object reference<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Page.html">PDF::Builder::Basic::PDF::Page</a> -- Represents a PDF page<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/String.html">PDF::Builder::Basic::PDF::String</a> -- PDF String type objects<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Utils.html">PDF::Builder::Basic::PDF::Utils</a> -- Utility functions for PDF library<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

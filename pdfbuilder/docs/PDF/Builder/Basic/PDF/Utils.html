@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Basic::PDF::Utils</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#PDFBool">PDFBool</a></li>
+      <li><a href="#PDFArray">PDFArray</a></li>
+      <li><a href="#PDFDict">PDFDict</a></li>
+      <li><a href="#PDFName">PDFName</a></li>
+      <li><a href="#PDFNull">PDFNull</a></li>
+      <li><a href="#PDFNum">PDFNum</a></li>
+      <li><a href="#PDFString">PDFString</a></li>
+      <li><a href="#PDFStr">PDFStr</a></li>
+      <li><a href="#PDFStrHex">PDFStrHex</a></li>
+      <li><a href="#PDFUtf">PDFUtf</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Basic::PDF::Utils - Utility functions for PDF library</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>A set of utility functions to save the fingers of the PDF library users!</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="PDFBool">PDFBool</h2>
+
+<pre><code>    PDFBool()</code></pre>
+
+<blockquote>
+
+<p>Creates a Bool via PDF::Builder::Basic::PDF::Bool-&gt;new()</p>
+
+</blockquote>
+
+<h2 id="PDFArray">PDFArray</h2>
+
+<pre><code>    PDFArray()</code></pre>
+
+<blockquote>
+
+<p>Creates an array via PDF::Builder::Basic::PDF::Array-&gt;new()</p>
+
+</blockquote>
+
+<h2 id="PDFDict">PDFDict</h2>
+
+<pre><code>    PDFDict()</code></pre>
+
+<blockquote>
+
+<p>Creates a dict via PDF::Builder::Basic::PDF::Dict-&gt;new()</p>
+
+</blockquote>
+
+<h2 id="PDFName">PDFName</h2>
+
+<pre><code>    PDFName()</code></pre>
+
+<blockquote>
+
+<p>Creates a name via PDF::Builder::Basic::PDF::Name-&gt;new()</p>
+
+</blockquote>
+
+<h2 id="PDFNull">PDFNull</h2>
+
+<pre><code>    PDFNull()</code></pre>
+
+<blockquote>
+
+<p>Creates a null via PDF::Builder::Basic::PDF::Null-&gt;new()</p>
+
+</blockquote>
+
+<h2 id="PDFNum">PDFNum</h2>
+
+<pre><code>    PDFNum()</code></pre>
+
+<blockquote>
+
+<p>Creates a number via PDF::Builder::Basic::PDF::Number-&gt;new()</p>
+
+</blockquote>
+
+<h2 id="PDFString">PDFString</h2>
+
+<pre><code>    PDFString($text, $usage)</code></pre>
+
+<blockquote>
+
+<p>Returns either PDFStr($text) or PDFUtf($text), depending on whether <code>$text</code> is already in UTF-8 and whether the <code>$usage</code> permits UTF-8. If UTF-8 is <i>not</i> permitted, <code>downgrade</code> will be called on a UTF-8 formatted <code>$text</code>.</p>
+
+<p><code>$usage</code> is a single character string indicating the use for which <code>$text</code> is to be applied. Some uses permit UTF-8, while others (currently) forbid it:</p>
+
+<dl>
+
+<dt>&#39;s&#39;</dt>
+<dd>
+
+<p>An ordinary <b>string</b>, where UTF-8 text is permitted.</p>
+
+</dd>
+<dt>&#39;n&#39;</dt>
+<dd>
+
+<p>A <b>named destination</b>, where UTF-8 text is permitted.</p>
+
+</dd>
+<dt>&#39;o&#39;</dt>
+<dd>
+
+<p>An <b>outline title</b>, where UTF-8 text is permitted.</p>
+
+</dd>
+<dt>&#39;p&#39;</dt>
+<dd>
+
+<p>A <b>popup title</b>, where UTF-8 text is permitted.</p>
+
+</dd>
+<dt>&#39;m&#39;</dt>
+<dd>
+
+<p><b>metadata</b>, where UTF-8 text is permitted.</p>
+
+</dd>
+<dt>&#39;f&#39;</dt>
+<dd>
+
+<p>A <b>file path and/or name</b>, where UTF-8 text is currently <b>not</b> permitted.</p>
+
+</dd>
+<dt>&#39;u&#39;</dt>
+<dd>
+
+<p>A <b>URL</b>, where UTF-8 text is currently <b>not</b> permitted.</p>
+
+</dd>
+<dt>&#39;x&#39;</dt>
+<dd>
+
+<p>Any other usage where UTF-8 text is <b>not</b> permitted.</p>
+
+</dd>
+</dl>
+
+</blockquote>
+
+<h2 id="PDFStr">PDFStr</h2>
+
+<pre><code>    PDFStr()</code></pre>
+
+<blockquote>
+
+<p>Creates a string via PDF::Builder::Basic::PDF::String-&gt;new()</p>
+
+<p><b>DEPRECATED.</b> It is preferable that you use <code>PDFString</code> instead.</p>
+
+</blockquote>
+
+<h2 id="PDFStrHex">PDFStrHex</h2>
+
+<pre><code>    PDFStrHex()</code></pre>
+
+<blockquote>
+
+<p>Creates a hex-string via PDF::Builder::Basic::PDF::String-&gt;new()</p>
+
+</blockquote>
+
+<h2 id="PDFUtf">PDFUtf</h2>
+
+<pre><code>    PDFUtf()</code></pre>
+
+<blockquote>
+
+<p>Creates a utf8-string via PDF::Builder::Basic::PDF::String-&gt;new()</p>
+
+<p><b>DEPRECATED.</b> It is preferable that you use <code>PDFString</code> instead.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Basic/PDF/Array.html">PDF::Builder::Basic::PDF::Array</a> -- Corresponds to a PDF array<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Bool.html">PDF::Builder::Basic::PDF::Bool</a> -- Holds the strings <b>true</b> or <b>false</b><br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Dict.html">PDF::Builder::Basic::PDF::Dict</a> -- PDF Dictionaries and Streams<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/File.html">PDF::Builder::Basic::PDF::File</a> -- Holds the trailers and cross-reference tables for a PDF file<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Filter.html">PDF::Builder::Basic::PDF::Filter</a> -- Abstract superclass for PDF stream filters<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Literal.html">PDF::Builder::Basic::PDF::Literal</a> -- Literal PDF Object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Name.html">PDF::Builder::Basic::PDF::Name</a> -- Stores PDF names (things beginning with /)<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Null.html">PDF::Builder::Basic::PDF::Null</a> -- PDF Null type object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Number.html">PDF::Builder::Basic::PDF::Number</a> -- Numbers in PDF<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Objind.html">PDF::Builder::Basic::PDF::Objind</a> -- PDF indirect object reference<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Page.html">PDF::Builder::Basic::PDF::Page</a> -- Represents a PDF page<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Pages.html">PDF::Builder::Basic::PDF::Pages</a> -- PDF pages hierarchical element<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/String.html">PDF::Builder::Basic::PDF::String</a> -- PDF String type objects<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

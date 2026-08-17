@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::Font</title>
+<link rel="stylesheet" href="../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+      <li><a href="#Down-Children">Down (Children)</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#encodeByData">encodeByData</a></li>
+      <li><a href="#automap">automap</a></li>
+      <li><a href="#remap">remap</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::Font - Some common support routines for font files</p>
+
+<p>Inherits from <a href="../../../PDF/Builder/Resource/BaseFont.html">PDF::Builder::Resource::BaseFont</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="encodeByData">encodeByData</h2>
+
+<pre><code>     $font-&gt;encodeByData($enc)</code></pre>
+
+<blockquote>
+
+<p>(No Information)</p>
+
+</blockquote>
+
+<h2 id="automap">automap</h2>
+
+<pre><code>    $font-&gt;automap()</code></pre>
+
+<blockquote>
+
+<p>This applies to core fonts (<code>$pdf-&gt;corefont()</code>) and PostScript fonts (<code>$pdf-&gt;psfont()</code>). These cannot use UTF-8 (or other multibyte character) encoded text; only single byte characters. This limits a font to a maximum of 256 glyphs (the &quot;standard&quot; single-byte encoding being used). Any other glyphs supplied with the font are inaccessible.</p>
+
+<p><code>automap</code> splits a font containing more than 256 glyphs into &quot;planes&quot; of single byte fonts of up to 256 glyphs, so that all glyphs may be accessed in separate &quot;fonts&quot;. An array of new fonts will be returned, with [0] being the standard code page (of the selected encoding). If there are any glyphs beyond xFF on the standard encoding page, they will be returned in one or more additional fonts of 223 glyphs each. <i>Why 223?</i> The first 32 are reserved as control characters (although they have no glyphs), and number x20 is a space. This, plus 223, gives 256 in total (the last plane may have fewer than 223 glyphs). These &quot;fonts&quot; are temporary (dynamic), though as usable as any other font.</p>
+
+<p>Note that a plane may be <b>empty</b> (only <i>space</i> at x20 and possibly an unusable character at x21) if the previous plane was full. You might want to check if any character in the plane has a Unicode value (if not, it&#39;s empty).</p>
+
+<p>The <i>ordering</i> of these 223 glyphs in each following plane does <i>not</i> appear to follow any particular official scheme, so be sure to reference something like <code>examples/020_corefonts</code> to see what is available, and what code point a glyph is at (e.g., an &#39;A&#39; in the text stream will print something different if you&#39;re not on plane 0). For a given font <b>file</b>, they should be <i>consistent</i>. For instance, in Times-Roman core font, an \x21 or ! in plane[1] should always give an A+macron. Further note that new editions of font files released in the future may have changes to the glyph list and the ordering (affecting which plane a glyph appears on), so use automap() with caution. It appears that glyphs are sorted by Unicode number, but if a new glyph is inserted, it would bump other glyphs to new positions, and even to the next plane.</p>
+
+<p>An example:</p>
+
+<pre><code>    $fnt = $pdf-&gt;corefont(&#39;Times-Roman&#39;, &#39;encode&#39; =&gt; &#39;latin1&#39;);
+    @planes = ($fnt, $fnt-&gt;automap());  # two planes
+    $text-&gt;font($planes[0], 15);  # or just $fnt will work
+    $text-&gt;text(&#39;!&#39;);  # prints !
+    $text-&gt;font($planes[1], 15);
+    $text-&gt;text(&#39;!&#39;);  # prints A+macron</code></pre>
+
+<p>If you had used &#39;latin2&#39; encoding, an \x21 on plane 1 will give an inverted ! (&amp;iexcl; HTML entity).</p>
+
+<p>Note that <code>$planes[$n]-&gt;fontname()</code> should always be the desired base font (e.g., <i>Times-Roman</i>), while <code>$planes[$n]-&gt;name()</code> will be the font ID (e.g., <i>TiRoCBC</i>) for plane 0, while for other planes there will be a unique suffix added (e.g., <i>TiRoCBCam0</i>).</p>
+
+<p>If you have just an occasional non-plane 0 character (or run of characters), it may be tolerable to switch back and forth between planes like this, just as typing an HTML entity once in a while when you need a Greek letter on a web page is acceptable to most people. However, if you&#39;re typing a lot of Greek text, a dedicated keyboard may be better for you. Like that, switching to a TTF font in order to be able to use UTF-8 may be easier.</p>
+
+</blockquote>
+
+<h2 id="remap">remap</h2>
+
+<pre><code>    $font-&gt;remap($enc)</code></pre>
+
+<blockquote>
+
+<p>(No Information)</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../Builder_index.html">Master Index</a><br>
+<a href="../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../.././PDF/Builder/Resource/BaseFont.html">PDF::Builder::Resource::BaseFont</a> -- Base class for font resources<br>
+<a href="../../.././PDF/Builder/Resource/CIDFont.html">PDF::Builder::Resource::CIDFont</a> -- Base class for CID fonts<br>
+<a href="../../.././PDF/Builder/Resource/ColorSpace.html">PDF::Builder::Resource::ColorSpace</a> -- Base class for PDF color spaces<br>
+<a href="../../.././PDF/Builder/Resource/Colors.html">PDF::Builder::Resource::Colors</a> -- Translate color names into RGB settings<br>
+<a href="../../.././PDF/Builder/Resource/ExtGState.html">PDF::Builder::Resource::ExtGState</a> -- Graphics state dictionary support<br>
+<a href="../../.././PDF/Builder/Resource/Glyphs.html">PDF::Builder::Resource::Glyphs</a> -- Preparsed uniglyph.txt file information<br>
+<a href="../../.././PDF/Builder/Resource/PaperSizes.html">PDF::Builder::Resource::PaperSizes</a> -- List of standard paper sizes and their dimensions<br>
+<a href="../../.././PDF/Builder/Resource/Pattern.html">PDF::Builder::Resource::Pattern</a> -- Support stub for fill patterns<br>
+<a href="../../.././PDF/Builder/Resource/Shading.html">PDF::Builder::Resource::Shading</a> -- Support stub for fill shading patterns<br>
+<a href="../../.././PDF/Builder/Resource/UniFont.html">PDF::Builder::Resource::UniFont</a> -- Unicode Font Support<br>
+<a href="../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+</p>
+
+<h2 id="Down-Children">Down (Children)</h2>
+<p>
+<a href="../../.././PDF/Builder/Resource/Font/BdFont.html">PDF::Builder::Resource::Font::BdFont</a> -- Module for using bitmapped Fonts<br>
+<a href="../../.././PDF/Builder/Resource/Font/CoreFont.html">PDF::Builder::Resource::Font::CoreFont</a> -- Module for using the 14 standard PDF built-in Fonts (plus 15 Windows Fonts)<br>
+<a href="../../.././PDF/Builder/Resource/Font/Postscript.html">PDF::Builder::Resource::Font::Postscript</a> -- Support routines for using PostScript (Type 1) fonts<br>
+<a href="../../.././PDF/Builder/Resource/Font/SynFont.html">PDF::Builder::Resource::Font::SynFont</a> -- Module for creating temporary synthetic Fonts<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

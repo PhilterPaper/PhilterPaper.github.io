@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::NamedDestination</title>
+<link rel="stylesheet" href="../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a>
+    <ul>
+      <li><a href="#Usage">Usage</a></li>
+    </ul>
+  </li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#Target-Destinations">Target Destinations</a>
+        <ul>
+          <li><a href="#goto-link">goto, link</a></li>
+          <li><a href="#pdf-pdf_file-pdfile">pdf, pdf_file, pdfile</a></li>
+          <li><a href="#uri-url">uri, url</a></li>
+          <li><a href="#launch-file">launch, file</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::NamedDestination - Add named destinations (views) to a PDF</p>
+
+<p>Inherits from <a href="../../PDF/Builder/Basic/PDF/Dict.html">PDF::Builder::Basic::PDF::Dict</a></p>
+
+<h2 id="Usage">Usage</h2>
+
+<p>A Named Destination is defined in a PDF which is intended to be the target of a specified Name (string), from within the same PDF, from another PDF, or from a PDF Reader command line (e.g, MyBigPDF.pdf#nameddest=foo). The advantage over going to a specific <i>page</i> is that a Named Destination always points to the same content in the document, even if that location moves around (i.e., to a different page number).</p>
+
+<p>Some Operating Systems support command line invocation (e.g., &gt; MyPDF.pdf#name=bar), and some browsers&#39; PDF readers also support it. <code>#nameddest=foo</code> is the most basic form, and if Named Destinations are supported, this form should work. Some readers support the shortcut <code>#name=foo</code>, and some even support the bare name: <code>#foo</code> (similar to HTML). Named Destination syntax on the command line can vary widely by Reader.</p>
+
+<p>A Named Destination must be unique within a given PDF, and is defined at the top level in the <code>$pdf</code> object. There are often limitations on the length of a Named Destination string (name), including the length of whatever means is used to invoke it (e.g., <code>#nameddest=foo</code> takes up 11 characters before you even get to the name &#39;foo&#39; itself, so if the limit is 32, you&#39;re left with perhaps 21 characters for the name itself). Be aware of this, and keep the names as short as reasonably possible. Spaces within a name are not permitted, and allowable punctuation is limited. Consult the PDF documentation for specifics, but A-Z, a-z, 0-9, and &#39;_&#39; (underscore) are generally permitted. Usually names are case-sensitive (&#39;foo&#39; is a different destination than &#39;Foo&#39;).</p>
+
+<pre><code>    # create a Named Destination &#39;foo&#39; in this PDF file on page $page
+    my $dest = PDF::Builder::NamedDestination-&gt;new($pdf);
+    # its action will be to go to this page object $page, and a window within it
+    # (various &#39;fits&#39; can be defined
+    $dest-&gt;goto($page, &#39;xyz&#39;, (undef, undef, undef));
+    $pdf-&gt;named_destination(&#39;Dests&#39;, &#39;foo&#39;, $dest);</code></pre>
+
+<p>See <a href="../../PDF/Builder.html#named_destination">&quot;named_destination&quot; in PDF::Builder</a> and <a href="../../PDF/Builder/Docs.html#Page-Fit-Options">&quot;Page Fit Options&quot; in PDF::Builder::Docs</a> for information on named destinations.</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $dest = PDF::Builder::NamedDestination-&gt;new($pdf)
+
+    $dest = PDF::Builder::NamedDestination-&gt;new($pdf, @args)</code></pre>
+
+<blockquote>
+
+<p>Creates a new named destination object. Any optional additional arguments will be passed on to destination processing for &quot;goto&quot;.</p>
+
+<pre><code>    $dest = PDF::Builder::NamedDestination-&gt;new($pdf, $page, &#39;xyz&#39;, 0,700, 1.5);</code></pre>
+
+<p>This will create a Named Destination which goes to (&quot;goto&quot;) page object <code>$page</code>, with fit XYZ at position 0,700 and zoom factor 1.5.</p>
+
+<p>It is possible to then call `goto()` to override the `new()` defined <i>fit</i>:</p>
+
+<pre><code>    $dest-&gt;goto($page, &#39;fitb&#39;); # overrides XYZ fit </code></pre>
+
+<p>If you did <b>not</b> give <i>fit</i> options in the `new()` call (just `$pdf`), it will be necessary to call `goto()` with <i>fit</i> settings, anyway:</p>
+
+<pre><code>    $dest = PDF::Builder::NamedDestination-&gt;new($pdf);
+    $dest-&gt;goto($page, &#39;fit&#39;);</code></pre>
+
+<p>Finally, however you created the Named Destination, its action, and its page fit, you need to tell the system to insert an entry into the Named Destination directory:</p>
+
+<pre><code>    $pdf-&gt;named_destination(&#39;Dests&#39;, &quot;foo&quot;, $dest);</code></pre>
+
+<p>This is where you actually <i>name</i> the destination. Consult <a href="../../PDF/Builder.html#named_destination">&quot;named_destination&quot; in PDF::Builder</a> and <a href="../../PDF/Builder/Docs.html#Page-Fit-Options">&quot;Page Fit Options&quot; in PDF::Builder::Docs</a> for more information.</p>
+
+</blockquote>
+
+<h2 id="Target-Destinations">Target Destinations</h2>
+
+<p>Note that the usual practice for a Named Destination, invoked when the PDF is opened with a Named Destination specified, is to <i>goto</i> a point in the document. It is <i>possible</i>, though unusual, to go to a point in another document (<code>pdf()</code>), launch a local application (<code>launch()</code>), or launch a web browser (<code>uri()</code>).</p>
+
+<p>The only &quot;options&quot; supported for <code>goto</code> and <code>pdf</code> are if you wish to give the location and its arguments (data) in the form of a hash element (anonymous array if more than one value). Unlike Annotation&#39;s &quot;action&quot; methods (<code>goto</code>, <code>pdf</code>, <code>uri</code>, and <code>launch</code>), there is no defining a &quot;click area&quot; (button) for the user interaction; thus, no <b>rect</b>, <b>border</b>, or <b>color</b> entries are recognized in NamedDestination. Any found will be ignored.</p>
+
+<p>See <a href="../../PDF/Builder/Docs.html#Page-Fit-Options">&quot;Page Fit Options&quot; in PDF::Builder::Docs</a> for a listing of the available locations and their syntax.</p>
+
+<p>&quot;xyz&quot; is the <b>default</b> fit setting, with position (left and top) and zoom all the same as the calling page&#39;s.</p>
+
+<h3 id="goto-link">goto, link</h3>
+
+<pre><code>    $dest-&gt;goto($page, $location, @args)  # preferred
+
+    $dest-&gt;goto($page, %opts)  # opts including location and data</code></pre>
+
+<blockquote>
+
+<p>A go-to (link) action changes the view to a specified destination (page object, location code, and various pieces of data for it). This is a jump <i>within</i> the current PDF document (<b>internal</b>), and is the usual way of doing things.</p>
+
+<p><b>Alternate name:</b> <code>link</code></p>
+
+<p>Originally this method was <code>link</code>, but PDF::API2 changed the name to <code>goto</code>, to match the internal PDF command <code>GoTo</code>. &quot;link&quot; is retained for compatibility.</p>
+
+<p><b>Notes:</b> <code>goto</code> is a reserved Perl keyword (go to a label), so take care when using this in code that the Perl interpreter doesn&#39;t see this as a Perl &#39;goto&#39;. If you receive an error message about a &quot;missing label&quot; or something equally puzzling, this may have happened. <code>link</code> is a built-in Perl function (Unix <code>ln</code> style command), so take care when using this code that the Perl interpreter doesn&#39;t see this as a Perl &#39;link&#39; call (e.g., error message about &quot;not enough arguments for link&quot;).</p>
+
+</blockquote>
+
+<h3 id="pdf-pdf_file-pdfile">pdf, pdf_file, pdfile</h3>
+
+<pre><code>    $dest-&gt;pdf($pdffile, $page_number, $location, @args) # preferred
+
+    $dest-&gt;pdf($pdffile, $page_number, %opts) # location is a hash element</code></pre>
+
+<blockquote>
+
+<p>Defines the destination as an <b>external</b> PDF-file with filepath <code>$pdffile</code>, on page <code>$page_number</code> (numeric value), and either options %opts (location/fit =&gt; any data for it as a scalar or anonymous array) or one of two formats: an array of location/fit string and any data for it, or a location/fit string and an array with any data needed for it.</p>
+
+<p>To go to a Named Destination and then immediately jump to a point in another PDF document is unusual, but possible.</p>
+
+<p><b>Alternate names:</b> <code>pdf_file</code> and <code>pdfile</code></p>
+
+<p>Originally this method was <code>pdfile</code>, and had been earlier renamed to <code>pdf_file</code>, but PDF::API2 changed the name to <code>pdf</code>. &quot;pdfile&quot; and &quot;pdf_file&quot; are retained for compatibility.</p>
+
+</blockquote>
+
+<h3 id="uri-url">uri, url</h3>
+
+<pre><code>    $dest-&gt;uri($url)</code></pre>
+
+<blockquote>
+
+<p>Defines the destination as launch-url (typically a web page) with uri <code>$url</code>. There are no options available.</p>
+
+<p>To go to a Named Destination and then immediately launch a web browser is unusual, but possible.</p>
+
+<p><b>Alternate name:</b> <code>url</code></p>
+
+<p>Originally this method was <code>url</code>, but PDF::API2 changed the name to <code>uri</code> to match the PDF command. &quot;url&quot; is retained for compatibility.</p>
+
+</blockquote>
+
+<h3 id="launch-file">launch, file</h3>
+
+<pre><code>    $dest-&gt;launch($file)</code></pre>
+
+<blockquote>
+
+<p>Defines the destination as launch-file with filepath <code>$file</code> and page-fit options %opts. The target application is run. Note that this is <b>not</b> a PDF <i>or</i> a browser file -- it is a usually a local application, such as a text editor or photo viewer. There are no options available.</p>
+
+<p>To go to a Named Destination and then immediately launch a local application is unusual, but possible.</p>
+
+<p><b>Alternate name:</b> <code>file</code></p>
+
+<p>Originally this method was <code>file</code>, but PDF::API2 changed the name to <code>launch</code> to match the PDF command. &quot;file&quot; is retained for compatibility.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../Builder_index.html">Master Index</a><br>
+<a href="../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../.././PDF/Builder/Annotation.html">PDF::Builder::Annotation</a> -- Add annotations to a PDF<br>
+<a href="../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+<a href="../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+<a href="../.././PDF/Builder/Docs.html">PDF::Builder::Docs</a> -- Additional documentation for Builder module<br>
+<a href="../.././PDF/Builder/FontManager.html">PDF::Builder::FontManager</a> -- Managing the font library for PDF::Builder<br>
+<a href="../.././PDF/Builder/Lite.html">PDF::Builder::Lite</a> -- Lightweight PDF creation methods (UNMAINTAINED)<br>
+<a href="../.././PDF/Builder/Matrix.html">PDF::Builder::Matrix</a> -- Matrix operations library<br>
+<a href="../.././PDF/Builder/Outline.html">PDF::Builder::Outline</a> -- Manage PDF outlines (a.k.a. <i>bookmarks</i>)<br>
+<a href="../.././PDF/Builder/Outlines.html">PDF::Builder::Outlines</a> -- Further Outline handling<br>
+<a href="../.././PDF/Builder/Page.html">PDF::Builder::Page</a> -- Methods to interact with individual pages<br>
+<a href="../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../.././PDF/Builder/UniWrap.html">PDF::Builder::UniWrap</a> -- Support routines for finding line breakpoints with Unicode text<br>
+<a href="../.././PDF/Builder/Util.html">PDF::Builder::Util</a> -- Utility package for often-used methods across the package<br>
+<a href="../.././PDF/Builder/ViewerPreferences.html">PDF::Builder::ViewerPreferences</a> -- How the PDF should be displayed or printed<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

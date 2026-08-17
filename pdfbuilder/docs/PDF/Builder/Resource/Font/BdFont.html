@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::Font::BdFont</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+    </ul>
+  </li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::Font::BdFont - Module for using bitmapped Fonts</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a></p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    #
+    use PDF::Builder;
+    #
+    $pdf = PDF::Builder-&gt;new();
+    $sft = $pdf-&gt;bdfont($file);
+    #</code></pre>
+
+<p>This creates a bitmapped font from a .bdf (bitmap distribution font) file. The default is to use square elements, and the style can be changed to use filled dots (looking more like a dot-matrix printer). The font will be embedded in the PDF file.</p>
+
+<p>Bitmapped fonts are quite rough, low resolution, and difficult to read, so unless you&#39;re a sadist who wants to force readers back to the good old days of dot-matrix printers and bitmapped X terminals, try to limit the use of such a font to decorative or novelty effects, such as chapter titles and major headings. Have mercy on your readers and use a real font (TrueType, etc.) for body text!</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $font = PDF::Builder::Resource::Font::BdFont-&gt;new($pdf, $font, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a BmpFont object.</p>
+
+</blockquote>
+
+<p>Valid options (%opts) are:</p>
+
+<dl>
+
+<dt><i>style</i></dt>
+<dd>
+
+<p>A value of &#39;<b>block</b>&#39; (the default) assembles a character from contiguous square blocks. A value of &#39;<b>dot</b>&#39; assembles a character from overlapping filled circles, in the style of a dot matrix printer.</p>
+
+</dd>
+</dl>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Alfred Reibenschuh, extensively rewritten by Phil Perry</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../.././PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a> -- Some common support routines for font files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont.html">PDF::Builder::Resource::Font::CoreFont</a> -- Module for using the 14 standard PDF built-in Fonts (plus 15 Windows Fonts)<br>
+<a href="../../../.././PDF/Builder/Resource/Font/Postscript.html">PDF::Builder::Resource::Font::Postscript</a> -- Support routines for using PostScript (Type 1) fonts<br>
+<a href="../../../.././PDF/Builder/Resource/Font/SynFont.html">PDF::Builder::Resource::Font::SynFont</a> -- Module for creating temporary synthetic Fonts<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

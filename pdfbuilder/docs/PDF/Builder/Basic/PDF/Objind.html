@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Basic::PDF::Objind</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#INSTANCE-VARIABLES">INSTANCE VARIABLES</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#uid">uid</a></li>
+      <li><a href="#release">release</a></li>
+      <li><a href="#val">val</a></li>
+      <li><a href="#realise">realise</a></li>
+      <li><a href="#outobjdeep">outobjdeep</a></li>
+      <li><a href="#outobj">outobj</a></li>
+      <li><a href="#elements">elements</a></li>
+      <li><a href="#empty">empty</a></li>
+      <li><a href="#merge">merge</a></li>
+      <li><a href="#is_obj">is_obj</a></li>
+      <li><a href="#copy">copy</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Basic::PDF::Objind - PDF indirect object reference</p>
+
+<p>Also acts as an abstract superclass for all elements in a PDF file</p>
+
+<h1 id="INSTANCE-VARIABLES">INSTANCE VARIABLES</h1>
+
+<p>Instance variables differ from content variables in that they all start with a space.</p>
+
+<dl>
+
+<dt>&#39; parent&#39;</dt>
+<dd>
+
+<p>For an object which is a reference to an object in some source, this holds the reference to the source object, so that should the reference have to be de-referenced, then we know where to go and get the info.</p>
+
+</dd>
+<dt>&#39; objnum&#39; (R)</dt>
+<dd>
+
+<p>The object number in the source (only for object references)</p>
+
+</dd>
+<dt>&#39; objgen&#39; (R)</dt>
+<dd>
+
+<p>The object generation in the source</p>
+
+<p>There are other instance variables which are used by the parent for file control.</p>
+
+</dd>
+<dt>&#39; isfree&#39;</dt>
+<dd>
+
+<p>This marks whether the object is in the free list and available for re-use as another object elsewhere in the file.</p>
+
+</dd>
+<dt>&#39; nextfree&#39;</dt>
+<dd>
+
+<p>Holds a direct reference to the next free object in the free list.</p>
+
+</dd>
+</dl>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    PDF::Builder::Basic::PDF::Objind-&gt;new()</code></pre>
+
+<blockquote>
+
+<p>Creates a new indirect object</p>
+
+</blockquote>
+
+<h2 id="uid">uid</h2>
+
+<pre><code>    $UID = $r-&gt;uid()</code></pre>
+
+<blockquote>
+
+<p>Returns a Unique id for this object, creating one if it didn&#39;t have one before</p>
+
+</blockquote>
+
+<h2 id="release">release</h2>
+
+<pre><code>    $r-&gt;release()</code></pre>
+
+<blockquote>
+
+<p>Releases ALL of the memory used by this indirect object, and all of its component/child objects. This method is called automatically by &#39;<code>PDF::Builder::Basic::PDF::File-&gt;release</code>&#39; (so you don&#39;t have to call it yourself).</p>
+
+<p><b>Note:</b> it is important that this method get called at some point prior to the actual destruction of the object. Internally, PDF files have an enormous amount of cross-references and this causes circular references within our own internal data structures. Calling &#39;<code>release()</code>&#39; forces these circular references to be cleaned up and the entire internal data structure purged.</p>
+
+</blockquote>
+
+<h2 id="val">val</h2>
+
+<pre><code>    $value = $r-&gt;val()</code></pre>
+
+<blockquote>
+
+<p>Returns the value of this object or reads the object and then returns its value.</p>
+
+<p>Note that all direct subclasses *must* make their own versions of this subroutine otherwise we could be in for a very deep loop!</p>
+
+</blockquote>
+
+<h2 id="realise">realise</h2>
+
+<pre><code>    $r-&gt;realise()</code></pre>
+
+<blockquote>
+
+<p>Makes sure that the object is fully read in, etc.</p>
+
+</blockquote>
+
+<h2 id="outobjdeep">outobjdeep</h2>
+
+<pre><code>    $v = $r-&gt;outobjdeep($fh, $pdf)</code></pre>
+
+<blockquote>
+
+<p>If you really want to output this object, then you need to read it first. This also means that all direct subclasses must subclass this method, or they will loop forever!</p>
+
+</blockquote>
+
+<h2 id="outobj">outobj</h2>
+
+<pre><code>    $r-&gt;outobj($fh, $pdf)</code></pre>
+
+<blockquote>
+
+<p>If this is a full object then outputs a reference to the object, otherwise calls outobjdeep to output the contents of the object at this point.</p>
+
+</blockquote>
+
+<h2 id="elements">elements</h2>
+
+<pre><code>    $s = $r-&gt;elements()</code></pre>
+
+<blockquote>
+
+<p>Abstract superclass function filler. Returns self here but should return something more useful if an array.</p>
+
+</blockquote>
+
+<h2 id="empty">empty</h2>
+
+<pre><code>    $s = $r-&gt;empty()</code></pre>
+
+<blockquote>
+
+<p>Empties all content from this object to free up memory or to be read to pass the object into the free list. Simplistically undefs all instance variables other than object number and generation.</p>
+
+</blockquote>
+
+<h2 id="merge">merge</h2>
+
+<pre><code>    $o = $r-&gt;merge($objind)</code></pre>
+
+<blockquote>
+
+<p>This merges content information into an object reference placeholder. This occurs when an object reference is read before the object definition and the information in the read data needs to be merged into the object placeholder.</p>
+
+</blockquote>
+
+<h2 id="is_obj">is_obj</h2>
+
+<pre><code>    $r-&gt;is_obj($pdf)</code></pre>
+
+<blockquote>
+
+<p>Returns whether this object is a full object with its own object number or whether it is purely a sub-object. <code>$pdf</code> indicates which output file we are concerned that the object is an object in.</p>
+
+</blockquote>
+
+<h2 id="copy">copy</h2>
+
+<pre><code>    $r-&gt;copy($pdf, $res)</code></pre>
+
+<blockquote>
+
+<p>Returns a new copy of this object. The object is assumed to be some kind of associative array and the copy is a deep copy for elements which are not PDF objects, according to <code>$pdf</code>, and shallow copy for those that are. Notice that calling <code>copy</code> on an object forces at least a one level copy even if it is a PDF object. The returned object loses its PDF object status though.</p>
+
+<p>If <code>$res</code> is defined then the copy goes into that object rather than creating a new one. It is up to the caller to bless <code>$res</code>, etc. Notice that elements from <code>$self</code> are not copied into <code>$res</code> if there is already an entry for them existing in <code>$res</code>.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Basic/PDF/Array.html">PDF::Builder::Basic::PDF::Array</a> -- Corresponds to a PDF array<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Bool.html">PDF::Builder::Basic::PDF::Bool</a> -- Holds the strings <b>true</b> or <b>false</b><br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Dict.html">PDF::Builder::Basic::PDF::Dict</a> -- PDF Dictionaries and Streams<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/File.html">PDF::Builder::Basic::PDF::File</a> -- Holds the trailers and cross-reference tables for a PDF file<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Filter.html">PDF::Builder::Basic::PDF::Filter</a> -- Abstract superclass for PDF stream filters<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Literal.html">PDF::Builder::Basic::PDF::Literal</a> -- Literal PDF Object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Name.html">PDF::Builder::Basic::PDF::Name</a> -- Stores PDF names (things beginning with /)<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Null.html">PDF::Builder::Basic::PDF::Null</a> -- PDF Null type object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Number.html">PDF::Builder::Basic::PDF::Number</a> -- Numbers in PDF<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Page.html">PDF::Builder::Basic::PDF::Page</a> -- Represents a PDF page<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Pages.html">PDF::Builder::Basic::PDF::Pages</a> -- PDF pages hierarchical element<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/String.html">PDF::Builder::Basic::PDF::String</a> -- PDF String type objects<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Utils.html">PDF::Builder::Basic::PDF::Utils</a> -- Utility functions for PDF library<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

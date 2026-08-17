@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::Font::Postscript</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::Font::Postscript - Support routines for using PostScript (Type 1) fonts</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    PDF::Builder::Resource::Font::Postscript-&gt;new($pdf, $psfile, %opts)</code></pre>
+
+<blockquote>
+
+<p>Create an object for a PostScript font. Handles ASCII (.pfa), binary (.pfb), and T1 (.t1) font files, as well as ASCII (.afm) and binary (.pfm) metrics files.</p>
+
+<p>See <a href="../../../../PDF/Builder/Docs.html#PS-Fonts">&quot;PS Fonts&quot; in PDF::Builder::Docs</a> for additional information.</p>
+
+<p>Valid %opts are:</p>
+
+<dl>
+
+<dt>encode</dt>
+<dd>
+
+<p>Changes the encoding of the font from its default. Notice that the encoding (<i>not</i> the entire font&#39;s glyph list) is shown in a PDF object (record), listing 256 glyphs associated with this encoding (<i>and</i> that are available in this font).</p>
+
+</dd>
+<dt>afmfile</dt>
+<dd>
+
+<p>Specifies the location of the <i>ASCII</i> font metrics file (.afm). It may be used with either an ASCII (.pfa) or binary (.pfb) glyph file.</p>
+
+<p><code>afm_file</code> is still accepted as an (older) <b>alternative</b> to <code>afmfile</code>.</p>
+
+</dd>
+<dt>pfmfile</dt>
+<dd>
+
+<p>Specifies the location of the <i>binary</i> font metrics file (.pfm). It may be used with either an ASCII (.pfa) or binary (.pfb) glyph file.</p>
+
+<p><code>pfm_file</code> is still accepted as an (older) <b>alternative</b> to <code>pfmfile</code>.</p>
+
+</dd>
+<dt>pdfname</dt>
+<dd>
+
+<p>Changes the reference-name of the font from its default. The reference-name is normally generated automatically and can be retrieved via $pdfname=$font-&gt;name().</p>
+
+</dd>
+<dt>dokern</dt>
+<dd>
+
+<p>Enables kerning if data is available.</p>
+
+<p><code>kerning</code> is still accepted as an (older) <b>alternative</b> to <code>dokern</code>.</p>
+
+</dd>
+</dl>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../.././PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a> -- Some common support routines for font files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/Font/BdFont.html">PDF::Builder::Resource::Font::BdFont</a> -- Module for using bitmapped Fonts<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont.html">PDF::Builder::Resource::Font::CoreFont</a> -- Module for using the 14 standard PDF built-in Fonts (plus 15 Windows Fonts)<br>
+<a href="../../../.././PDF/Builder/Resource/Font/SynFont.html">PDF::Builder::Resource::Font::SynFont</a> -- Module for creating temporary synthetic Fonts<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

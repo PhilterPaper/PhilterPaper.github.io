@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Content::Hyphenate_basic</title>
+<link rel="stylesheet" href="../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Content::Hyphenate_basic - Simple hyphenation capability</p>
+
+<p>Inherits from <a href="../../../PDF/Builder/Content/Text.html">PDF::Builder::Content::Text</a></p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>These are internal routines that are somewhat experimental, and may (or may not) be extended in the future. They are called from various Content routines that take long strings of text and split them into fixed-length lines.</p>
+
+<p>Words are split to fill the line most completely, without regard to widows and orphans, long runs of hyphens at the right edge, &quot;rivers&quot; of space flowing through a paragraph, and other problems. Also, only simple splitting is done (not actually <i>words</i>), on a simple, language-independent basis. No dictionary or rules-based splitting is currently done.</p>
+
+<p>This functionality may well be replaced by &quot;hooks&quot; to call language-specific word-splitting rules, as well as worrying about the appearance of the results (such as Knuth-Plass).</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../Builder_index.html">Master Index</a><br>
+<a href="../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../.././PDF/Builder/Content/Column_docs.html">PDF::Builder::Content::Column_docs</a> --  -- column text formatting system<br>
+<a href="../../.././PDF/Builder/Content/Text.html">PDF::Builder::Content::Text</a> -- Additional specialized text-related formatting methods<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

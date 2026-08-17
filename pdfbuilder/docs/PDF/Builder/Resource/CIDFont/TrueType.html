@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::CIDFont::TrueType</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+      <li><a href="#Down-Children">Down (Children)</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#fontfile">fontfile</a></li>
+      <li><a href="#fontobj">fontobj</a></li>
+      <li><a href="#wxByCId">wxByCId</a></li>
+      <li><a href="#haveKernPairs">haveKernPairs</a></li>
+      <li><a href="#kernPairCid">kernPairCid</a></li>
+      <li><a href="#subsetByCId">subsetByCId</a></li>
+      <li><a href="#subvec">subvec</a></li>
+      <li><a href="#glyphNum">glyphNum</a></li>
+      <li><a href="#outobjdeep">outobjdeep</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::CIDFont::TrueType - TrueType (ttfont) font support</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Resource/CIDFont.html">PDF::Builder::Resource::CIDFont</a></p>
+
+<p>Generally also usable for OTF (Open Type) fonts</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $font = PDF::Builder::Resource::CIDFont::TrueType-&gt;new($pdf, $file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a font object for TrueType and OpenType fonts (from <code>ttfont()</code> call).</p>
+
+</blockquote>
+
+<p>Valid Options (%opts) are:</p>
+
+<dl>
+
+<dt>encode</dt>
+<dd>
+
+<p>Changes the encoding of the font from its default (WinAnsiEncoding).</p>
+
+<p>Note that for a single byte encoding (e.g., &#39;latin1&#39;), you are limited to 256 characters defined for that encoding. &#39;automap&#39; does not work with TrueType. If you want more characters than that, use &#39;utf8&#39; encoding with a UTF-8 encoded text string.</p>
+
+</dd>
+<dt>isocmap</dt>
+<dd>
+
+<p>Use the ISO Unicode Map instead of the default MS Unicode Map.</p>
+
+</dd>
+<dt>unicodemap</dt>
+<dd>
+
+<p>If 1 (default), output ToUnicode CMap to permit text searches and screen readers. Set to 0 to save space by <i>not</i> including the ToUnicode CMap, but text searching and screen reading will not be possible.</p>
+
+</dd>
+<dt>dokern</dt>
+<dd>
+
+<p>Enables kerning if data is available.</p>
+
+<p><code>kerning</code> is still accepted as an (older) <b>alternative</b> to <code>dokern</code>.</p>
+
+</dd>
+<dt>embed</dt>
+<dd>
+
+<p>If set (non-zero), which is the default, the font (entire or subsetted) will be embedded in the PDF file. See the comments in <code>noembed</code> about the possible hazards of <i>not</i> embedding the font, and limitations on embedding.</p>
+
+<p><code>true</code> (non-zero) and <code>false</code> (zero) are the values of <code>embed</code>. It is possible that in the future, some non-zero values may get special meaning (such as permission flags), so it is best to use only 0 and 1 for a value.</p>
+
+</dd>
+<dt>noembed</dt>
+<dd>
+
+<p><b>noembed</b> is <i>ignored</i> if <b>embed</b> <i>is</i> given. <code>noembed</code> is deprecated, while <code>embed</code> (default true) is preferred.</p>
+
+<p>Disables embedding of the font file. <b>Note that this is potentially hazardous, as the glyphs provided on the PDF reader machine may not match what was used on the PDF writer machine (the one running PDF::Builder)!</b> If you know <i>for sure</i> that all PDF readers will be using the same TTF or OTF file you&#39;re using with PDF::Builder; not embedding the font may be acceptable, in return for a smaller PDF file size. Note that the Reader needs to know where to find the font file -- it can&#39;t be in any random place, but typically needs to be listed in a path that the Reader follows. Otherwise, it will be unable to render the text!</p>
+
+<p>Some additional comments on embedding font file(s) into the PDF: besides substantially increasing the size of the PDF (even if the font is subsetted, by default), PDF::Builder does not check the font file for any flags indicating font licensing issues and limitations on use. A font foundry may not permit embedding at all, may permit a subset of the font to be embedded, may permit a full font to be embedded, and may specify what can be done with an embedded font (e.g., may or may not be extracted for further use beyond displaying this one PDF). When you choose to use (and embed) a font, you should be aware of any such licensing issues.</p>
+
+</dd>
+<dt>nosubset</dt>
+<dd>
+
+<p>Disables subsetting of a TTF/OTF font, when embedded. By default, only the glyphs used by a document are included in the file, and <i>not</i> the entire font. This can result in a tremendous savings in PDF file size. If you intend to allow the PDF to be edited by users, not having the entire font glyph set available may cause problems, so be aware of that (and consider using <code>nosubset =&gt; 1</code>. Setting this flag to any value results in the entire font glyph set being embedded in the file. It might be a good idea to use only the value <b>1</b>, in case other values are assigned roles in the future.</p>
+
+</dd>
+<dt>debug</dt>
+<dd>
+
+<p>If set to 1 (default is 0), diagnostic information is output about the CMap processing.</p>
+
+</dd>
+<dt>usecmf</dt>
+<dd>
+
+<p>If set to 1 (default is 0), the first priority is to make use of one of the four <code>.cmap</code> files for CJK fonts. This is the <i>old</i> way of processing TTF files. If, after all is said and done, a working <i>internal</i> CMap hasn&#39;t been found (for usecmf=&gt;0), <code>ttfont()</code> will fall back to using a <code>.cmap</code> file if possible.</p>
+
+</dd>
+<dt>cmaps</dt>
+<dd>
+
+<p>This flag may be set to a string listing the Platform/Encoding pairs to look for of any internal CMaps in the font file, in the desired order (highest priority first). If one list (comma and/or space-separated pairs) is given, it is used for both Windows and non-Windows platforms (on which PDF::Builder is running, <i>not</i> the PDF reader&#39;s). Two lists, separated by a semicolon ; may be given, with the first being used for a Windows platform and the second for non-Windows. The default list is <code>0/6 3/10 0/4 3/1 0/3; 0/6 0/4 3/10 0/3 3/1</code>. Finally, instead of a P/E list, a string <code>find_ms</code> may be given to tell it to simply call the Font::TTF <code>find_ms()</code> method to find a (preferably Windows) internal CMap. <code>cmaps</code> set to &#39;find_ms&#39; would emulate the <i>old</i> way of looking for CMaps. Symbol fonts (3/0) always use find_ms(), and the new default lookup is (if <code>.cmap</code> isn&#39;t used, see <code>usecmf</code>) to try to get a match with the default list for the appropriate OS. If none can be found, find_ms() is tried, and as last resort use the <code>.cmap</code> (if available), even if <code>usecmf</code> is not 1.</p>
+
+</dd>
+</dl>
+
+<h2 id="fontfile">fontfile</h2>
+
+<pre><code>    $font-&gt;fontfile()</code></pre>
+
+<blockquote>
+
+<p>Returns font file object (&#39; ff&#39; element), so its methods may be invoked.</p>
+
+</blockquote>
+
+<h2 id="fontobj">fontobj</h2>
+
+<pre><code>    $font-&gt;fontobj()</code></pre>
+
+<blockquote>
+
+<p>Returns font object, so its methods and properties may be used.</p>
+
+</blockquote>
+
+<h2 id="wxByCId">wxByCId</h2>
+
+<pre><code>    $font-&gt;wxByCId($gID)</code></pre>
+
+<blockquote>
+
+<p>Returns unscaled glyph width, given its glyph ID (CID).</p>
+
+</blockquote>
+
+<h2 id="haveKernPairs">haveKernPairs</h2>
+
+<pre><code>    $flag = $font-&gt;haveKernPairs()</code></pre>
+
+<blockquote>
+
+<p>Does the font include kerning data? Invokes fontfile&#39;s haveKernPairs(). Not clear what additional optional arguments are.</p>
+
+</blockquote>
+
+<h2 id="kernPairCid">kernPairCid</h2>
+
+<pre><code>    $flag = $font-&gt;kernPairCid($gID, $n)</code></pre>
+
+<blockquote>
+
+<p>Returns kerning information for? Not clear what additional arguments are. Invokes fontfile&#39;s kernPairCid() method.</p>
+
+</blockquote>
+
+<h2 id="subsetByCId">subsetByCId</h2>
+
+<pre><code>    $font-&gt;subsetByCId($gID)</code></pre>
+
+<blockquote>
+
+<p>Invokes subsetByCId() method from fontfile() to put the glyph into the embedded font cache in the PDF.</p>
+
+</blockquote>
+
+<h2 id="subvec">subvec</h2>
+
+<pre><code>    $font-&gt;subvec($gID)</code></pre>
+
+<blockquote>
+
+<p>(No Information) invokes fontfile&#39;s subvec() method.</p>
+
+</blockquote>
+
+<h2 id="glyphNum">glyphNum</h2>
+
+<pre><code>    $count = $font-&gt;glyphNum()</code></pre>
+
+<blockquote>
+
+<p>Number of glyphs in the font.</p>
+
+</blockquote>
+
+<h2 id="outobjdeep">outobjdeep</h2>
+
+<pre><code>    $font-&gt;outobjdeep()</code></pre>
+
+<blockquote>
+
+<p>(No Information) output to PDF</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../.././PDF/Builder/Resource/CIDFont.html">PDF::Builder::Resource::CIDFont</a> -- Base class for CID fonts<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/CIDFont/CJKFont.html">PDF::Builder::Resource::CIDFont::CJKFont</a> -- Base class for CJK fonts<br>
+</p>
+
+<h2 id="Down-Children">Down (Children)</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/CIDFont/TrueType/FontFile.html">PDF::Builder::Resource::CIDFont::TrueType::FontFile</a> -- Additional code support for TT font files<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

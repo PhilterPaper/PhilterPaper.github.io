@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::ColorSpace</title>
+<link rel="stylesheet" href="../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+      <li><a href="#Down-Children">Down (Children)</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#name">name</a></li>
+      <li><a href="#param">param</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::ColorSpace - Base class for PDF color spaces</p>
+
+<p>Inherits from <a href="../../../PDF/Builder/Basic/PDF/Array.html">PDF::Builder::Basic::PDF::Array</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $cs = PDF::Builder::Resource::ColorSpace-&gt;new($pdf, $key, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new colorspace object, base class for all colorspaces.</p>
+
+</blockquote>
+
+<h2 id="name">name</h2>
+
+<pre><code>    $name = $res-&gt;name($name) # Set
+
+    $name = $res-&gt;name() # Get</code></pre>
+
+<blockquote>
+
+<p>Returns or sets the Name of the resource.</p>
+
+</blockquote>
+
+<h2 id="param">param</h2>
+
+<pre><code>    @param = $cs-&gt;param(@param)</code></pre>
+
+<blockquote>
+
+<p>Returns properly formatted color-parameters based on the colorspace.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../Builder_index.html">Master Index</a><br>
+<a href="../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../.././PDF/Builder/Resource/BaseFont.html">PDF::Builder::Resource::BaseFont</a> -- Base class for font resources<br>
+<a href="../../.././PDF/Builder/Resource/CIDFont.html">PDF::Builder::Resource::CIDFont</a> -- Base class for CID fonts<br>
+<a href="../../.././PDF/Builder/Resource/Colors.html">PDF::Builder::Resource::Colors</a> -- Translate color names into RGB settings<br>
+<a href="../../.././PDF/Builder/Resource/ExtGState.html">PDF::Builder::Resource::ExtGState</a> -- Graphics state dictionary support<br>
+<a href="../../.././PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a> -- Some common support routines for font files<br>
+<a href="../../.././PDF/Builder/Resource/Glyphs.html">PDF::Builder::Resource::Glyphs</a> -- Preparsed uniglyph.txt file information<br>
+<a href="../../.././PDF/Builder/Resource/PaperSizes.html">PDF::Builder::Resource::PaperSizes</a> -- List of standard paper sizes and their dimensions<br>
+<a href="../../.././PDF/Builder/Resource/Pattern.html">PDF::Builder::Resource::Pattern</a> -- Support stub for fill patterns<br>
+<a href="../../.././PDF/Builder/Resource/Shading.html">PDF::Builder::Resource::Shading</a> -- Support stub for fill shading patterns<br>
+<a href="../../.././PDF/Builder/Resource/UniFont.html">PDF::Builder::Resource::UniFont</a> -- Unicode Font Support<br>
+<a href="../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+</p>
+
+<h2 id="Down-Children">Down (Children)</h2>
+<p>
+<a href="../../.././PDF/Builder/Resource/ColorSpace/DeviceN.html">PDF::Builder::Resource::ColorSpace::DeviceN</a> -- Colorspace handling for Device CMYK<br>
+<a href="../../.././PDF/Builder/Resource/ColorSpace/Indexed.html">PDF::Builder::Resource::ColorSpace::Indexed</a> -- Base colorspace support for indexed color models<br>
+<a href="../../.././PDF/Builder/Resource/ColorSpace/Separation.html">PDF::Builder::Resource::ColorSpace::Separation</a> -- Support for color space separations<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

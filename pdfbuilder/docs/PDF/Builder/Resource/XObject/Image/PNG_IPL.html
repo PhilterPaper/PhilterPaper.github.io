@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::XObject::Image::PNG_IPL</title>
+<link rel="stylesheet" href="../../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#Supported-PNG-types">Supported PNG types</a></li>
+      <li><a href="#usesLib">usesLib</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::XObject::Image::PNG_IPL - Support routines for PNG image library (using Image::PNG::Libpng)</p>
+
+<p>Inherits from <a href="../../../../../PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $res = PDF::Builder::Resource::XObject::Image::PNG_IPL-&gt;new($pdf, $file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a PNG-image object. <code>$pdf</code> is the PDF object being added to, <code>$file</code> is the input PNG file, and the optional <code>$name</code> of the new parent image object defaults to PxAAA.</p>
+
+<p>If the Image::PNG::Libpng package is installed, and its use is not suppressed via the <code>nouseIPL</code> flag (see Builder documentation for <code>image_png</code>), the PNG_IPL library will be used. Otherwise, the PNG library will be used instead.</p>
+
+<p><b>opts:</b></p>
+
+<dl>
+
+<dt>&#39;notrans&#39; =&gt; 1</dt>
+<dd>
+
+<p>No transparency -- ignore tRNS chunk if provided, ignore Alpha channel if provided.</p>
+
+</dd>
+<dt>&#39;force8bps&#39; =&gt; 1</dt>
+<dd>
+
+<p>If the PNG source is 16bps, tell the libpng library to strip down all channels to 8bps, permitting use on PDF 1.4 output.</p>
+
+</dd>
+<dt>&#39;name&#39; =&gt; &#39;string&#39;</dt>
+<dd>
+
+<p>This is the name you can give for the PNG image object. The default is Pxnnnn.</p>
+
+</dd>
+</dl>
+
+<p>Remember that you need to use Builder.pm&#39;s image_png to process PNG images.</p>
+
+</blockquote>
+
+<h2 id="Supported-PNG-types">Supported PNG types</h2>
+
+<pre><code>   (0) Gray scale of depth 1, 2, 4, 8, or 16 bits per pixel (2, 4, 16, 256,
+       or 65536 gray levels). Full transparency (of one 16-bit gray value) 
+       via the tRNS chunk is allowed, unless the notrans option specifies 
+       that it be ignored.
+
+   (2) RGB truecolor with 8 or 16 bits per sample (3 samples: 16.7 million 
+       or 281.5 trillion colors). Full transparency (of one 3x16-bit RGB 
+       color value) via the tRNS chunk is allowed, unless the notrans 
+       option specifies that it be ignored.
+
+   (3) Palette color with 1, 2, 4, or 8 bits per pixel (2, 4, 16, or 256
+       color table/palette entries). 16 bpp is not currently supported by
+       PNG or PDF. Partial transparency (8-bit Alpha) for each palette
+       entry via the tRNS chunk is allowed, unless the notrans option 
+       specifies that it be ignored (all entries fully opaque).
+
+   (4) Gray scale of depth 8 or 16 bits per pixel plus equal-sized Alpha
+       channel (256 or 65536 gray levels and 256 or 65536 levels of
+       transparency). The Alpha channel is ignored if the notrans 
+       option is given. The tRNS chunk is not permitted.
+
+   (5) B&lt;RESERVED&gt; for grayscale via palette + Alpha channel
+
+   (6) RGB truecolor with 8 or 16 bits per sample, with equal-sized 
+       Alpha channel (256 or 65536 levels of transparency). The Alpha 
+       channel is ignored if the notrans option is given. The tRNS 
+       chunk is not permitted.
+
+   (7) B&lt;RESERVED&gt; for truecolor via palette + Alpha channel</code></pre>
+
+<p>In all cases, 16 bits per sample forces PDF 1.5 (or higher) output, unless you give the <code>force8bps</code> option, to &quot;strip&quot; 16 bit samples to 8 bits, and permit PDF 1.4-compatible output. The libpng.a library is assuming standard &quot;network&quot; bit and byte ordering (Big Endian), although flags might be added to change this.</p>
+
+<p>The transparency chunk (tRNS) will specify one gray level entry or one RGB entry to be treated as transparent (Alpha = 0). For palette color, up to 256 palette entry 8-bit Alpha values are specified (256 levels of transparency, from 0 = transparent to 255 = opaque).</p>
+
+<p>Only a limited number of chunks are handled: IHDR, IDAT (internally), PLTE, tRNS, and IEND (internally). All other chunks are ignored at this time. Filters and compression applied to data is handled internally by libpng.a -- there may be unsupported methods.</p>
+
+<h2 id="usesLib">usesLib</h2>
+
+<pre><code>    $mode = $png-&gt;usesLib()</code></pre>
+
+<blockquote>
+
+<p>Returns 1 if Image::PNG::Libpng installed and used, 0 if not installed, or -1 if installed but not used (nouseIPL option given to <code>image_png</code>).</p>
+
+<p><b>Caution:</b> this method can only be used <i>after</i> the image object has been created. It can&#39;t tell you whether Image::PNG::Libpng is available in advance of actually using it, in case you want to use some functionality available only in PNG_IPL. See the <a href="../../../../../PDF/Builder.html">PDF::Builder</a> LA_IPL() call if you need to know in advance.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../../Builder_index.html">Master Index</a><br>
+<a href="../../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a> -- Base class for external raster image objects<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/GD.html">PDF::Builder::Resource::XObject::Image::GD</a> -- Support routines for Graphics Development image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/GIF.html">PDF::Builder::Resource::XObject::Image::GIF</a> -- Support routines for GIF image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/JPEG.html">PDF::Builder::Resource::XObject::Image::JPEG</a> -- Support routines for JPEG image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNG.html">PDF::Builder::Resource::XObject::Image::PNG</a> -- Support routines for PNG image library (using pure Perl code)<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNM.html">PDF::Builder::Resource::XObject::Image::PNM</a> -- Support routines for PNM (Portable aNy Map) image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/SVG.html">PDF::Builder::Resource::XObject::Image::SVG</a> -- Support routines for SVG (Scalable Vector Graphics) image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF.html">PDF::Builder::Resource::XObject::Image::TIFF</a> -- TIFF image support<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF_GT.html">PDF::Builder::Resource::XObject::Image::TIFF_GT</a> -- TIFF image support (Graphics::TIFF enabled)<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

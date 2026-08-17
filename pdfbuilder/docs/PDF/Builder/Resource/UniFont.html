@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::UniFont</title>
+<link rel="stylesheet" href="../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a>
+        <ul>
+          <li><a href="#Valid-options-opts">Valid options (%opts)</a></li>
+        </ul>
+      </li>
+      <li><a href="#isvirtual">isvirtual</a></li>
+      <li><a href="#fontlist">fontlist</a></li>
+      <li><a href="#width">width</a></li>
+      <li><a href="#text">text</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::UniFont - Unicode Font Support</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $font = PDF::Builder::Resource::UniFont-&gt;new($pdf, @fontspecs, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a uni-font object.</p>
+
+<p><b>FONTSPECS:</b> fonts can be registered using the following hash-ref:</p>
+
+<pre><code>    {
+        font   =&gt; $fontobj,     # the font to be registered
+        blocks =&gt; $blockspec,   # the unicode blocks the font is being registered for
+        codes  =&gt; $codespec,    # the unicode codepoints, -&quot;-
+    }</code></pre>
+
+<p><b>BLOCKSPECS:</b></p>
+
+<pre><code>    [
+         $block1, $block3,    # register font for block 1 + 3
+        [$blockA, $blockZ],   # register font for blocks A .. Z
+    ]</code></pre>
+
+<p><b>CODESPECS:</b></p>
+
+<pre><code>    [
+         $cp1, $cp3,          # register font for codepoint 1 + 3
+        [$cpA, $cpZ],         # register font for codepoints A .. Z
+    ]</code></pre>
+
+<p><b>NOTE:</b> if you want to register a font for the entire unicode space (ie. U+0000 .. U+FFFF), then simply specify a font-object without the hash-ref.</p>
+
+</blockquote>
+
+<h3 id="Valid-options-opts">Valid options (%opts)</h3>
+
+<dl>
+
+<dt>encode</dt>
+<dd>
+
+<p>Changes the encoding of the font from its default. See &quot;perldoc Encode&quot; for a list of valid tags.</p>
+
+</dd>
+</dl>
+
+<h2 id="isvirtual">isvirtual</h2>
+
+<pre><code>    $flag = $font-&gt;isvirtual()</code></pre>
+
+<blockquote>
+
+<p>(No Information)</p>
+
+</blockquote>
+
+<h2 id="fontlist">fontlist</h2>
+
+<pre><code>    $font-&gt;fontlist()</code></pre>
+
+<blockquote>
+
+<p>(No Information)</p>
+
+</blockquote>
+
+<h2 id="width">width</h2>
+
+<pre><code>    $w = $font-&gt;width($string)</code></pre>
+
+<blockquote>
+
+<p>(No Information)</p>
+
+</blockquote>
+
+<h2 id="text">text</h2>
+
+<pre><code>    $font-&gt;text($string, $size, $indent)</code></pre>
+
+<blockquote>
+
+<p>(No Information)</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../Builder_index.html">Master Index</a><br>
+<a href="../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../.././PDF/Builder/Resource/BaseFont.html">PDF::Builder::Resource::BaseFont</a> -- Base class for font resources<br>
+<a href="../../.././PDF/Builder/Resource/CIDFont.html">PDF::Builder::Resource::CIDFont</a> -- Base class for CID fonts<br>
+<a href="../../.././PDF/Builder/Resource/ColorSpace.html">PDF::Builder::Resource::ColorSpace</a> -- Base class for PDF color spaces<br>
+<a href="../../.././PDF/Builder/Resource/Colors.html">PDF::Builder::Resource::Colors</a> -- Translate color names into RGB settings<br>
+<a href="../../.././PDF/Builder/Resource/ExtGState.html">PDF::Builder::Resource::ExtGState</a> -- Graphics state dictionary support<br>
+<a href="../../.././PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a> -- Some common support routines for font files<br>
+<a href="../../.././PDF/Builder/Resource/Glyphs.html">PDF::Builder::Resource::Glyphs</a> -- Preparsed uniglyph.txt file information<br>
+<a href="../../.././PDF/Builder/Resource/PaperSizes.html">PDF::Builder::Resource::PaperSizes</a> -- List of standard paper sizes and their dimensions<br>
+<a href="../../.././PDF/Builder/Resource/Pattern.html">PDF::Builder::Resource::Pattern</a> -- Support stub for fill patterns<br>
+<a href="../../.././PDF/Builder/Resource/Shading.html">PDF::Builder::Resource::Shading</a> -- Support stub for fill shading patterns<br>
+<a href="../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

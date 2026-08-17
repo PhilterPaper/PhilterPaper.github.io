@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::Font::CoreFont</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+      <li><a href="#Down-Children">Down (Children)</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#Supported-typefaces">Supported typefaces</a>
+        <ul>
+          <li><a href="#Standard-PDF-types">Standard PDF types</a></li>
+          <li><a href="#Primarily-Windows-typefaces">Primarily Windows typefaces</a></li>
+        </ul>
+      </li>
+      <li><a href="#Options">Options</a></li>
+      <li><a href="#is_standard">is_standard</a></li>
+      <li><a href="#names">names</a></li>
+      <li><a href="#loadallfonts">loadallfonts</a></li>
+    </ul>
+  </li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::Font::CoreFont - Module for using the 14 standard PDF built-in Fonts (plus 15 Windows Fonts)</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a></p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    #
+    use PDF::Builder;
+    #
+    my $pdf = PDF::Builder-&gt;new();
+    my $cft = $pdf-&gt;font(&#39;Times-Roman&#39;);
+   #my $cft = $pdf-&gt;corefont(&#39;Times-Roman&#39;);
+    #
+    my $page = $pdf-&gt;page();
+    my $text = $page-&gt;text();
+    $text-&gt;font($cft, 20);
+    $text-&gt;translate(200, 700);
+    $text-&gt;text(&quot;Hello, World!&quot;);</code></pre>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $font = PDF::Builder::Resource::Font::CoreFont-&gt;new($pdf, $fontname, %options)</code></pre>
+
+<blockquote>
+
+<p>Returns a corefont object.</p>
+
+</blockquote>
+
+<h2 id="Supported-typefaces">Supported typefaces</h2>
+
+<h3 id="Standard-PDF-types">Standard PDF types</h3>
+
+<p>See examples/020_corefonts for a list of each font&#39;s glyphs.</p>
+
+<ul>
+
+<li><p>Helvetica, Helvetica-Oblique, Helvetica-Bold, Helvetia-BoldOblique</p>
+
+<p>Sans-serif, may have Arial substituted on some systems (e.g., Windows).</p>
+
+</li>
+<li><p>Courier, Courier-Oblique, Courier-Bold, Courier-BoldOblique</p>
+
+<p>Fixed pitch, may have Courier New substituted on some systems (e.g., Windows).</p>
+
+</li>
+<li><p>Times-Roman, Times-Italic, Times-Bold, Times-BoldItalic</p>
+
+<p>Serif, may have Times New Roman substituted on some systems (e.g., Windows).</p>
+
+</li>
+<li><p>Symbol, ZapfDingbats</p>
+
+<p>Various symbols, including the Greek alphabet (in Symbol).</p>
+
+</li>
+</ul>
+
+<h3 id="Primarily-Windows-typefaces">Primarily Windows typefaces</h3>
+
+<p>See examples/022_truefonts /Windows/Fonts/&lt;name&gt;.ttf for a list of each font&#39;s glyphs. examples/020_corefonts can also be used.</p>
+
+<ul>
+
+<li><p>Georgia, Georgia-Italic, Georgia-Bold, Georgia-BoldItalic</p>
+
+<p>Serif proportional.</p>
+
+</li>
+<li><p>Trebuchet, Trebuchet-Italic, Trebuchet-Bold, Trebuchet-BoldItalic</p>
+
+<p>Sans-serif proportional with simple strokes.</p>
+
+</li>
+<li><p>Verdana, Verdana-Italic, Verdana-Bold, Verdana-BoldItalic</p>
+
+<p>Sans-serif proportional with simple strokes.</p>
+
+</li>
+<li><p>BankGothic, BankGothic-Italic, BankGothic-Bold, BankGothic-BoldItalic</p>
+
+<p>Sans-serif proportional with simple strokes. Free versions of Bank Gothic are often only medium weight Roman (BankGothic), and this is all that usually comes with Windows.</p>
+
+</li>
+<li><p>Webdings, Wingdings</p>
+
+<p>Various symbols, in the vein of Zapf Dingbats.</p>
+
+</li>
+</ul>
+
+<p>Keep in mind that only font metrics (widths) are provided with PDF::Builder; the fonts themselves are provided by the reader&#39;s machine (often packaged with the operating system, or obtained separately by the user). To use a specific font may require you to obtain one or more files from some source.</p>
+
+<p>If a font (typeface and variant) is not available on a given reader&#39;s machine, a substitution <i>may</i> be automatically made. For example, Helvetica is usually not shipped with Windows machines, and Arial might be substituted. For most characters, the glyph widths will be the same, but this can not be guaranteed!</p>
+
+<p>PDF::Builder currently uses the [typeface].pm files to map glyph names to code points (single byte encodings only) and to look up the glyph widths for character positioning. There is no guarantee that a given font file includes all the desired glyphs, nor that the widths will be absolutely the same, even in different releases of the same font.</p>
+
+<h2 id="Options">Options</h2>
+
+<dl>
+
+<dt>encode</dt>
+<dd>
+
+<p>Changes the encoding of the font from its default. Notice that the encoding (<i>not</i> the entire font&#39;s glyph list) is shown in a PDF object (record), listing 256 glyphs associated with this encoding (<i>and</i> that are available in this font).</p>
+
+<p>See <i>Perl&#39;s Encode</i> for the supported values. <b>Warning:</b> only single byte encodings are permitted. Multibyte encodings such as &#39;utf8&#39; are forbidden.</p>
+
+</dd>
+<dt>dokern</dt>
+<dd>
+
+<p>Enables kerning if data is available.</p>
+
+<p><code>kerning</code> is an older name for this option, and is still available as an <b>alternative</b> to <code>dokern</code>.</p>
+
+</dd>
+<dt>pdfname</dt>
+<dd>
+
+<p>Changes the reference-name of the font from its default. The reference-name is normally generated automatically and can be retrieved via $pdfname=$font-&gt;name().</p>
+
+</dd>
+<dt>metrics</dt>
+<dd>
+
+<p>If given, it is expected to be an anonymous hash of font file data. This is to be used instead of looking up the <i>$fontname</i>.pm file for width and other data. You may need to use this option if your installed font happens to be out of sync with the PDF::Builder built-in core font metrics file (e.g., <i>helveticabold.pm</i>).</p>
+
+</dd>
+</dl>
+
+<h2 id="is_standard">is_standard</h2>
+
+<pre><code>    $bool = $class-&gt;is_standard($name)
+
+    $bool = $class-&gt;is_standard($name, $win_flag)</code></pre>
+
+<blockquote>
+
+<p>Returns true if <code>$name</code> is an exact, case-sensitive match for one of the standard font names shown above. If <code>$win_flag</code> is given, and is true (1), check against not only the basic 14 fonts, but also against the additional 15 Windows core font extensions.</p>
+
+</blockquote>
+
+<h2 id="names">names</h2>
+
+<pre><code>    my @font_names = PDF::Builder::Resource::Font::CoreFont-&gt;names($flag);
+
+    my $array_ref  = PDF::Builder::Resource::Font::CoreFont-&gt;names($flag);</code></pre>
+
+<p>Returns an array or a reference to an array containing the names of the built-in core (standard) fonts.</p>
+
+<p>If called with an optional <code>$flag</code> of &quot;true&quot; value (1), the additional 15 Windows core fonts are included.</p>
+
+<h2 id="loadallfonts">loadallfonts</h2>
+
+<pre><code>    PDF::Builder::Resource::Font::CoreFont-&gt;loadallfonts($flag)</code></pre>
+
+<blockquote>
+
+<p>&quot;Requires in&quot; all fonts available as corefonts, including Windows extensions if the optional <code>$flag</code> is given and is &quot;true&quot; (1).</p>
+
+<p><b>Warning:</b> &quot;dies&quot; if any requested font is not found!</p>
+
+</blockquote>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Alfred Reibenschuh</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../.././PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a> -- Some common support routines for font files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/Font/BdFont.html">PDF::Builder::Resource::Font::BdFont</a> -- Module for using bitmapped Fonts<br>
+<a href="../../../.././PDF/Builder/Resource/Font/Postscript.html">PDF::Builder::Resource::Font::Postscript</a> -- Support routines for using PostScript (Type 1) fonts<br>
+<a href="../../../.././PDF/Builder/Resource/Font/SynFont.html">PDF::Builder::Resource::Font::SynFont</a> -- Module for creating temporary synthetic Fonts<br>
+</p>
+
+<h2 id="Down-Children">Down (Children)</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/bankgothic.html">PDF::Builder::Resource::Font::CoreFont::bankgothic</a> -- Font-specific information for Bank Gothic font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/courier.html">PDF::Builder::Resource::Font::CoreFont::courier</a> -- Font-specific information for regular Courier font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/courierbold.html">PDF::Builder::Resource::Font::CoreFont::courierbold</a> -- Font-specific information for bold weight Courier font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/courierboldoblique.html">PDF::Builder::Resource::Font::CoreFont::courierboldoblique</a> -- Font-specific information for bold weight + slanted Courier font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/courieroblique.html">PDF::Builder::Resource::Font::CoreFont::courieroblique</a> -- Font-specific information for slanted Courier font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/georgia.html">PDF::Builder::Resource::Font::CoreFont::georgia</a> -- Font-specific information for regular Georgia font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/georgiabold.html">PDF::Builder::Resource::Font::CoreFont::georgiabold</a> -- Font-specific information for bold weight Georgia font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/georgiabolditalic.html">PDF::Builder::Resource::Font::CoreFont::georgiabolditalic</a> -- Font-specific information for bold weight + italic Georgia font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/georgiaitalic.html">PDF::Builder::Resource::Font::CoreFont::georgiaitalic</a> -- Font-specific information for italic Georgia font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/helvetica.html">PDF::Builder::Resource::Font::CoreFont::helvetica</a> -- Font-specific information for regular Helvetica font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/helveticabold.html">PDF::Builder::Resource::Font::CoreFont::helveticabold</a> -- Font-specific information for bold weight Helvetica font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/helveticaboldoblique.html">PDF::Builder::Resource::Font::CoreFont::helveticaboldoblique</a> -- Font-specific information for bold weight + slanted Helvetica font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/helveticaoblique.html">PDF::Builder::Resource::Font::CoreFont::helveticaoblique</a> -- Font-specific information for slanted Helvetica font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/symbol.html">PDF::Builder::Resource::Font::CoreFont::symbol</a> -- Font-specific information for the Symbol font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/timesbold.html">PDF::Builder::Resource::Font::CoreFont::timesbold</a> -- Font-specific information for bold weight Times font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/timesbolditalic.html">PDF::Builder::Resource::Font::CoreFont::timesbolditalic</a> -- Font-specific information for bold weight + italic Times font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/timesitalic.html">PDF::Builder::Resource::Font::CoreFont::timesitalic</a> -- Font-specific information for italic Times font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/timesroman.html">PDF::Builder::Resource::Font::CoreFont::timesroman</a> -- Font-specific information for regular (roman) Times font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/trebuchet.html">PDF::Builder::Resource::Font::CoreFont::trebuchet</a> -- Font-specific information for regular Trebuchet font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/trebuchetbold.html">PDF::Builder::Resource::Font::CoreFont::trebuchetbold</a> -- Font-specific information for bold-weight Trebuchet font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/trebuchetbolditalic.html">PDF::Builder::Resource::Font::CoreFont::trebuchetbolditalic</a> -- Font-specific information for bold weight + italic Trebuchet font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/trebuchetitalic.html">PDF::Builder::Resource::Font::CoreFont::trebuchetitalic</a> -- Font-specific information for italic Trebuchet font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/verdana.html">PDF::Builder::Resource::Font::CoreFont::verdana</a> -- Font-specific information for regular Verdana font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/verdanabold.html">PDF::Builder::Resource::Font::CoreFont::verdanabold</a> -- Font-specific information for bold weight Verdana font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/verdanabolditalic.html">PDF::Builder::Resource::Font::CoreFont::verdanabolditalic</a> -- Font-specific information for bold weight + italic Verdana font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/verdanaitalic.html">PDF::Builder::Resource::Font::CoreFont::verdanaitalic</a> -- Font-specific information for italic Verdana font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/webdings.html">PDF::Builder::Resource::Font::CoreFont::webdings</a> -- Font-specific information for WebDings symbol font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/wingdings.html">PDF::Builder::Resource::Font::CoreFont::wingdings</a> -- Font-specific information for WingDings symbol font<br>
+<a href="../../../.././PDF/Builder/Resource/Font/CoreFont/zapfdingbats.html">PDF::Builder::Resource::Font::CoreFont::zapfdingbats</a> -- Font-specific information for Zapf Dingbats symbol font<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

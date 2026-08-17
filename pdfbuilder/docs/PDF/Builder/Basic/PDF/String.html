@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Basic::PDF::String</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#from_pdf">from_pdf</a></li>
+      <li><a href="#new">new</a></li>
+      <li><a href="#convert">convert</a></li>
+      <li><a href="#val">val</a></li>
+      <li><a href="#as_pdf">as_pdf</a></li>
+      <li><a href="#outobjdeep">outobjdeep</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Basic::PDF::String - PDF String type objects</p>
+
+<p>Superclass for simple objects that are basically stringlike (Number, Name, etc.)</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Basic/PDF/Objind.html">PDF::Builder::Basic::PDF::Objind</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="from_pdf">from_pdf</h2>
+
+<pre><code>    PDF::Builder::Basic::PDF::String-&gt;from_pdf($string)</code></pre>
+
+<blockquote>
+
+<p>Creates a new string object (not a full object yet) from a given string. The string is parsed according to input criteria with escaping working.</p>
+
+</blockquote>
+
+<h2 id="new">new</h2>
+
+<pre><code>    PDF::Builder::Basic::PDF::String-&gt;new($string)</code></pre>
+
+<blockquote>
+
+<p>Creates a new string object (not a full object yet) from a given string. The string is parsed according to input criteria with escaping working.</p>
+
+</blockquote>
+
+<h2 id="convert">convert</h2>
+
+<pre><code>    $s-&gt;convert($str)</code></pre>
+
+<blockquote>
+
+<p>Returns $str converted as per criteria for input from PDF file</p>
+
+</blockquote>
+
+<h2 id="val">val</h2>
+
+<pre><code>    $s-&gt;val()</code></pre>
+
+<blockquote>
+
+<p>Returns the value of this string (the string itself).</p>
+
+</blockquote>
+
+<h2 id="as_pdf">as_pdf</h2>
+
+<pre><code>    $s-&gt;as_pdf()</code></pre>
+
+<blockquote>
+
+<p>Returns the string formatted for output as PDF for PDF File object $pdf.</p>
+
+</blockquote>
+
+<h2 id="outobjdeep">outobjdeep</h2>
+
+<pre><code>    $s-&gt;outobjdeep($fh, $pdf)</code></pre>
+
+<blockquote>
+
+<p>Outputs the string in PDF format, complete with necessary conversions.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Basic/PDF/Array.html">PDF::Builder::Basic::PDF::Array</a> -- Corresponds to a PDF array<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Bool.html">PDF::Builder::Basic::PDF::Bool</a> -- Holds the strings <b>true</b> or <b>false</b><br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Dict.html">PDF::Builder::Basic::PDF::Dict</a> -- PDF Dictionaries and Streams<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/File.html">PDF::Builder::Basic::PDF::File</a> -- Holds the trailers and cross-reference tables for a PDF file<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Filter.html">PDF::Builder::Basic::PDF::Filter</a> -- Abstract superclass for PDF stream filters<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Literal.html">PDF::Builder::Basic::PDF::Literal</a> -- Literal PDF Object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Name.html">PDF::Builder::Basic::PDF::Name</a> -- Stores PDF names (things beginning with /)<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Null.html">PDF::Builder::Basic::PDF::Null</a> -- PDF Null type object<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Number.html">PDF::Builder::Basic::PDF::Number</a> -- Numbers in PDF<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Objind.html">PDF::Builder::Basic::PDF::Objind</a> -- PDF indirect object reference<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Page.html">PDF::Builder::Basic::PDF::Page</a> -- Represents a PDF page<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Pages.html">PDF::Builder::Basic::PDF::Pages</a> -- PDF pages hierarchical element<br>
+<a href="../../../.././PDF/Builder/Basic/PDF/Utils.html">PDF::Builder::Basic::PDF::Utils</a> -- Utility functions for PDF library<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

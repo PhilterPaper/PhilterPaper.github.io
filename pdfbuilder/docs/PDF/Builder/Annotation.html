@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Annotation</title>
+<link rel="stylesheet" href="../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#Common-parameters">Common parameters</a></li>
+      <li><a href="#Annotation-types">Annotation types</a>
+        <ul>
+          <li><a href="#goto-link">goto, link</a></li>
+          <li><a href="#pdf-pdfile-pdf_file">pdf, pdfile, pdf_file</a></li>
+          <li><a href="#uri-url">uri, url</a></li>
+          <li><a href="#launch-file">launch, file</a></li>
+          <li><a href="#text">text</a></li>
+          <li><a href="#markup">markup</a></li>
+          <li><a href="#movie">movie</a></li>
+          <li><a href="#file_attachment">file_attachment</a></li>
+        </ul>
+      </li>
+      <li><a href="#Internal-routines-and-common-options">Internal routines and common options</a>
+        <ul>
+          <li><a href="#rect">rect</a></li>
+          <li><a href="#border">border</a></li>
+          <li><a href="#Color">Color</a></li>
+          <li><a href="#content">content</a></li>
+          <li><a href="#open">open</a></li>
+          <li><a href="#text-string">text string</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Annotation - Add annotations to a PDF</p>
+
+<p>Inherits from <a href="../../PDF/Builder/Basic/PDF/Dict.html">PDF::Builder::Basic::PDF::Dict</a></p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>An &quot;annotation&quot; is an extra feature on a page that may change the appearance (e.g., highlighting), or perform some action when clicked on. Some actions may require a single click and others a double click; this depends on the PDF Reader used. Some may warn you and/or ask permission to perform a certain action, while others may refuse to do something (which may be configurable).</p>
+
+<pre><code>    my $pdf = PDF::Builder-&gt;new();
+    my $font = $pdf-&gt;font(&#39;Helvetica&#39;);
+    my $page1 = $pdf-&gt;page();
+    my $page2 = $pdf-&gt;page();
+
+    my $content = $page1-&gt;text();
+    my $message = &#39;Go to Page 2&#39;;
+    my $size = 18;
+
+    $content-&gt;distance(1 * 72, 9 * 72);
+    $content-&gt;font($font, $size);
+    $content-&gt;text($message);
+
+    my $annotation = $page1-&gt;annotation();
+    my $width = $content-&gt;text_width($message);
+    $annotation-&gt;rect(1 * 72, 9 * 72, 1 * 72 + $width, 9 * 72 + $size);
+    $annotation-&gt;link($page2);
+
+    $pdf-&gt;save(&#39;sample.pdf&#39;);</code></pre>
+
+<h1 id="METHODS">METHODS</h1>
+
+<p>Note that the handling of annotations can vary from Reader to Reader. The available icon set may be larger or smaller than given here, and some Readers activate an annotation on a single mouse click, while others require a double click. Not all features provided here may be available on all PDF Readers. In particular, Named Destinations seem to be handled in widely varying ways!</p>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $annotation = PDF::Builder::Annotation-&gt;new()</code></pre>
+
+<blockquote>
+
+<p>Returns an annotation object (called from $page-&gt;annotation()).</p>
+
+<p>It is normally <i>not</i> necessary to explicitly call this method (see examples).</p>
+
+</blockquote>
+
+<h2 id="Common-parameters">Common parameters</h2>
+
+<p>For the annotation calls given below, all require a clickable rectangular area (button) on the page to activate the call. These all share common parameters to define this &quot;button&quot;. Note that <i>your</i> code is responsible for creating the visible content of the button (if any), while the &#39;rect&#39; parameter tells the annotation what (invisible) area on the page activates it, and the &#39;border&#39; and &#39;color&#39; parameters describe the border drawn around the button.</p>
+
+<p>Note that this is in contrast to <code>NamedDestination</code>, which ignores any of these entries, as it does not define a &quot;button&quot; to press.</p>
+
+<pre><code>    &#39;rect&#39;   =&gt; [ LLx,LLy, URx,URy ]</code></pre>
+
+<p>This defines the rectangle of the &quot;button&quot;. Your code is responsible for any fill or text visible to the user, via normal text and graphics calls. As an alternative (mandatory if &#39;rect&#39; is not given), you may specify the rectangle with the <code>$ann-&gt;rect(LLx,LLy, URx,URy);</code> call. <i>Note:</i> the other diagonals (UL to LR, LR to UL, UR to LL) are usually allowed.</p>
+
+<p>Instead of this hash element being used, the</p>
+
+<pre><code>    $ann-&gt;rect( LLx,LLy, URx,URy )</code></pre>
+
+<p>method may be used (<i>before</i> the annotation method itself is invoked).</p>
+
+<pre><code>    &#39;border&#39; =&gt; [ Rx,Ry, w, [dash-pattern] ]</code></pre>
+
+<p>This defines the border around the button. If not given, the default is [ 0, 0, 1 ]. Rx and Ry are corner radii (0 for sharp corners), <i>w</i> is the stroke width (0 for no visible border), and an optional dash-pattern may be given to draw something other than a solid line (e.g., [5, 5] for a 5pt long dash and 5pt space pattern). Note that the square brackets [ ] are actually used, as the dash-pattern is an anonymous array.</p>
+
+<p>Instead of this hash element being used, the</p>
+
+<pre><code>    $ann-&gt;border(Rx,Ry, w, [dash-pattern]) </code></pre>
+
+<p>method may be used (<i>before</i> the annotation method itself is invoked).</p>
+
+<pre><code>    &#39;color&#39;  =&gt; [ Red, Green, Blue ]</code></pre>
+
+<p>This defines the stroke color of the button border, using the RGB triplet way of describing a color (RGB anonymous array, each value 0 to 1). If 0 width does not work on all Readers to suppress the border, selecting a color that matches any fill or background color in the button may work instead.</p>
+
+<p>Instead of this hash element being used, the</p>
+
+<pre><code>    $ann-&gt;Color(Red, Green, Blue)</code></pre>
+
+<p>method may be used (<i>before</i> the annotation method itself is invoked). Note that Color is capitalized, unlike the hash option method.</p>
+
+<p>It&#39;s a matter of stylistic choice whether to give these settings as options to the annotation object in the call, or call their methods directly <i>before</i> the annotation action method itself is called.</p>
+
+<p>Some calls have additional optional parameters, which will be described in their section.</p>
+
+<h2 id="Annotation-types">Annotation types</h2>
+
+<h3 id="goto-link">goto, link</h3>
+
+<pre><code>    $annotation-&gt;goto($page, $location, @args, %opts) # preferred
+
+    $annotation-&gt;goto($page, %opts)  # location info as a hash element</code></pre>
+
+<blockquote>
+
+<p>Defines the annotation as a PDF launch-page with page object <code>$page</code> (within <i>this</i> document), &#39;fit&#39;, and opts %opts (common parameters and optionally <i>fit</i>: see descriptions below).</p>
+
+<p><b>Note</b> that <code>$page</code> is <i>not</i> a simple page number, but is either a page <i>object</i> such as <code>$pdf-&gt;openpage(page_number)</code>, <i>or</i> a Named Destination defined elsewhere (a prefix of &#39;#&#39; or &#39;/&#39; is optional, except when the Named Destination is entirely numeric, and then it is required). &#39;foo&#39;, &#39;#foo&#39;, and &#39;/3659&#39; are examples of Named Destinations. If a Named Destination is given, the page fit (location) is ignored, as the Named Destination handles that.</p>
+
+<p>Note that the <i>options</i> %opts is a hash, permitting &#39;rect&#39;, &#39;border&#39;, and &#39;color&#39; to be described in a more natural manner than flattening the hash into an array. The location and its arguments (fit data) may be either a list (in the PDF::API2 style) or another hash element.</p>
+
+<p><b>Alternate name:</b> <code>link</code></p>
+
+<p>Originally this method was named <code>link</code>, but PDF::API2 changed it to <code>goto</code>, to correspond to the <b>GoTo</b> PDF command used. For compatibility, it has been changed to <code>goto</code>, with <code>link</code> still available as an alias.</p>
+
+</blockquote>
+
+<h3 id="pdf-pdfile-pdf_file">pdf, pdfile, pdf_file</h3>
+
+<pre><code>    $annotation-&gt;pdf($pdffile, $page_number, $location, @args, %opts) # preferred
+
+    $annotation-&gt;pdf($pdffile, $page_number, %opts) # including location &amp; data</code></pre>
+
+<blockquote>
+
+<p>Defines the annotation as an <b>external</b> PDF-file with filepath <code>$pdffile</code>, on page <code>$page_number</code>, and options %opts (common parameters and <i>fit</i>: see descriptions below). This differs from the <code>goto</code> call in that the target is found in a <i>different</i> PDF file, not the current document. Your operating system may warn you that you are going to a different file.</p>
+
+<p><code>$page_number</code> is the physical page number, starting at 1: 1, 2,..., <i>or</i> a Named Destination defined in that document (a prefix of &#39;#&#39; or &#39;/&#39; is optional, except when the Named Destination is entirely numeric, and then it is required). &#39;foo&#39;, &#39;/foo&#39;, and &#39;#3659&#39; are examples of Named Destinations. If a Named Destination is used, the page fit (location) is ignored, as the Named Destination handles that.</p>
+
+<p>Note that the <i>options</i> %opts is a hash, while the location and fit @args may be described as a list (PDF::API2 style), or as another hash element. This permits &#39;rect&#39;, &#39;border&#39;, and &#39;color&#39; to be described in a more natural manner than flattening the hash into an array.</p>
+
+<p><b>Alternate names:</b> <code>pdfile</code> and <code>pdf_file</code></p>
+
+<p>Originally this method was named <code>pdfile</code>, and then <code>pdf_file</code> but PDF::API2 changed it to <code>pdf</code>. For compatibility, it has been changed to <code>pdf</code>, with <code>pdfile</code> and <code>pdf_file</code> still available as aliases.</p>
+
+</blockquote>
+
+<h3 id="uri-url">uri, url</h3>
+
+<pre><code>    $annotation-&gt;uri($url, %opts)</code></pre>
+
+<blockquote>
+
+<p>Defines the annotation as a launch-url with url <code>$url</code> and options %opts (common parameters). This page is usually brought up in a browser, and may be remote. This depends on your operating system configuration.</p>
+
+<p><b>Alternate name:</b> <code>url</code></p>
+
+<p>Originally this method was named <code>url</code>, but PDF::API2 changed it to <code>uri</code> to correspond to the <b>URI</b> PDF command used. For compatibility, it has been changed to <code>uri</code>, with <code>url</code> still available as an alias.</p>
+
+</blockquote>
+
+<h3 id="launch-file">launch, file</h3>
+
+<pre><code>    $annotation-&gt;launch($file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Defines the annotation as a launch-file with filepath <code>$file</code> (a local file, often an executable or script/batch file) and options %opts (common parameters). <i>How</i> the file is &quot;launched&quot; or displayed depends on the operating system, type of file, and local configuration or mapping. Common applications are to bring up a text editor to display a file, or start a photo viewer.</p>
+
+<p><b>Alternate name:</b> <code>file</code></p>
+
+<p>Originally this method was named <code>file</code>, but PDF::API2 changed it to <code>launch</code> to correspond to the <b>Launch</b> PDF command used. For compatibility, it has been changed to <code>launch</code>, with <code>file</code> still available as an alias.</p>
+
+</blockquote>
+
+<h3 id="text">text</h3>
+
+<pre><code>    $annotation-&gt;text($text, %opts)</code></pre>
+
+<blockquote>
+
+<p>Defines the annotation as a text note with content string <code>$text</code> and options %opts (common parameters, text, open: see descriptions below). The <code>$text</code> may include newlines \n for multiple lines. Note that the option &#39;border&#39; is ignored, since an <i>icon</i> is used.</p>
+
+<p>The option <code>text</code> is the popup&#39;s label string, not to be confused with the main <code>$text</code>.</p>
+
+<p>The icon appears in the upper left corner of the <code>rect</code> selection rectangle, and its active clickable area is fixed by the icon (it is <i>not</i> equal to the rectangle). The icon size is fixed, and its fill color set by <code>color</code>.</p>
+
+<p>Additional options:</p>
+
+</blockquote>
+
+<dl>
+
+<dt>icon =&gt; name_string</dt>
+<dd>
+
+</dd>
+<dt>icon =&gt; reference</dt>
+<dd>
+
+<p>Specify the <b>icon</b> to be used. The default is Reader-specific (usually <code>Note</code>), and others may be defined by the Reader. <code>Comment</code>, <code>Key</code>, <code>Help</code>, <code>NewParagraph</code>, <code>Paragraph</code>, and <code>Insert</code> are also supposed to be available on all PDF Readers. Note that the name <i>case</i> must exactly match. The icon is of fixed size. Any <i>AP</i> dictionary entry will override the icon setting.</p>
+
+<p>A <i>reference</i> to an icon may be passed instead of a name.</p>
+
+</dd>
+<dt>opacity =&gt; <i>value</i></dt>
+<dd>
+
+<p>Define the opacity (non-transparency, opaqueness) of the icon. This value ranges from 0.0 (transparent) to 1.0 (fully opaque), and applies to both the outline and the fill color. The default is 1.0.</p>
+
+</dd>
+</dl>
+
+<h3 id="markup">markup</h3>
+
+<pre><code>    $annotation-&gt;markup($text, $PointList, $highlight, %opts)</code></pre>
+
+<blockquote>
+
+<p>Defines the annotation as a text note with content string <code>$text</code> and options %opts (color, text, open, opacity: see descriptions below). The <code>$text</code> may include newlines \n for multiple lines.</p>
+
+<p><code>text</code> is the popup&#39;s label string, not to be confused with the main <code>$text</code>.</p>
+
+<p>There is no icon. Instead, the annotated text marked by <code>$PointList</code> is highlighted in one of four ways specified by <code>$highlight</code>.</p>
+
+</blockquote>
+
+<dl>
+
+<dt>$PointList =&gt; [ 8n numbers ]</dt>
+<dd>
+
+<p>One or more sets of numeric coordinates are given, defining the quadrilateral (usually a rectangle) around the text to be highlighted and selectable (clickable, to bring up the annotation text). These are four sets of <code>x,y</code> coordinates, given (for Left-to-Right text) as the upper bound Upper Left to Upper Right and then the lower bound Lower Left to Lower Right. <b>Note that this is different from what is (erroneously) documented in some PDF specifications!</b> It is important that the coordinates be given in this order.</p>
+
+<p>Multiple sets of quadrilateral corners may be given, such as for highlighted text that wraps around to new line(s). The minimum is one set (8 numbers). Any <i>AP</i> dictionary entry will override the <code>$PointList</code> setting. Finally, the &quot;Rect&quot; selection rectangle is created <i>just outside</i> the convex bounding box defined by <code>$PointList</code>.</p>
+
+</dd>
+<dt>$highlight =&gt; &#39;string&#39;</dt>
+<dd>
+
+<p>The following highlighting effects are permitted. The <code>string</code> must be spelled and capitalized <i>exactly</i> as given:</p>
+
+<dl>
+
+<dt>Highlight</dt>
+<dd>
+
+<p>The effect of a translucent &quot;highlighter&quot; marker.</p>
+
+</dd>
+<dt>Squiggly</dt>
+<dd>
+
+<p>The effect is an underline written in a &quot;squiggly&quot; manner.</p>
+
+</dd>
+<dt>StrikeOut</dt>
+<dd>
+
+<p>The text is struck-through with a straight line.</p>
+
+</dd>
+<dt>Underline</dt>
+<dd>
+
+<p>The text is marked by a straight underline.</p>
+
+</dd>
+</dl>
+
+</dd>
+<dt>color =&gt; <i>array of values</i></dt>
+<dd>
+
+<p>If <code>color</code> is not given (an array of numbers in the range 0.0-1.0), a medium gray should be used by default. Named colors are not supported at this time.</p>
+
+</dd>
+<dt>opacity =&gt; <i>value</i></dt>
+<dd>
+
+<p>Define the opacity (non-transparency, opaqueness) of the icon. This value ranges from 0.0 (transparent) to 1.0 (fully opaque), and applies to both the outline and the fill color. The default is 1.0.</p>
+
+</dd>
+</dl>
+
+<h3 id="movie">movie</h3>
+
+<pre><code>    $annotation-&gt;movie($file, $contentType, %opts)</code></pre>
+
+<blockquote>
+
+<p>Defines the annotation as a movie from <code>$file</code> with content (MIME) type <code>$contentType</code> and options %opts (common parameters, text: see descriptions below).</p>
+
+<p>The <code>rect</code> rectangle <b>also serves as the area where the movie is played</b>, so it should be of usable size and aspect ratio. It does not use a separate popup player. It is known to play .avi and .wav files -- others have not been tested. Using Adobe Reader, it will not play .mpg files (unsupported type). More work is probably needed on this annotation method.</p>
+
+</blockquote>
+
+<h3 id="file_attachment">file_attachment</h3>
+
+<pre><code>    $annotation-&gt;file_attachment($file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Defines the annotation as a file attachment with file $file and options %opts (common parameters: see descriptions below). Note that <code>color</code> applies to the icon fill color, not to a selectable area outline. The icon is resized (including aspect ratio changes) based on the selectable rectangle given by <code>rect</code>, so watch your rectangle dimensions!</p>
+
+<p>The file, along with its name, is <i>embedded</i> in the PDF document and may be extracted for viewing with the appropriate viewer.</p>
+
+<p>This differs from the <code>file</code> method in that <code>file</code> looks for and launches a file <i>already</i> on the Reader&#39;s machine, while <code>file_attachment</code> embeds the file in the PDF, and makes it available on the Reader&#39;s machine for actions of the user&#39;s choosing.</p>
+
+<p><b>Note 1:</b> some Readers may only permit an &quot;open&quot; action, and may also restrict file types (extensions) that will be handled. This may be configurable with your Reader&#39;s security settings.</p>
+
+<p><b>Note 2:</b> the displayed file name (pop-up during mouse rollover of the target rectangle) is given with the <i>path</i> trimmed off (file name only). If you want the displayed name to exactly match the path that was passed to the call, including the path, give the <code>notrimpath</code> option.</p>
+
+<p>Options:</p>
+
+</blockquote>
+
+<dl>
+
+<dt>icon =&gt; name_string</dt>
+<dd>
+
+</dd>
+<dt>icon =&gt; reference</dt>
+<dd>
+
+<p>Specify the <b>icon</b> to be used. The default is Reader-specific (usually <code>PushPin</code>), and others may be defined by the Reader. <code>Paperclip</code>, <code>Graph</code>, and <code>Tag</code> are also supposed to be available on all PDF Readers. Note that the name <i>case</i> must exactly match. <code>None</code> is a custom invisible icon defined by PDF::Builder. The icon is stretched/squashed to fill the defined target rectangle, so take care when defining <code>rect</code> dimensions. Any <i>AP</i> dictionary entry will override the icon setting.</p>
+
+<p>A <i>reference</i> to an icon may be passed instead of a name.</p>
+
+</dd>
+<dt>opacity =&gt; <i>value</i></dt>
+<dd>
+
+<p>Define the opacity (non-transparency, opaqueness) of the icon. This value ranges from 0.0 (transparent) to 1.0 (fully opaque), and applies to both the outline and the fill color. The default is 1.0.</p>
+
+</dd>
+<dt>notrimpath =&gt; 1</dt>
+<dd>
+
+<p>If given, show the entire path and file name on mouse rollover, rather than just the file name.</p>
+
+</dd>
+<dt>text =&gt; string</dt>
+<dd>
+
+<p>A text label for the popup (on mouseover) that contains the file name.</p>
+
+</dd>
+</dl>
+
+<p>Note that while PDF permits different specifications (paths) to DOS/Windows, Mac, and Unix (including Linux) versions of a file, and different format copies to be embedded, at this time PDF::Builder only permits a single file (format of your choice) to be embedded. If there is user demand for multiple file formats to be referenced and/or embedded, we could look into providing this, <i>although separate OS version paths <b>may</b> be considered obsolescent!</i>.</p>
+
+<h2 id="Internal-routines-and-common-options">Internal routines and common options</h2>
+
+<p>The common options may be called separately (applied against $annotation before calling the action routine), or passed as options to the call.</p>
+
+<h3 id="rect">rect</h3>
+
+<pre><code>    $annotation-&gt;rect($llx,$lly, $urx,$ury)</code></pre>
+
+<blockquote>
+
+<p>Sets the rectangle (active click area) of the annotation, given by &#39;rect&#39; option. This is any pair of diagonally opposite corners of the rectangle.</p>
+
+<p>The default clickable area is the icon itself.</p>
+
+<p>Defining option. <i>Note that this &quot;option&quot; is actually <b>required</b>.</i></p>
+
+<p><i>This call may be replaced by a hash element &#39;rect&#39;=&gt; in many calls (see Common parameters).</i></p>
+
+</blockquote>
+
+<dl>
+
+<dt>rect =&gt; [LLx, LLy, URx, URy]</dt>
+<dd>
+
+<p>Set annotation rectangle <i>as an option</i> at <code>[LLx,LLy]</code> to <code>[URx,URy]</code> (lower left and upper right coordinates). LL to UR is customary, but any diagonal is allowed.</p>
+
+</dd>
+</dl>
+
+<h3 id="border">border</h3>
+
+<pre><code>    $annotation-&gt;border(@b)</code></pre>
+
+<blockquote>
+
+<p>Sets the border-style of the annotation, if applicable, as given by the border option. There are three entries in the array: horizontal and vertical corner radii, and border width. An optional fourth entry (described below) may be used for a dashed or dotted line.</p>
+
+<p>A border is used in annotations where text or some other material is put down, and a clickable rectangle is defined over it (rect). A border is not shown when an <b>icon</b> is being used to mark the clickable area.</p>
+
+<p>A <i>PDF Reader</i> normally defaults to [0 0 1] (solid line of width 1, with sharp corners) if no border (<code>/Border</code>) is specified. Keeping compatibility with PDF::API2&#39;s longstanding practice, PDF::Builder defaults to no visible border <code>[0 0 0]</code> (solid line of width 0, and thus invisible).</p>
+
+<p>Defining option:</p>
+
+</blockquote>
+
+<dl>
+
+<dt>border =&gt; [CRh, CRv, W]</dt>
+<dd>
+
+</dd>
+<dt>border =&gt; [CRh, CRv, W, [on, off...]]</dt>
+<dd>
+
+<p>Note that the square brackets [ and ] are literally <i>there</i>, indicating a vector or array of values. They do <b>not</b> indicate optional values!</p>
+
+<p>Set annotation <b>border style</b> of horizontal and vertical corner radii <code>CRh</code> and <code>CRv</code> (value 0 for squared corners) and width <code>W</code> (value 0 for no border). The PDF::Builder default is no border (while a <i>PDF Reader</i> typically defaults to no border ([0 0 0]), if no /Border entry is given). Optionally, a dash pattern array may be given (<code>on</code> length, <code>off</code> length, as one or more <i>pairs</i>). The default is a solid line.</p>
+
+<p>The border vector seems to ignore the first two settings (corner radii), but the line thickness works, on basic Readers. The corner radii <i>may</i> work on some other Readers.</p>
+
+</dd>
+</dl>
+
+<p><i>This call may be replaced by a hash element &#39;border&#39;=&gt; in many calls (see Common parameters).</i></p>
+
+<h3 id="Color">Color</h3>
+
+<pre><code>    $annotation-&gt;Color(@color)</code></pre>
+
+<blockquote>
+
+<p>Set the icon&#39;s fill color <i>or</i> the click area&#39;s border color. The color is an array of 1, 3, or 4 numbers, each in the range 0.0 to 1.0. If 1 number is given, it is the grayscale value (0 = black to 1 = white). If 3 numbers are given, it is an RGB color value. If 4 numbers are given, it is a CMYK color value. Currently, named colors (strings) are not handled.</p>
+
+<p>For link and url annotations, this is the color of the rectangle border (border given with a width of at least 1).</p>
+
+<p>If an invalid array length or numeric value is given, a medium gray ( [0.5] ) value is used, without any message. If no color is given, the usual fill color is black.</p>
+
+<p>Defining option:</p>
+
+<p>Named colors (e.g., &#39;black&#39;) are not supported at this time.</p>
+
+</blockquote>
+
+<dl>
+
+<dt>color =&gt; [ ] or not 1, 3, or 4 numbers 0.0-1.0</dt>
+<dd>
+
+<p>A medium gray (0.5 value) will be used if an invalid color is given.</p>
+
+</dd>
+<dt>color =&gt; [ g ]</dt>
+<dd>
+
+<p>If <i>g</i> is between 0.0 (black) and 1.0 (white), the fill color will be gray.</p>
+
+</dd>
+<dt>color =&gt; [ r, g, b ]</dt>
+<dd>
+
+<p>If <i>r</i> (red), <i>g</i> (green), and <i>b</i> (blue) are all between 0.0 and 1.0, the fill color will be the defined RGB hue. [ 0, 0, 0 ] is black, [ 1, 1, 0 ] is yellow, and [ 1, 1, 1 ] is white.</p>
+
+</dd>
+<dt>color =&gt; [ c, m, y, k ]</dt>
+<dd>
+
+<p>If <i>c</i> (red), <i>m</i> (magenta), <i>y</i> (yellow), and <i>k</i> (black) are all between 0.0 and 1.0, the fill color will be the defined CMYK hue. [ 0, 0, 0, 0 ] is white, [ 1, 0, 1, 0 ] is green, and [ 1, 1, 1, 1 ] is black.</p>
+
+</dd>
+</dl>
+
+<p><i>This call may be replaced by a hash element &#39;color&#39;=&gt; in many calls (see Common parameters).</i></p>
+
+<h3 id="content">content</h3>
+
+<pre><code>    $annotation-&gt;content(@lines)</code></pre>
+
+<blockquote>
+
+<p>Sets the text-content of the <code>text()</code> annotation. This is a text string or array of strings.</p>
+
+</blockquote>
+
+<h3 id="open">open</h3>
+
+<pre><code>    $annotation-&gt;open($bool)</code></pre>
+
+<blockquote>
+
+<p>Display the <code>text()</code> annotation either open or closed, if applicable.</p>
+
+<p>Both are editable; the &quot;open&quot; form brings up the page with the entry area already open for editing, while &quot;closed&quot; has to be clicked on to edit it.</p>
+
+<p>Defining option:</p>
+
+</blockquote>
+
+<dl>
+
+<dt>open =&gt; boolean</dt>
+<dd>
+
+<p>If true (1), the annotation will be marked as initially &quot;open&quot;. If false (0), or the option is not given, the annotation is initially &quot;closed&quot;.</p>
+
+</dd>
+</dl>
+
+<h3 id="text-string">text string</h3>
+
+<pre><code>    &#39;text&#39; =&gt; string</code></pre>
+
+<blockquote>
+
+<p>Specify an optional <b>text label</b> for annotation. This text or comment only shows up <i>as a title</i> in the pop-up containing the file or text.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../Builder_index.html">Master Index</a><br>
+<a href="../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+<a href="../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+<a href="../.././PDF/Builder/Docs.html">PDF::Builder::Docs</a> -- Additional documentation for Builder module<br>
+<a href="../.././PDF/Builder/FontManager.html">PDF::Builder::FontManager</a> -- Managing the font library for PDF::Builder<br>
+<a href="../.././PDF/Builder/Lite.html">PDF::Builder::Lite</a> -- Lightweight PDF creation methods (UNMAINTAINED)<br>
+<a href="../.././PDF/Builder/Matrix.html">PDF::Builder::Matrix</a> -- Matrix operations library<br>
+<a href="../.././PDF/Builder/NamedDestination.html">PDF::Builder::NamedDestination</a> -- Add named destinations (views) to a PDF<br>
+<a href="../.././PDF/Builder/Outline.html">PDF::Builder::Outline</a> -- Manage PDF outlines (a.k.a. <i>bookmarks</i>)<br>
+<a href="../.././PDF/Builder/Outlines.html">PDF::Builder::Outlines</a> -- Further Outline handling<br>
+<a href="../.././PDF/Builder/Page.html">PDF::Builder::Page</a> -- Methods to interact with individual pages<br>
+<a href="../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../.././PDF/Builder/UniWrap.html">PDF::Builder::UniWrap</a> -- Support routines for finding line breakpoints with Unicode text<br>
+<a href="../.././PDF/Builder/Util.html">PDF::Builder::Util</a> -- Utility package for often-used methods across the package<br>
+<a href="../.././PDF/Builder/ViewerPreferences.html">PDF::Builder::ViewerPreferences</a> -- How the PDF should be displayed or printed<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

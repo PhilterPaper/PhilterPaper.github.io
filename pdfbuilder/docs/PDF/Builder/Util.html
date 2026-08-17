@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Util</title>
+<link rel="stylesheet" href="../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a>
+    <ul>
+      <li><a href="#PREDEFINED-COLORS">PREDEFINED COLORS</a></li>
+      <li><a href="#STREAM-FILTERS">STREAM FILTERS</a></li>
+      <li><a href="#PREDEFINED-GLYPH-NAMES">PREDEFINED GLYPH-NAMES</a></li>
+      <li><a href="#PREDEFINED-PAPER-SIZES">PREDEFINED PAPER SIZES</a>
+        <ul>
+          <li><a href="#paper_size">paper_size</a></li>
+          <li><a href="#getPaperSizes">getPaperSizes</a></li>
+        </ul>
+      </li>
+      <li><a href="#STRING-TO-DIMENSION">STRING TO DIMENSION</a>
+        <ul>
+          <li><a href="#str2dim">str2dim</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Util - Utility package for often-used methods across the package</p>
+
+<h2 id="PREDEFINED-COLORS">PREDEFINED COLORS</h2>
+
+<p>See the source of <a href="../../PDF/Builder/Resource/Colors.html">PDF::Builder::Resource::Colors</a> for a complete list.</p>
+
+<p><b>Please Note:</b> This is an amalgamation of the X11, SGML and (X)HTML specification sets.</p>
+
+<p>There are many color model conversion and input conversion routines defined here.</p>
+
+<h2 id="STREAM-FILTERS">STREAM FILTERS</h2>
+
+<p>There are a number of functions here to handle stream filtering.</p>
+
+<h2 id="PREDEFINED-GLYPH-NAMES">PREDEFINED GLYPH-NAMES</h2>
+
+<p>See the file <code>uniglyph.txt</code> for a complete list.</p>
+
+<p><b>Please Note:</b> You may notice that apart from the &#39;AGL/WGL4&#39;, names from the XML, (X)HTML and SGML specification sets have been included to enable interoperability towards PDF.</p>
+
+<p>There are a number of functions here to handle various aspects of glyph identification.</p>
+
+<h2 id="PREDEFINED-PAPER-SIZES">PREDEFINED PAPER SIZES</h2>
+
+<p>Dimensions are in points.</p>
+
+<h3 id="paper_size">paper_size</h3>
+
+<pre><code>    @box_corners = paper_size($x1,$y1, $x2,$y2);</code></pre>
+
+<blockquote>
+
+<p>Returns an array ($x1,$y1, $x2,$y2) (full bounding box).</p>
+
+</blockquote>
+
+<pre><code>    @box_corners = paper_size($x1,$y1);</code></pre>
+
+<blockquote>
+
+<p>Returns an array (0,0, $x1,$y1) (half bounding box).</p>
+
+</blockquote>
+
+<pre><code>    @box_corners = paper_size($media_name);</code></pre>
+
+<blockquote>
+
+<p>Returns an array (0,0, paper_width,paper_height) for the named media.</p>
+
+</blockquote>
+
+<pre><code>    @box_corners = paper_size($x1);</code></pre>
+
+<blockquote>
+
+<p>Returns an array (0,0, $x1,$x1) (single quadratic).</p>
+
+<p>Otherwise, array (0,0, 612,792) (US Letter dimensions) is returned.</p>
+
+</blockquote>
+
+<h3 id="getPaperSizes">getPaperSizes</h3>
+
+<pre><code>    %sizes = getPaperSizes();</code></pre>
+
+<blockquote>
+
+<p>Returns a hash containing the available paper size aliases as keys and their dimensions as a two-element array reference.</p>
+
+<p>See the source of <a href="../../PDF/Builder/Resource/PaperSizes.html">PDF::Builder::Resource::PaperSizes</a> for the complete list.</p>
+
+</blockquote>
+
+<h2 id="STRING-TO-DIMENSION">STRING TO DIMENSION</h2>
+
+<p>Convert a string &quot;number [unit]&quot; to the value in desired units. Units are case-insensitive (the input is first folded to lower case).</p>
+
+<p>Supported units: mm, cm, in (inch), pt (Big point, 72/inch), ppt (printer&#39;s point, 72.27/inch), pc (pica, 6/inch), dd (Didot point, 67.5532/inch), and cc (Ciceros, 5.62943/inch). More can be added easily. Invalid units are a fatal error.</p>
+
+<h3 id="str2dim">str2dim</h3>
+
+<pre><code>    $value = str2dim($string, $type, $default_units);</code></pre>
+
+<blockquote>
+
+<p><code>$string</code> contains a number and optionally, a unit. Space(s) between the number and the unit are optional. E.g., &#39;200&#39;, &#39;35.2 mm&#39;, and &#39;1.5in&#39; are all allowable input strings.</p>
+
+<p><code>$type</code> is for validation of the input $string&#39;s numeric value. The first character is <b>i</b> for an <i>integer</i> is required (no decimal point), or <b>f</b> for other (floating point) numbers. Next is an optional <b>c</b> to indicate that an out-of-range input value is to be silently <i>clamped</i> to be within the given range (the default is to raise a fatal error). Finally, an optional <i>range</i> expression: {lower limit,upper limit}. The limits are either numbers or <b>*</b> (to indicate +/- infinity (no limit) on that end of the range). <b>{</b> is <b>[</b> to say that the lower limit is <i>included</i> in the range, while <b>(</b> says that the lower limit is <i>excluded</i> from the range. Likewise, <b>}</b> is <b>]</b> for <i>included</i> upper limit, and <b>)</b> for <i>excluded</i>. The limits (and silent clamping, or fatal error if the input is out of range) are against the input value, before conversion to the output units.</p>
+
+<p>Example types:</p>
+
+<dl>
+
+<dt><code>&#39;f(*,*)&#39;</code> no limits (the default) -- all values OK</dt>
+<dd>
+
+</dd>
+<dt><code>&#39;i(0,*)&#39;</code> integer greater than 0</dt>
+<dd>
+
+</dd>
+<dt><code>&#39;fc[-3.2,7.86]&#39;</code> a number between -3.2 and 7.86, with value clamped to be within that range (including the endpoints)</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p><code>$default_units</code> is a required string, giving the units that the input is converted to. For example, if the default units are &#39;pt&#39;, and the input string &#39;2 in&#39;, the output value would be &#39;144&#39;. If the input string has no explicit units, it is assumed to be in the default units (no conversion is done).</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../Builder_index.html">Master Index</a><br>
+<a href="../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../.././PDF/Builder/Annotation.html">PDF::Builder::Annotation</a> -- Add annotations to a PDF<br>
+<a href="../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+<a href="../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+<a href="../.././PDF/Builder/Docs.html">PDF::Builder::Docs</a> -- Additional documentation for Builder module<br>
+<a href="../.././PDF/Builder/FontManager.html">PDF::Builder::FontManager</a> -- Managing the font library for PDF::Builder<br>
+<a href="../.././PDF/Builder/Lite.html">PDF::Builder::Lite</a> -- Lightweight PDF creation methods (UNMAINTAINED)<br>
+<a href="../.././PDF/Builder/Matrix.html">PDF::Builder::Matrix</a> -- Matrix operations library<br>
+<a href="../.././PDF/Builder/NamedDestination.html">PDF::Builder::NamedDestination</a> -- Add named destinations (views) to a PDF<br>
+<a href="../.././PDF/Builder/Outline.html">PDF::Builder::Outline</a> -- Manage PDF outlines (a.k.a. <i>bookmarks</i>)<br>
+<a href="../.././PDF/Builder/Outlines.html">PDF::Builder::Outlines</a> -- Further Outline handling<br>
+<a href="../.././PDF/Builder/Page.html">PDF::Builder::Page</a> -- Methods to interact with individual pages<br>
+<a href="../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../.././PDF/Builder/UniWrap.html">PDF::Builder::UniWrap</a> -- Support routines for finding line breakpoints with Unicode text<br>
+<a href="../.././PDF/Builder/ViewerPreferences.html">PDF::Builder::ViewerPreferences</a> -- How the PDF should be displayed or printed<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

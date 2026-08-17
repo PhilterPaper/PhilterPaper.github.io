@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder</title>
+<link rel="stylesheet" href="../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Down-Children">Down (Children)</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#SOME-SPECIAL-NOTES">SOME SPECIAL NOTES</a>
+    <ul>
+      <li><a href="#SOFTWARE-DEVELOPMENT-KIT">SOFTWARE DEVELOPMENT KIT</a></li>
+      <li><a href="#OPTIONAL-LIBRARIES">OPTIONAL LIBRARIES</a></li>
+      <li><a href="#STRINGS-CHARACTER-TEXT">STRINGS (CHARACTER TEXT)</a></li>
+      <li><a href="#RENDERING-ORDER">RENDERING ORDER</a></li>
+      <li><a href="#PDF-VERSIONS-SUPPORTED">PDF VERSIONS SUPPORTED</a></li>
+      <li><a href="#SUPPORTED-PERL-VERSIONS-BACKWARDS-COMPATIBILITY-GOALS">SUPPORTED PERL VERSIONS (BACKWARDS COMPATIBILITY GOALS)</a></li>
+      <li><a href="#KNOWN-ISSUES">KNOWN ISSUES</a></li>
+      <li><a href="#HISTORY">HISTORY</a></li>
+      <li><a href="#AUTHOR">AUTHOR</a></li>
+      <li><a href="#SUPPORT">SUPPORT</a></li>
+      <li><a href="#LICENSE">LICENSE</a></li>
+    </ul>
+  </li>
+  <li><a href="#GENERAL-PURPOSE-METHODS">GENERAL PURPOSE METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#default_page_size">default_page_size</a></li>
+      <li><a href="#default_page_boundaries">default_page_boundaries</a></li>
+    </ul>
+  </li>
+  <li><a href="#INPUT-OUTPUT-METHODS">INPUT/OUTPUT METHODS</a>
+    <ul>
+      <li><a href="#open">open</a></li>
+      <li><a href="#from_string-open_scalar-openScalar">from_string, open_scalar, openScalar</a></li>
+      <li><a href="#to_string-stringify">to_string, stringify</a></li>
+      <li><a href="#finishobjects">finishobjects</a></li>
+      <li><a href="#update">update</a></li>
+      <li><a href="#saveas">saveas</a></li>
+      <li><a href="#save">save</a></li>
+      <li><a href="#close-release-end">close, release, end</a></li>
+      <li><a href="#end">end</a></li>
+      <li><a href="#METADATA-METHODS">METADATA METHODS</a>
+        <ul>
+          <li><a href="#title">title</a></li>
+          <li><a href="#author">author</a></li>
+          <li><a href="#subject">subject</a></li>
+          <li><a href="#keywords">keywords</a></li>
+          <li><a href="#creator">creator</a></li>
+          <li><a href="#producer">producer</a></li>
+          <li><a href="#created">created</a></li>
+          <li><a href="#modified">modified</a></li>
+          <li><a href="#info_metadata">info_metadata</a></li>
+          <li><a href="#info">info</a></li>
+          <li><a href="#infoMetaAttributes">infoMetaAttributes</a></li>
+          <li><a href="#xml_metadata">xml_metadata</a></li>
+          <li><a href="#xmpMetadata">xmpMetadata</a></li>
+          <li><a href="#default">default</a></li>
+          <li><a href="#version">version</a></li>
+          <li><a href="#is_encrypted-isEncrypted">is_encrypted, isEncrypted</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#INTERACTIVE-FEATURE-METHODS">INTERACTIVE FEATURE METHODS</a>
+    <ul>
+      <li><a href="#outline-outlines">outline, outlines</a></li>
+      <li><a href="#page_layout">page_layout</a></li>
+      <li><a href="#page_mode">page_mode</a></li>
+      <li><a href="#viewer_preferences">viewer_preferences</a></li>
+      <li><a href="#preferences">preferences</a></li>
+    </ul>
+  </li>
+  <li><a href="#PAGE-METHODS">PAGE METHODS</a>
+    <ul>
+      <li><a href="#page">page</a></li>
+      <li><a href="#open_page-openpage">open_page, openpage</a></li>
+      <li><a href="#import_page-importpage">import_page, importpage</a></li>
+      <li><a href="#embed_page-importPageIntoForm">embed_page, importPageIntoForm</a></li>
+      <li><a href="#page_count-pages">page_count, pages</a></li>
+      <li><a href="#page_labels-pageLabel">page_labels, pageLabel</a></li>
+      <li><a href="#userunit">userunit</a></li>
+      <li><a href="#mediabox">mediabox</a></li>
+      <li><a href="#cropbox">cropbox</a></li>
+      <li><a href="#bleedbox">bleedbox</a></li>
+      <li><a href="#trimbox">trimbox</a></li>
+      <li><a href="#artbox">artbox</a></li>
+    </ul>
+  </li>
+  <li><a href="#FONT-METHODS">FONT METHODS</a>
+    <ul>
+      <li><a href="#Embedding-of-Fonts">Embedding of Fonts</a></li>
+      <li><a href="#Font-related-Methods">Font-related Methods</a>
+        <ul>
+          <li><a href="#corefont">corefont</a></li>
+          <li><a href="#psfont">psfont</a></li>
+          <li><a href="#ttfont">ttfont</a></li>
+          <li><a href="#bdfont">bdfont</a></li>
+          <li><a href="#cjkfont">cjkfont</a></li>
+          <li><a href="#font">font</a></li>
+          <li><a href="#standard_fonts">standard_fonts</a></li>
+          <li><a href="#is_standard_font">is_standard_font</a></li>
+          <li><a href="#font_path">font_path</a></li>
+          <li><a href="#add_to_font_path-addFontDirs">add_to_font_path, addFontDirs</a></li>
+          <li><a href="#set_font_path">set_font_path</a></li>
+          <li><a href="#synfont-synthetic_font">synfont, synthetic_font</a></li>
+          <li><a href="#unifont">unifont</a></li>
+        </ul>
+      </li>
+      <li><a href="#Font-Manager-methods">Font Manager methods</a>
+        <ul>
+          <li><a href="#font_settings">font_settings</a></li>
+          <li><a href="#add_font_path">add_font_path</a></li>
+          <li><a href="#add_font">add_font</a></li>
+          <li><a href="#get_font">get_font</a></li>
+          <li><a href="#get_external_font">get_external_font</a></li>
+          <li><a href="#dump_font_tables">dump_font_tables</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#IMAGE-METHODS">IMAGE METHODS</a>
+    <ul>
+      <li><a href="#image">image</a></li>
+      <li><a href="#image_jpeg">image_jpeg</a></li>
+      <li><a href="#image_tiff">image_tiff</a>
+        <ul>
+          <li><a href="#LA_GT">LA_GT</a></li>
+        </ul>
+      </li>
+      <li><a href="#image_pnm">image_pnm</a></li>
+      <li><a href="#image_png">image_png</a>
+        <ul>
+          <li><a href="#LA_IPL">LA_IPL</a></li>
+        </ul>
+      </li>
+      <li><a href="#image_gif">image_gif</a></li>
+      <li><a href="#image_svg">image_svg</a>
+        <ul>
+          <li><a href="#LA_SVG">LA_SVG</a></li>
+        </ul>
+      </li>
+      <li><a href="#image_gd">image_gd</a></li>
+    </ul>
+  </li>
+  <li><a href="#COLORSPACE-METHODS">COLORSPACE METHODS</a>
+    <ul>
+      <li><a href="#colorspace">colorspace</a></li>
+      <li><a href="#colorspace_act">colorspace_act</a></li>
+      <li><a href="#colorspace_web">colorspace_web</a></li>
+      <li><a href="#colorspace_hue">colorspace_hue</a></li>
+      <li><a href="#colorspace_separation">colorspace_separation</a></li>
+      <li><a href="#colorspace_devicen">colorspace_devicen</a></li>
+    </ul>
+  </li>
+  <li><a href="#BARCODE-METHODS">BARCODE METHODS</a>
+    <ul>
+      <li><a href="#xo_-Bar-Code-routines">xo_* Bar Code routines</a></li>
+    </ul>
+  </li>
+  <li><a href="#OTHER-METHODS">OTHER METHODS</a>
+    <ul>
+      <li><a href="#xo_form">xo_form</a></li>
+      <li><a href="#egstate">egstate</a></li>
+      <li><a href="#pattern">pattern</a></li>
+      <li><a href="#shading">shading</a></li>
+      <li><a href="#named_destination">named_destination</a></li>
+      <li><a href="#init_state">init_state()</a></li>
+      <li><a href="#pass_start_state">pass_start_state()</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder - Facilitates the creation and modification of PDF files</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    use PDF::Builder;
+
+    # Create a blank PDF file
+    $pdf = PDF::Builder-&gt;new();
+
+    # Open an existing PDF file
+    $pdf = PDF::Builder-&gt;open(&#39;some.pdf&#39;);
+
+    # Add a blank page
+    $page = $pdf-&gt;page();
+
+    # Retrieve an existing page
+    $page = $pdf-&gt;open_page($page_number);
+
+    # Set the page size
+    $page-&gt;size(&#39;Letter&#39;);  # or mediabox(&#39;Letter&#39;)
+
+    # Add a built-in font to the PDF
+    $font = $pdf-&gt;font(&#39;Helvetica-Bold&#39;); # or corefont(&#39;Helvetica-Bold&#39;)
+
+    # Add an external TrueType (TTF) font to the PDF
+    $font = $pdf-&gt;font(&#39;/path/to/font.ttf&#39;);  # or ttfont() in this case
+
+    # Add some text to the page
+    $text = $page-&gt;text();
+    $text-&gt;font($font, 20);
+    $text-&gt;position(200, 700);  # or translate()
+    $text-&gt;text(&#39;Hello World!&#39;);
+
+    # Save the PDF
+    $pdf-&gt;saveas(&#39;/path/to/new.pdf&#39;);</code></pre>
+
+<h1 id="SOME-SPECIAL-NOTES">SOME SPECIAL NOTES</h1>
+
+<p>See the file README.md (in downloadable package and on CPAN) for a summary of prerequisites and tools needed to install PDF::Builder, both mandatory and optional.</p>
+
+<h2 id="SOFTWARE-DEVELOPMENT-KIT">SOFTWARE DEVELOPMENT KIT</h2>
+
+<p>There are four levels of involvement with PDF::Builder. Depending on what you want to do, different kinds of installs are recommended. See <a href="../PDF/Builder/Docs.html#Software-Development-Kit">&quot;Software Development Kit&quot; in PDF::Builder::Docs</a> for suggestions.</p>
+
+<h2 id="OPTIONAL-LIBRARIES">OPTIONAL LIBRARIES</h2>
+
+<p>PDF::Builder can make use of some optional libraries, which are not <i>required</i> for a successful installation, but improve speed and capabilities. See <a href="../PDF/Builder/Docs.html#Optional-Libraries">&quot;Optional Libraries&quot; in PDF::Builder::Docs</a> for more information.</p>
+
+<h2 id="STRINGS-CHARACTER-TEXT">STRINGS (CHARACTER TEXT)</h2>
+
+<p>There are some things you should know about character encoding (for text), before you dive in to coding. Please go to <a href="../PDF/Builder/Docs.html#Strings-Character-Text">&quot;Strings (Character Text)&quot; in PDF::Builder::Docs</a> and have a read.</p>
+
+<h2 id="RENDERING-ORDER">RENDERING ORDER</h2>
+
+<p>Invoking &quot;text&quot; and &quot;graphics&quot; methods can lead to unexpected results (a different ordering of output than intended). See <a href="../PDF/Builder/Docs.html#Rendering-Order">&quot;Rendering Order&quot; in PDF::Builder::Docs</a> for more information.</p>
+
+<h2 id="PDF-VERSIONS-SUPPORTED">PDF VERSIONS SUPPORTED</h2>
+
+<p>PDF::Builder is mostly PDF 1.4-compliant, but there <i>are</i> complications you should be aware of. Please read <a href="../PDF/Builder/Docs.html#PDF-Versions-Supported">&quot;PDF Versions Supported&quot; in PDF::Builder::Docs</a> for details.</p>
+
+<h2 id="SUPPORTED-PERL-VERSIONS-BACKWARDS-COMPATIBILITY-GOALS">SUPPORTED PERL VERSIONS (BACKWARDS COMPATIBILITY GOALS)</h2>
+
+<p>PDF::Builder intends to support all major Perl versions that were released in the past six years, plus one, in order to continue working for the life of most long-term-stable (LTS) server distributions. See <a href="../PDF/Builder/Docs.html#Supported-Perl-Versions">&quot;Supported Perl Versions&quot; in PDF::Builder::Docs</a> for more information, including expected cutoff dates for Perl versions.</p>
+
+<h2 id="KNOWN-ISSUES">KNOWN ISSUES</h2>
+
+<p>This module does not work with Perl&#39;s -l command-line switch.</p>
+
+<p>There is a file INFO/KNOWN_INCOMP which lists known incompatibilities with PDF::API2, in case you&#39;re thinking of porting over something from that world, or have experience there and want to try PDF::Builder. There is also a file INFO/DEPRECATED, which lists things which are planned to be removed at some point.</p>
+
+<h2 id="HISTORY">HISTORY</h2>
+
+<p>The history of PDF::Builder is a complex and exciting saga... OK, it may be mildly interesting. Have a look at <a href="../PDF/Builder/Docs.html#History">&quot;History&quot; in PDF::Builder::Docs</a> section.</p>
+
+<h2 id="AUTHOR">AUTHOR</h2>
+
+<p>PDF::API2 was originally written by Alfred Reibenschuh. See the HISTORY section for more information.</p>
+
+<p>It was maintained by Steve Simms, who is still contributing new code to it (which often ends up in PDF::Builder).</p>
+
+<p>PDF::Builder is currently being maintained by Phil M. Perry.</p>
+
+<h2 id="SUPPORT">SUPPORT</h2>
+
+<p>The full source is on https://github.com/PhilterPaper/Perl-PDF-Builder.</p>
+
+<p>The release distribution is on CPAN: https://metacpan.org/pod/PDF::Builder.</p>
+
+<p>A formatted copy of the documentation (POD) may be found online, for your convenience, at https://www.catskilltech.com/Documentation/PDF/Builder.html.</p>
+
+<p>Copies of most of the output of &quot;examples/&quot; sample programs may be found online at https://www.catskilltech.com/Examples/PDF/Builder.html.</p>
+
+<p>Bug reports are on https://github.com/PhilterPaper/Perl-PDF-Builder/issues?q=is%3Aissue+sort%3Aupdated-desc (with &quot;bug&quot; label), feature requests have an &quot;enhancement&quot; label, and general discussions (architecture, roadmap, etc.) have a &quot;general discussion&quot; label.</p>
+
+<p>Do <b>not</b> under <i>any</i> circumstances open a PR (Pull Request) to report a bug. That&#39;s <b>not</b> what a PR is for, and is a waste of both your and our time and effort. Open a regular ticket (issue), and attach a Perl (.pl) program illustrating the problem, if possible. If you believe that you have a program patch, and offer to share it as a PR, we may give the go-ahead. Unsolicited PRs may be closed without further action.</p>
+
+<h2 id="LICENSE">LICENSE</h2>
+
+<p>This software is Copyright (c) 2017-2025 by Phil M. Perry.</p>
+
+<p>This is free software, licensed under:</p>
+
+<p>The GNU Lesser General Public License (LGPL) Version 2.1, February 1999</p>
+
+<pre><code>  (The master copy of this license lives on the GNU website.)
+  (A copy is provided in the INFO/LICENSE file for your convenience.)</code></pre>
+
+<p>This section of Builder.pm is intended only as a very brief summary of the license; please consider INFO/LICENSE to be the controlling version, if there is any conflict or ambiguity between the two.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License, as published by the Free Software Foundation, either version 2.1 of the License, or (at your option) any later version of this license.</p>
+
+<p>NOTE: there are several files in this distribution which were incorporated from outside sources and carry different licenses. If a file states that it is under a license different than LGPL 2.1, that license and its terms will apply to that file, and not LGPL 2.1.</p>
+
+<p>This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.</p>
+
+<h1 id="GENERAL-PURPOSE-METHODS">GENERAL PURPOSE METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $pdf = PDF::Builder-&gt;new(%opts)</code></pre>
+
+<blockquote>
+
+<p>Creates a new PDF object.</p>
+
+<p><b>Options</b></p>
+
+</blockquote>
+
+<dl>
+
+<dt>file</dt>
+<dd>
+
+<p>If you will be saving it as a file and already know the filename, you can give the &#39;file&#39; option to minimize possible memory requirements later on (the file is opened immediately for writing, rather than waiting until the <code>save</code>). The <code>file</code> may also be a filehandle.</p>
+
+</dd>
+<dt>compress</dt>
+<dd>
+
+<p>The &#39;compress&#39; option can be given to specify stream compression: default is &#39;flate&#39;, &#39;none&#39; (or 0) is no compression. No other compression methods are currently supported.</p>
+
+</dd>
+<dt>outver</dt>
+<dd>
+
+<p>The &#39;outver&#39; option defaults to 1.4 as the output PDF version and the highest allowed feature version (attempts to use anything higher will give a warning). If an existing PDF with a higher version is read in, <code>outver</code> will be increased to that version, with a warning.</p>
+
+</dd>
+<dt>msgver</dt>
+<dd>
+
+<p>The &#39;msgver&#39; option value of 1 (default) gives a warning message if the &#39;outver&#39; PDF level has to be bumped up due to either a higher PDF level file being read in, or a higher level feature was requested. A value of 0 suppresses the warning message.</p>
+
+</dd>
+<dt>diaglevel</dt>
+<dd>
+
+<p>The &#39;diaglevel&#39; option can be given to specify the level of diagnostics given by IntegrityCheck(). The default is level 2 (errors and warnings). See <a href="../PDF/Builder/Docs.html#IntegrityCheck">&quot;IntegrityCheck&quot; in PDF::Builder::Docs</a> for more information.</p>
+
+</dd>
+</dl>
+
+<p><b>Example:</b></p>
+
+<pre><code>    $pdf = PDF::Builder-&gt;new();
+    ...
+    print $pdf-&gt;to_string();
+
+    $pdf = PDF::Builder-&gt;new(compress =&gt; &#39;none&#39;);
+    # equivalent to $pdf-&gt;{&#39;forcecompress&#39;} = &#39;none&#39;; (or older, 0)
+
+    $pdf = PDF::Builder-&gt;new();
+    ...
+    $pdf-&gt;saveas(&#39;our/new.pdf&#39;);
+
+    $pdf = PDF::Builder-&gt;new(file =&gt; &#39;our/new.pdf&#39;);
+    ...
+    $pdf-&gt;save();</code></pre>
+
+<h2 id="default_page_size">default_page_size</h2>
+
+<pre><code>    @rectangle = $pdf-&gt;default_page_size($size); # Set
+
+    @rectangle = $pdf-&gt;default_page_size() # Get</code></pre>
+
+<blockquote>
+
+<p>Set the default physical size for pages in the PDF. If called without arguments (Get), return an array of the coordinates of the rectangle describing the default physical page size (the Media Box). <i>Setting</i> the size also returns the resulting media size.</p>
+
+<p>This is essentially an alternate method of defining the <code>mediabox()</code> call, and added for compatibility with PDF::API2.</p>
+
+<p>See <a href="../PDF/Builder/Page.html#Page-Sizes">&quot;Page Sizes&quot; in PDF::Builder::Page</a> for possible values.</p>
+
+<p>Note that this method is <i>only</i> at the PDF (document) level. It is not implemented at the page level. If you want to set or get the page-level override of the media size, use the <code>mediabox()</code> method.</p>
+
+</blockquote>
+
+<h2 id="default_page_boundaries">default_page_boundaries</h2>
+
+<pre><code>    %boundaries = $pdf-&gt;default_page_boundaries(&#39;media&#39; =&gt; 
+         [xmin, ymin, xmax, ymax]);  # Set the media box
+
+    %boundaries = $pdf-&gt;default_page_boundaries(); # Get (all five)
+    @media_rect = @{ $boundaries{&#39;media&#39;} }; # show &#39;media&#39; box</code></pre>
+
+<blockquote>
+
+<p>Set default prepress page boundaries (&#39;boxes&#39;) for pages in the PDF. If called without arguments, returns the coordinates of the rectangles describing each of the supported page boundaries, as a hash of array refs. Each will be US Letter size, unless it has been explicitly changed. <i>Setting</i> the values will also return the hash.</p>
+
+<p>See the equivalent <code>page_boundaries</code> method in <a href="../PDF/Builder/Page.html">PDF::Builder::Page</a> for details.</p>
+
+</blockquote>
+
+<h1 id="INPUT-OUTPUT-METHODS">INPUT/OUTPUT METHODS</h1>
+
+<h2 id="open">open</h2>
+
+<pre><code>    $pdf = PDF::Builder-&gt;open($pdf_file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Opens an existing PDF file. See <code>new()</code> for options.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    $pdf = PDF::Builder-&gt;open(&#39;our/old.pdf&#39;);
+    ...
+    $pdf-&gt;saveas(&#39;our/new.pdf&#39;);
+
+    $pdf = PDF::Builder-&gt;open(&#39;our/to/be/updated.pdf&#39;);
+    ...
+    $pdf-&gt;update();</code></pre>
+
+<h2 id="from_string-open_scalar-openScalar">from_string, open_scalar, openScalar</h2>
+
+<pre><code>    $pdf = PDF::Builder-&gt;from_string($pdf_string, %opts)</code></pre>
+
+<blockquote>
+
+<p>Opens a PDF contained in a string. See <code>new()</code> for other options.</p>
+
+</blockquote>
+
+<dl>
+
+<dt>diags =&gt; 1</dt>
+<dd>
+
+<p>Display warnings when non-conforming PDF structure is found, and fix up where possible. See <a href="../PDF/Builder/Basic/PDF/File.html">PDF::Builder::Basic::PDF::File</a> for more information.</p>
+
+</dd>
+</dl>
+
+<p><b>Example:</b></p>
+
+<pre><code>    # Read a PDF into a string, for the purpose of demonstration
+    open $fh, &#39;our/old.pdf&#39; or croak $@;
+    undef $/;  # Read the whole file at once
+    $pdf_string = &lt;$fh&gt;;
+
+    $pdf = PDF::Builder-&gt;from_string($pdf_string);
+    ...
+    $pdf-&gt;saveas(&#39;our/new.pdf&#39;);</code></pre>
+
+<blockquote>
+
+<p><b>Alternate name:</b> <code>open_scalar</code></p>
+
+<p><code>from_string</code> was formerly known as <code>open_scalar</code> (and even before that, as <code>openScalar</code>), and this older name is still valid as an alternative to <code>from_string</code>. It is <i>possible</i> that <code>open_scalar</code> will be deprecated and then removed some time in the future, so it may be advisable to use <code>from_string</code> in new work.</p>
+
+</blockquote>
+
+<h2 id="to_string-stringify">to_string, stringify</h2>
+
+<pre><code>    $string = $pdf-&gt;to_string()</code></pre>
+
+<blockquote>
+
+<p>Return the document as a string and remove the object structure from memory.</p>
+
+<p><b>Caution:</b> Although the object <code>$pdf</code> will still exist, it is no longer usable for any purpose after invoking this method! You will receive error messages about &quot;can&#39;t call method new_obj on an undefined value&quot;.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    $pdf = PDF::Builder-&gt;new();
+    ...
+    print $pdf-&gt;to_string();</code></pre>
+
+<blockquote>
+
+<p><b>Alternate name:</b> <code>stringify</code></p>
+
+<p><code>to_string</code> was formerly known as <code>stringify</code>, and this older name is still valid as an alternative to <code>to_string</code>. It is <i>possible</i> that <code>stringify</code> will be deprecated and then removed some time in the future, so it may be advisable to use <code>to_string</code> in new work.</p>
+
+</blockquote>
+
+<h2 id="finishobjects">finishobjects</h2>
+
+<pre><code>    $pdf-&gt;finishobjects(@objects)</code></pre>
+
+<blockquote>
+
+<p>Force objects to be written to file if possible.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    $pdf = PDF::Builder-&gt;new(file =&gt; &#39;our/new.pdf&#39;);
+    ...
+    $pdf-&gt;finishobjects($page, $gfx, $txt);
+    ...
+    $pdf-&gt;save();</code></pre>
+
+<blockquote>
+
+<p><b>Note:</b> this method is now considered obsolete, and may be deprecated. It allows for objects to be written to disk in advance of finally saving and closing the file. Otherwise, it&#39;s no different than just calling <code>save()</code> when all changes have been made. There&#39;s no memory advantage since <code>ship_out</code> doesn&#39;t remove objects from memory.</p>
+
+</blockquote>
+
+<h2 id="update">update</h2>
+
+<pre><code>    $pdf-&gt;update()</code></pre>
+
+<blockquote>
+
+<p>Saves a previously opened document.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    $pdf = PDF::Builder-&gt;open(&#39;our/to/be/updated.pdf&#39;);
+    ...
+    $pdf-&gt;update();</code></pre>
+
+<blockquote>
+
+<p><b>Note:</b> it is considered better to simply <code>save()</code> the file, rather than calling <code>update()</code>. They end up doing the same thing, anyway. This method may be deprecated in the future.</p>
+
+</blockquote>
+
+<h2 id="saveas">saveas</h2>
+
+<pre><code>    $pdf-&gt;saveas($file)</code></pre>
+
+<blockquote>
+
+<p>Save the document to $file and remove the object structure from memory.</p>
+
+<p><b>Caution:</b> Although the object <code>$pdf</code> will still exist, it is no longer usable for any purpose after invoking this method! You will receive error messages about &quot;can&#39;t call method new_obj on an undefined value&quot;.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    $pdf = PDF::Builder-&gt;new();
+    ...
+    $pdf-&gt;saveas(&#39;our/new.pdf&#39;);</code></pre>
+
+<h2 id="save">save</h2>
+
+<pre><code>    $pdf-&gt;save()
+
+    $pdf-&gt;save(filename)</code></pre>
+
+<blockquote>
+
+<p>Save the document to an already-defined file (or filename) and remove the object structure from memory. Optionally, a new filename may be given.</p>
+
+<p><b>Caution:</b> Although the object <code>$pdf</code> will still exist, it is no longer usable for any purpose after invoking this method! You will receive error messages about &quot;can&#39;t call method new_obj on an undefined value&quot;.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    $pdf = PDF::Builder-&gt;new(file =&gt; &#39;file_to_output&#39;);
+    ...
+    $pdf-&gt;save();</code></pre>
+
+<blockquote>
+
+<p><b>Note:</b> now that <code>save()</code> can take a filename as an argument, it effectively is interchangeable with <code>saveas()</code>. This is strictly for compatibility with recent changes to PDF::API2. Unlike PDF::API2, we are not deprecating the <code>saveas()</code> method, because in user interfaces, &quot;save&quot; normally means that the current filename is known and is to be used, while &quot;saveas&quot; normally means that (whether or not there is a current filename) a new filename is to be used.</p>
+
+</blockquote>
+
+<h2 id="close-release-end">close, release, end</h2>
+
+<pre><code>    $pdf-&gt;close();</code></pre>
+
+<blockquote>
+
+<p>Close an open file (if relevant) and remove the object structure from memory.</p>
+
+<p>PDF::API2 contains circular references, so this call is necessary in long-running processes to keep from running out of memory.</p>
+
+<p>This will be called automatically when you save or stringify a PDF. You should only need to call it explicitly if you are reading PDF files and not writing them.</p>
+
+<p><b>Alternate names:</b> <code>release</code> and <code>end</code></p>
+
+</blockquote>
+
+<h2 id="end">end</h2>
+
+<pre><code>    $pdf-&gt;end()</code></pre>
+
+<blockquote>
+
+<p>Remove the object structure from memory. PDF::Builder contains circular references, so this call is necessary in long-running processes to keep from running out of memory.</p>
+
+<p>This will be called automatically when you save or to_string a PDF. You should only need to call it explicitly if you are reading PDF files and not writing them.</p>
+
+<p>This (and <i>release</i>) are older and now deprecated names formerly used in PDF::API2 and PDF::Builder. You should try to avoid having to explicitly call them.</p>
+
+</blockquote>
+
+<h2 id="METADATA-METHODS">METADATA METHODS</h2>
+
+<h3 id="title">title</h3>
+
+<pre><code>    $title = $pdf-&gt;title();
+
+    $pdf = $pdf-&gt;title($title);</code></pre>
+
+<blockquote>
+
+<p>Get/set/clear the document&#39;s title.</p>
+
+</blockquote>
+
+<h3 id="author">author</h3>
+
+<pre><code>    $author = $pdf-&gt;author();
+
+    $pdf = $pdf-&gt;author($author);</code></pre>
+
+<blockquote>
+
+<p>Get/set/clear the name of the person who created the document.</p>
+
+</blockquote>
+
+<h3 id="subject">subject</h3>
+
+<pre><code>    $subject = $pdf-&gt;subject();
+
+    $pdf = $pdf-&gt;subject($subject);</code></pre>
+
+<blockquote>
+
+<p>Get/set/clear the subject of the document.</p>
+
+</blockquote>
+
+<h3 id="keywords">keywords</h3>
+
+<pre><code>    $keywords = $pdf-&gt;keywords();
+
+    $pdf = $pdf-&gt;keywords($keywords);</code></pre>
+
+<blockquote>
+
+<p>Get/set/clear a space-separated string of keywords associated with the document.</p>
+
+</blockquote>
+
+<h3 id="creator">creator</h3>
+
+<pre><code>    $creator = $pdf-&gt;creator();
+
+    $pdf = $pdf-&gt;creator($creator);</code></pre>
+
+<blockquote>
+
+<p>Get/set/clear the name of the product that created the document prior to its conversion to PDF.</p>
+
+</blockquote>
+
+<h3 id="producer">producer</h3>
+
+<pre><code>    $producer = $pdf-&gt;producer();
+
+    $pdf = $pdf-&gt;producer($producer);</code></pre>
+
+<blockquote>
+
+<p>Get/set/clear the name of the product that converted the original document to PDF.</p>
+
+<p>PDF::Builder fills in this field when creating a PDF.</p>
+
+</blockquote>
+
+<h3 id="created">created</h3>
+
+<pre><code>    $date = $pdf-&gt;created();
+
+    $pdf = $pdf-&gt;created($date);</code></pre>
+
+<blockquote>
+
+<p>Get/set/clear the document&#39;s creation date.</p>
+
+<p>The date format is <code>D:YYYYMMDDHHmmSSOHH&#39;mm</code>, where <code>D:</code> is a static prefix identifying the string as a PDF date. The date may be truncated at any point after the year. <code>O</code> is one of <code>+</code>, <code>-</code>, or <code>Z</code>, with the following <code>HH&#39;mm</code> representing an offset from UTC.</p>
+
+<p>See comments in the internal function <code>_is_date()</code> for more information on the inconsistency of PDF standards on exactly what the date format should be!</p>
+
+<p>When setting the date, <code>D:</code> will be prepended automatically if omitted.</p>
+
+</blockquote>
+
+<h3 id="modified">modified</h3>
+
+<pre><code>    $date = $pdf-&gt;modified();
+
+    $pdf = $pdf-&gt;modified($date);</code></pre>
+
+<blockquote>
+
+<p>Get/set/clear the document&#39;s modification date. The date format is as described in <code>created</code> above.</p>
+
+<p>See comments in the internal function <code>_is_date()</code> for more information on the inconsistency of PDF standards on exactly what the date format should be!</p>
+
+</blockquote>
+
+<h3 id="info_metadata">info_metadata</h3>
+
+<pre><code>    %info = $pdf-&gt;info_metadata(); # Get all keys and values
+
+    $value = $pdf-&gt;info_metadata($key); # Get the value of one key
+
+    $pdf = $pdf-&gt;info_metadata($key, $value); # Set the value of one key</code></pre>
+
+<blockquote>
+
+<p>Get/set/clear a key in the document&#39;s information dictionary. The standard keys (title, author, etc.) have their own accessors, so this is primarily intended for interacting with custom metadata.</p>
+
+<p>Pass <code>undef</code> as the value in order to remove the key from the dictionary.</p>
+
+<p>See comments in the internal function <code>_is_date()</code> for more information on the inconsistency of PDF standards on exactly what the date format should be! This applies to CreationDate and ModDate keys.</p>
+
+</blockquote>
+
+<h3 id="info">info</h3>
+
+<pre><code>    %infohash = $pdf-&gt;info()
+
+    %infohash = $pdf-&gt;info(%infohash)</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the info structure of the document.</p>
+
+<p>See <a href="../PDF/Builder/Docs.html#info-Example">&quot;info Example&quot; in PDF::Builder::Docs</a> section for an example of the use of this method.</p>
+
+<p><b>Note:</b> this method is still available, for compatibility purposes. It is better to use individual accessors or <code>info_metadata</code> instead.</p>
+
+</blockquote>
+
+<h3 id="infoMetaAttributes">infoMetaAttributes</h3>
+
+<pre><code>    @metadata_attributes = $pdf-&gt;infoMetaAttributes()
+
+    @metadata_attributes = $pdf-&gt;infoMetaAttributes(@metadata_attributes)</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the supported info-structure tags.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    @attributes = $pdf-&gt;infoMetaAttributes;
+    print &quot;Supported Attributes: @attr\n&quot;;
+
+    @attributes = $pdf-&gt;infoMetaAttributes(&#39;CustomField1&#39;);
+    print &quot;Supported Attributes: @attributes\n&quot;;</code></pre>
+
+<blockquote>
+
+<p><b>Note:</b> this method is still available for compatibility purposes, but the use of <code>info_metadata</code> instead is encouraged.</p>
+
+</blockquote>
+
+<h3 id="xml_metadata">xml_metadata</h3>
+
+<pre><code>    $xml = $pdf-&gt;xml_metadata();
+
+    $pdf = $pdf-&gt;xml_metadata($xml);</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the document&#39;s XML metadata stream.</p>
+
+</blockquote>
+
+<h3 id="xmpMetadata">xmpMetadata</h3>
+
+<pre><code>    $xml = $pdf-&gt;xmpMetadata()  # Get
+
+    $xml = $pdf-&gt;xmpMetadata($xml)  # Set (also returns $xml value)</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the XMP XML data stream.</p>
+
+<p>See <a href="../PDF/Builder/Docs.html#XMP-XML-example">&quot;XMP XML example&quot; in PDF::Builder::Docs</a> section for an example of the use of this method.</p>
+
+<p>This method is considered <b>obsolete</b>. Use <code>xml_metadata</code> instead.</p>
+
+</blockquote>
+
+<h3 id="default">default</h3>
+
+<pre><code>    $val = $pdf-&gt;default($parameter)
+
+    $pdf-&gt;default($parameter, $value)</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the default value for a behavior of PDF::Builder.</p>
+
+<p><b>Supported Parameters:</b></p>
+
+</blockquote>
+
+<dl>
+
+<dt>nounrotate</dt>
+<dd>
+
+<p>prohibits Builder from rotating imported/opened page to re-create a default pdf-context.</p>
+
+</dd>
+<dt>pageencaps</dt>
+<dd>
+
+<p>enables Builder&#39;s adding save/restore commands upon importing/opening pages to preserve graphics-state for modification.</p>
+
+</dd>
+<dt>copyannots</dt>
+<dd>
+
+<p>enables importing of annotations (<b>*EXPERIMENTAL*</b>).</p>
+
+</dd>
+</dl>
+
+<blockquote>
+
+<p><b>CAUTION:</b> Perl::Critic (tools/1_pc.pl) has started flagging the name &quot;default&quot; as a reserved keyword in higher Perl versions. Use with caution, and be aware that this name <i>may</i> have to be changed in the future.</p>
+
+</blockquote>
+
+<h3 id="version">version</h3>
+
+<pre><code>    $version = $pdf-&gt;pdf_version() # Get
+
+    $version = $pdf-&gt;pdf_version($version) # Set (also returns newly set version)</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the PDF version (e.g., 1.5). For compatibility with earlier releases, if no decimal point is given, assume &quot;1.&quot; precedes the number given.</p>
+
+<p>A warning message is given if you attempt to <i>decrease</i> the PDF version, as you might have already read in a higher level file, or used a higher level feature.</p>
+
+<p>See <a href="../PDF/Builder/Basic/PDF/File.html">PDF::Builder::Basic::PDF::File</a> for additional information on the <code>version</code> method.</p>
+
+</blockquote>
+
+<h3 id="is_encrypted-isEncrypted">is_encrypted, isEncrypted</h3>
+
+<pre><code>    $bool = $pdf-&gt;is_encrypted()</code></pre>
+
+<blockquote>
+
+<p>Checks if the previously opened PDF is encrypted.</p>
+
+<p><b>Alternate name:</b> <code>isEncrypted</code></p>
+
+<p>This is the older name; it is kept for compatibility with PDF::API2.</p>
+
+</blockquote>
+
+<h1 id="INTERACTIVE-FEATURE-METHODS">INTERACTIVE FEATURE METHODS</h1>
+
+<h2 id="outline-outlines">outline, outlines</h2>
+
+<pre><code>    $otls = $pdf-&gt;outline()</code></pre>
+
+<blockquote>
+
+<p>Creates (if needed) and returns the document&#39;s &#39;outline&#39; tree, which is also known as its &#39;bookmarks&#39; or the &#39;table of contents&#39;, depending on the PDF reader being used.</p>
+
+<p>To examine or modify the outline tree, see <a href="../PDF/Builder/Outlines.html">PDF::Builder::Outlines</a>.</p>
+
+<p><b>Alternate name:</b> <code>outlines</code></p>
+
+<p>This is the older name; it is kept for compatibility.</p>
+
+</blockquote>
+
+<h2 id="page_layout">page_layout</h2>
+
+<pre><code>    $layout = $pdf-&gt;page_layout();
+
+    $pdf = $pdf-&gt;page_layout($layout);</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the page layout that should be used when the PDF is opened.</p>
+
+<p><code>$layout</code> is one of the following:</p>
+
+</blockquote>
+
+<dl>
+
+<dt>single_page (or undef)</dt>
+<dd>
+
+<p>Display one page at a time.</p>
+
+</dd>
+<dt>one_column</dt>
+<dd>
+
+<p>Display the pages in one column (a.k.a. continuous).</p>
+
+</dd>
+<dt>two_column_left</dt>
+<dd>
+
+<p>Display the pages in two columns, with odd-numbered pages on the left.</p>
+
+</dd>
+<dt>two_column_right</dt>
+<dd>
+
+<p>Display the pages in two columns, with odd-numbered pages on the right.</p>
+
+</dd>
+<dt>two_page_left</dt>
+<dd>
+
+<p>Display two pages at a time, with odd-numbered pages on the left.</p>
+
+</dd>
+<dt>two_page_right</dt>
+<dd>
+
+<p>Display two pages at a time, with odd-numbered pages on the right.</p>
+
+</dd>
+</dl>
+
+<blockquote>
+
+<p>This has been split out from <code>preferences()</code> for compatibility with PDF::API2. It also can both set (assign) and get (query) the settings used.</p>
+
+</blockquote>
+
+<h2 id="page_mode">page_mode</h2>
+
+<pre><code>    $mode = $pdf-&gt;page_mode(); # Get
+
+    $pdf = $pdf-&gt;page_mode($mode); # Set</code></pre>
+
+<blockquote>
+
+<p>Gets/sets the page mode, which describes how the PDF should be displayed when opened.</p>
+
+<p><code>$mode</code> is one of the following:</p>
+
+</blockquote>
+
+<dl>
+
+<dt>none (or undef)</dt>
+<dd>
+
+<p>Neither outlines nor thumbnails should be displayed.</p>
+
+</dd>
+<dt>outlines</dt>
+<dd>
+
+<p>Show the document outline.</p>
+
+</dd>
+<dt>thumbnails</dt>
+<dd>
+
+<p>Show the page thumbnails.</p>
+
+</dd>
+<dt>full_screen</dt>
+<dd>
+
+<p>Open in full-screen mode, with no menu bar, window controls, or any other window visible.</p>
+
+</dd>
+<dt>optional_content</dt>
+<dd>
+
+<p>Show the optional content group panel.</p>
+
+</dd>
+<dt>attachments</dt>
+<dd>
+
+<p>Show the attachments panel.</p>
+
+</dd>
+</dl>
+
+<blockquote>
+
+<p>This has been split out from <code>preferences()</code> for compatibility with PDF::API2. It also can both set (assign) and get (query) the settings used.</p>
+
+</blockquote>
+
+<h2 id="viewer_preferences">viewer_preferences</h2>
+
+<pre><code>    %preferences = $pdf-&gt;viewer_preferences(); # Get
+
+    $pdf = $pdf-&gt;viewer_preferences(%preferences); # Set</code></pre>
+
+<blockquote>
+
+<p>Gets/sets PDF viewer preferences, as described in <a href="../PDF/Builder/ViewerPreferences.html">PDF::Builder::ViewerPreferences</a>.</p>
+
+<p>This has been split out from <code>preferences()</code> for compatibility with PDF::API2. It also can both set (assign) and get (query) the settings used.</p>
+
+</blockquote>
+
+<h2 id="preferences">preferences</h2>
+
+<pre><code>    $pdf-&gt;preferences(%opts)</code></pre>
+
+<blockquote>
+
+<p>Controls viewing preferences for the PDF, including the <b>Page Mode</b>, <b>Page Layout</b>, <b>Viewer</b>, and <b>Initial Page</b> Options. See <a href="../PDF/Builder/Docs.html#Preferences---set-user-display-preferences">&quot;Preferences - set user display preferences&quot; in PDF::Builder::Docs</a> for details on all these option groups, and <a href="../PDF/Builder/Docs.html#Page-Fit-Options">&quot;Page Fit Options&quot; in PDF::Builder::Docs</a> for page positioning.</p>
+
+<p><b>Note:</b> the various preferences have been split out into their own methods. It is preferred that you use these specific methods.</p>
+
+</blockquote>
+
+<h1 id="PAGE-METHODS">PAGE METHODS</h1>
+
+<h2 id="page">page</h2>
+
+<pre><code>    $page = $pdf-&gt;page()
+
+    $page = $pdf-&gt;page($page_number)</code></pre>
+
+<blockquote>
+
+<p>Returns a <i>new</i> page object. By default, the page is added to the end of the document. If you give an existing page number, the new page will be inserted in that position, pushing existing pages back by 1 (e.g., <code>page(5)</code> would insert an empty page 5, with the old page 5 now page 6, etc.</p>
+
+<p>If $page_number is -1, the new page is inserted as the second-to-last page; if $page_number is 0, the new page is inserted as the last page.</p>
+
+<p><b>Example:</b></p>
+
+<pre><code>    $pdf = PDF::Builder-&gt;new();
+
+    # Add a page.  This becomes page 1.
+    $page = $pdf-&gt;page();
+
+    # Add a new first page.  $page becomes page 2.
+    $another_page = $pdf-&gt;page(1);</code></pre>
+
+</blockquote>
+
+<h2 id="open_page-openpage">open_page, openpage</h2>
+
+<pre><code>    $page = $pdf-&gt;open_page($page_number)</code></pre>
+
+<blockquote>
+
+<p>Returns the <a href="../PDF/Builder/Page.html">PDF::Builder::Page</a> object of page $page_number. This is similar to <code>$page = $pdf-&gt;page()</code>, except that <code>$page</code> is <i>not</i> a new, empty page; but contains the contents of that existing page.</p>
+
+<p>If <code>$page_number</code> is 0, -1, or unspecified, it will return the last page in the document. If the requested page is out of range, the <code>$page</code> returned will be undefined.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    $pdf  = PDF::Builder-&gt;open(&#39;our/99page.pdf&#39;);
+    $page = $pdf-&gt;open_page(1);   # returns the first page
+    $page = $pdf-&gt;open_page(99);  # returns the last page
+    $page = $pdf-&gt;open_page(-1);  # returns the last page
+    $page = $pdf-&gt;open_page(999); # returns undef
+    $page = $pdf-&gt;open_page(0);   # returns the last page
+    $page = $pdf-&gt;open_page();    # returns the last page</code></pre>
+
+<blockquote>
+
+<p><b>Alternate name:</b> <code>openpage</code></p>
+
+<p>This is the older name; it is kept for compatibility until after June 2023 (deprecated, as previously announced).</p>
+
+</blockquote>
+
+<h2 id="import_page-importpage">import_page, importpage</h2>
+
+<pre><code>    $page = $pdf-&gt;import_page($source_pdf)
+
+    $page = $pdf-&gt;import_page($source_pdf, $source_page_number)
+
+    $page = $pdf-&gt;import_page($source_pdf, $source_page_number, $target_page_number)
+
+    $page = $pdf-&gt;import_page($source_pdf, $source_page_number, $target_page_object)</code></pre>
+
+<blockquote>
+
+<p>Imports a page from $source_pdf and adds it to the specified position in $pdf.</p>
+
+<p>If the <code>$source_page_number</code> is omitted, 0, or -1; the last page of the source is imported. If the <code>$target_page_number</code> is omitted, 0, or -1; the imported page will be placed as the new last page of the target (<code>$pdf</code>). Otherwise, as with the <code>page()</code> method, the page will be inserted before an existing page of that number.</p>
+
+<p><b>Note:</b> If you pass a page <i>object</i> instead of a page <i>number</i> for <code>$target_page_number</code>, the contents of the page will be <b>merged</b> into the existing page.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    my $pdf = PDF::Builder-&gt;new();
+    my $source = PDF::Builder-&gt;open(&#39;source.pdf&#39;);
+
+    # Add page 2 from the old PDF as page 1 of the new PDF
+    my $page = $pdf-&gt;import_page($source, 2);
+
+    $pdf-&gt;saveas(&#39;sample.pdf&#39;);</code></pre>
+
+<blockquote>
+
+<p><b>Note:</b> You can only import a page from an existing PDF file.</p>
+
+<p><b>Alternate name:</b> importpage</p>
+
+<p>This name is still valid in PDF::API2, so it is included here for compatibility.</p>
+
+</blockquote>
+
+<h2 id="embed_page-importPageIntoForm">embed_page, importPageIntoForm</h2>
+
+<pre><code>    $xoform = $pdf-&gt;embed_page($source_pdf, $source_page_number)</code></pre>
+
+<blockquote>
+
+<p>Returns a Form XObject created by extracting the specified page from <code>$source_pdf</code>.</p>
+
+<p>This is useful if you want to transpose the imported page somewhat differently onto a page (e.g. two-up, four-up, etc.).</p>
+
+<p>If <code>$source_page_number</code> is 0 or -1, it will return the last page in the document. The <b>default</b> value for the <code>$source_page_number</code> is 0 (return last page).</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    # take page 2 of source.pdf and add to empty doc sample.pdf at half size
+    # note that sample.pdf could be an existing document!
+    #
+    my $pdf = PDF::Builder-&gt;new();                      # so far, empty document
+    my $source = PDF::Builder-&gt;open(&#39;source.pdf&#39;);        # content to copy over
+    my $page = $pdf-&gt;page();                      # place to be actually updated
+
+    # Import Page 2 from the source PDF
+    my $xo = $pdf-&gt;embed_page($source, 2);
+
+    # Add it to the new PDF&#39;s first page at 1/2 scale
+    my ($x, $y) = (0, 0);
+    $page-&gt;object($xo, $x, $y, 0.5);
+
+    $pdf-&gt;save(&#39;sample.pdf&#39;);</code></pre>
+
+<blockquote>
+
+<p><b>Note:</b> You can only import a page from an existing PDF file.</p>
+
+<p><b>Alternate name:</b> <code>importPageIntoForm</code></p>
+
+<p>This is the older name; it is kept for compatibility.</p>
+
+</blockquote>
+
+<h2 id="page_count-pages">page_count, pages</h2>
+
+<pre><code>    $count = $pdf-&gt;page_count()</code></pre>
+
+<blockquote>
+
+<p>Returns the number of pages in the document.</p>
+
+<p><b>Alternate name:</b> <code>pages</code></p>
+
+<p>This is the old name; it is kept for compatibility.</p>
+
+</blockquote>
+
+<h2 id="page_labels-pageLabel">page_labels, pageLabel</h2>
+
+<pre><code>    $pdf-&gt;page_labels($page_number, %opts)</code></pre>
+
+<blockquote>
+
+<p>Sets page label numbering format, for the PDF Reader&#39;s page-selection slider thumb (<i>not</i> the outline/bookmarks). At this time, there is no method to automatically synchronize a page&#39;s label with the outline/bookmarks, or to somewhere on the printed page. Depending on the PDF Reader you are using, this formatted page label <i>may</i> show up in the reader control area as the current page number.</p>
+
+<p><b>CAUTIONS:</b></p>
+
+</blockquote>
+
+<ol>
+
+<li><p>The given page index started at 0 for the old method (<code>pageLabel()</code>), which is the internal PDF array index, while for the new method (<code>page_labels()</code>) it starts with 1, the visible page number! Don&#39;t get confused.</p>
+
+</li>
+<li><p>Options for the old method (<code>pageLabel</code>) were a hashref, while for the new method (<code>page_labels</code>) it is a hash. This permits pageLabel() to accept <i>multiple</i> page number schemes in one call, rather than one per call as per page_labels().</p>
+
+</li>
+<li><p>Many PDF readers do not support page labels; they simply (at most) label the sliding thumb with the physical page number. <b>Adobe Acrobat Reader</b> (free version) appears to have a bug in some versions, where if the only page label is &#39;decimal&#39; (the default), it labels the thumb as though no page labels were defined (&quot;Page <i>m</i> of <i>n</i>&quot;). You can get around this problem by using an explicit <b>start</b> option value, e.g., <code>&#39;start&#39; =&gt; 1</code>. However, for your convenience, the <b>start</b> option now defaults to 1.</p>
+
+</li>
+</ol>
+
+<pre><code>    # Generate a 30-page PDF
+    my $pdf = PDF::Builder-&gt;new();
+    $pdf-&gt;page() for 1..30;
+
+    # Number pages i to v, 1 to 20, and A-1 to A-5, respectively
+    $pdf-&gt;page_labels(1, &#39;style&#39; =&gt; &#39;roman&#39;);
+    $pdf-&gt;page_labels(6, &#39;style&#39; =&gt; &#39;decimal&#39;);
+    $pdf-&gt;page_labels(26, &#39;style&#39; =&gt; &#39;decimal&#39;, &#39;prefix&#39; =&gt; &#39;A-&#39;);
+
+    or...
+
+    $pdf-&gt;pageLabel(0,  { style =&gt; &#39;roman&#39; },
+                    5,  { style =&gt; &#39;decimal&#39; },
+                    25, { style =&gt; &#39;decimal&#39;, prefix =&gt; &#39;A-&#39; });
+
+    $pdf-&gt;save(&#39;sample.pdf&#39;);</code></pre>
+
+<p><b>Supported Options:</b></p>
+
+<dl>
+
+<dt>style</dt>
+<dd>
+
+<p><b>Roman</b> (I,II,III,...), <b>roman</b> (i,ii,iii,...), <b>decimal</b> (1,2,3,...), <b>Alpha</b> (A,B,C,...), <b>alpha</b> (a,b,c,...), or <b>nocounter</b>. This is the styling of the counter part of the label (unless <code>nocounter</code>, in which case there is no counter output). Note that <b>arabic</b> is permitted as a synonym for <b>decimal</b>.</p>
+
+</dd>
+<dt>start</dt>
+<dd>
+
+<p>(Re)start numbering the <i>counter</i> at given page number (this is a decimal integer, <i>not</i> the styled counter). By default it starts at 1, and <b>resets</b> to 1 at each call to <code>page_labels()</code>! You need to explicitly give <code>start</code> if you want to <i>continue</i> counting at the current page number when you call <code>page_labels()</code>, whether or not you are changing the format.</p>
+
+<p>Also note that the counter starts at physical page <b>1</b>, while the page <code>$index</code> number in the <code>page_labels()</code> call (as well as the PDF PageLabels dictionary) starts at logical page (index) <b>0</b>.</p>
+
+</dd>
+<dt>prefix</dt>
+<dd>
+
+<p>Text prefix for numbering, such as an Appendix letter <b>B-</b>. If <code>style</code> is <i>nocounter</i>, just this text is used, otherwise a styled counter will be appended. If <code>style</code> is omitted, remember that it will default to a decimal number, which will be appended to the prefix.</p>
+
+<p>According to the Adobe/ISO PDF specification, a prefix of &#39;Content&#39; has a special meaning, in that any /S counter is ignored and only that text is used. However, this appears to be ignored (use a style of <i>nocounter</i> to suppress the counter).</p>
+
+</dd>
+</dl>
+
+<blockquote>
+
+<p><b>Dotted inserted page numbers</b></p>
+
+<p>To easily insert a range of pages, e.g., 3 pages between existing pages 37 and 38, use a <code>prefix</code> of &#39;37.&#39; and decimal numbering starting (<code>start</code>) at 1 or a specified point. This would produce pages 37.1, 37.2, and 37.3. To put leading 0&#39;s on the numbers, if you find that you later need to insert additional pages between those, e.g., page 37.05 between 37 and 37.1, use a <code>prefix</code> of &#39;37.0&#39; and <code>start</code> at 5.</p>
+
+<p>Just remember that only the (rightmost) <i>counter</i>, which begins at the <code>start</code> value, is incremented (and formatted) by the PDF Reader. Everything else (the <code>prefix</code>) is a constant string. At worst, you might have to define a page label for each individual page.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    # Start with lowercase Roman Numerals at the 1st page, starting with i (1)
+    $pdf-&gt;page_labels(1, 
+        &#39;style&#39; =&gt; &#39;roman&#39;,
+    );
+
+    or,
+
+    $pdf-&gt;pageLabel(0, 
+        { &#39;style&#39; =&gt; &#39;roman&#39; },
+    );
+
+    # Switch to Arabic (decimal) at the 5th page, starting with 1
+    $pdf-&gt;page_labels(5, 
+        &#39;style&#39; =&gt; &#39;decimal&#39;,
+    );
+
+    or, 
+
+    $pdf-&gt;pageLabel(4, 
+        { &#39;style&#39; =&gt; &#39;decimal&#39; },
+    );
+
+    # invalid style at the 25th page, should just continue 
+    # with decimal at the current counter
+    $pdf-&gt;page_labels(25, 
+        &#39;style&#39; =&gt; &#39;raman_noodles&#39;,  # fail over to decimal
+           # note that older versions of PDF::API2 may see the &#39;r&#39; and 
+           #   treat it as &#39;roman&#39;
+        &#39;start&#39; =&gt; 25,  # necessary, otherwise would restart at 1
+    );
+
+    # No page label at the 31st and 32nd pages. Note that this could be
+    # confusing to the person viewing the PDF, but may be appropriate if
+    # the page itself has no numbering.
+    $pdf-&gt;page_labels(31, 
+        &#39;style&#39; =&gt; &#39;nocounter&#39;,
+    );
+
+    # Numbering for Appendix A at the 33rd page, A-1, A-2,...
+    $pdf-&gt;page_labels(33, 
+        &#39;start&#39; =&gt; 1,  # unnecessary
+        &#39;prefix&#39; =&gt; &#39;A-&#39;
+    );
+
+    # Numbering for Appendix B at the 37th page, B-1, B-2,...
+    $pdf-&gt;page_labels(37, 
+        &#39;prefix&#39; =&gt; &#39;B-&#39;
+    );
+
+    # Numbering for the Index at the 41st page, Index I, Index II,...
+    $pdf-&gt;page_labels(41, 
+        &#39;style&#39; =&gt; &#39;Roman&#39;,
+        &#39;start&#39; =&gt; 1,  # unnecessary
+        &#39;prefix&#39; =&gt; &#39;Index &#39;  # note trailing space
+    );
+
+    # Unnumbered &#39;Index&#39; at the 45th page, Index, Index,...
+    $pdf-&gt;page_labels(45, 
+        &#39;style&#39; =&gt; &#39;nocounter&#39;,
+        &#39;prefix&#39; =&gt; &#39;Index &#39;
+    );</code></pre>
+
+<blockquote>
+
+<p><b>Alternate name:</b> <code>pageLabel</code></p>
+
+<p>This old method name is retained for compatibility with old user code. Note that with <code>pageLabel</code>, you need to make the &quot;options&quot; list an anonymous hash by placing <b>{ }</b> around the entire list, even if it has only one item in it. Also remember that the page number (index) for <code>pageLabel</code> starts at 0 (same as the PDF page index), rather than 1 (as in <code>page_labels</code>). Finally, pageLabel() still permits you to define multiple page numbering schemes in one call.</p>
+
+</blockquote>
+
+<h2 id="userunit">userunit</h2>
+
+<pre><code>    $pdf-&gt;userunit($value)</code></pre>
+
+<blockquote>
+
+<p>Sets the global UserUnit, defining the scale factor to multiply any size or coordinate by. For example, <code>userunit(72)</code> results in a User Unit of 72 points, or 1 inch.</p>
+
+<p>See <a href="../PDF/Builder/Docs.html#User-Units">&quot;User Units&quot; in PDF::Builder::Docs</a> for more information.</p>
+
+</blockquote>
+
+<h2 id="mediabox">mediabox</h2>
+
+<pre><code>    $pdf-&gt;mediabox($name)
+
+    $pdf-&gt;mediabox($name, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $pdf-&gt;mediabox($w,$h)
+
+    $pdf-&gt;mediabox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;mediabox()</code></pre>
+
+<blockquote>
+
+<p>Sets (or gets) the global MediaBox, defining the width and height (or by corner coordinates, or by standard name) of the output page itself, such as the physical paper size.</p>
+
+<p>See <a href="../PDF/Builder/Docs.html#Media-Box">&quot;Media Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h2 id="cropbox">cropbox</h2>
+
+<pre><code>    $pdf-&gt;cropbox($name)
+
+    $pdf-&gt;cropbox($name, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $pdf-&gt;cropbox($w,$h)
+
+    $pdf-&gt;cropbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;cropbox()</code></pre>
+
+<blockquote>
+
+<p>Sets (or gets) the global CropBox. This will define the media size to which the output will later be clipped.</p>
+
+<p>See <a href="../PDF/Builder/Docs.html#Crop-Box">&quot;Crop Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h2 id="bleedbox">bleedbox</h2>
+
+<pre><code>    $pdf-&gt;bleedbox($name)
+
+    $pdf-&gt;bleedbox($name, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $pdf-&gt;bleedbox($w,$h)
+
+    $pdf-&gt;bleedbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;bleedbox()</code></pre>
+
+<blockquote>
+
+<p>Sets (or gets) the global BleedBox. This is typically used for hard copy printing where you want ink to go to the edge of the cut paper.</p>
+
+<p>See <a href="../PDF/Builder/Docs.html#Bleed-Box">&quot;Bleed Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h2 id="trimbox">trimbox</h2>
+
+<pre><code>    $pdf-&gt;trimbox($name)
+
+    $pdf-&gt;trimbox($name, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $pdf-&gt;trimbox($w,$h)
+
+    $pdf-&gt;trimbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;trimbox()</code></pre>
+
+<blockquote>
+
+<p>Sets (or gets) the global TrimBox. This is supposed to be the actual dimensions of the finished page (after trimming of the paper).</p>
+
+<p>See <a href="../PDF/Builder/Docs.html#Trim-Box">&quot;Trim Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h2 id="artbox">artbox</h2>
+
+<pre><code>    $pdf-&gt;artbox($name)
+
+    $pdf-&gt;artbox($name, &#39;orient&#39; =&gt; &#39;orientation&#39;)
+
+    $pdf-&gt;artbox($w,$h)
+
+    $pdf-&gt;artbox($llx,$lly, $urx,$ury)
+
+    ($llx,$lly, $urx,$ury) = $pdf-&gt;artbox()</code></pre>
+
+<blockquote>
+
+<p>Sets (or gets) the global ArtBox. This is supposed to define &quot;the extent of the page&#39;s <i>meaningful</i> content&quot;. What is considered &quot;meaningful&quot; is up to the author of the page, but would usually exclude &quot;decorative&quot; graphics and such; and possibly titles, headers, footers, and page numbers.</p>
+
+<p>See <a href="../PDF/Builder/Docs.html#Art-Box">&quot;Art Box&quot; in PDF::Builder::Docs</a> for more information. The method always returns the current bounds (after any set operation).</p>
+
+</blockquote>
+
+<h1 id="FONT-METHODS">FONT METHODS</h1>
+
+<h2 id="Embedding-of-Fonts">Embedding of Fonts</h2>
+
+<p><b>CAUTION:</b> Some font routines (currently only <code>ttfont()</code>) automatically embed font definitions for the purpose of improving portability of PDF files. Note that font copyright and licensing terms vary by font provider, and some may prohibit embedding of their fonts, either entirely, or allowing only the subset of glyphs actually used in the document. You should be aware of the terms, and use the <code>embed</code> and <code>nosubset</code> flags as appropriate. The PDF::Builder font routines currently have no means to automatically detect any embedding limitations for a given font, and cannot default their behavior accordingly!</p>
+
+<h2 id="Font-related-Methods">Font-related Methods</h2>
+
+<h3 id="corefont">corefont</h3>
+
+<pre><code>    $font = $pdf-&gt;corefont($fontname, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new Adobe core font object. For details, including supported <code>%opts</code>, see <a href="../PDF/Builder/Resource/Font/CoreFont.html">PDF::Builder::Resource::Font::CoreFont</a>. Note that this is an Adobe-standard corefont <i>name</i>, and not a file name.</p>
+
+<p>See also <a href="../PDF/Builder/Docs.html#Core-Fonts">&quot;Core Fonts&quot; in PDF::Builder::Docs</a> for additional information, including Notes and Limitations.</p>
+
+</blockquote>
+
+<h3 id="psfont">psfont</h3>
+
+<pre><code>    $font = $pdf-&gt;psfont($ps_file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new Adobe Type1 (&quot;PostScript&quot;, &quot;T1&quot;) font object. For details, including supported <code>%opts</code>, see <a href="../PDF/Builder/Resource/Font/Postscript.html">PDF::Builder::Resource::Font::Postscript</a>.</p>
+
+<p>See also <a href="../PDF/Builder/Docs.html#PS-Fonts">&quot;PS Fonts&quot; in PDF::Builder::Docs</a> for additional information, including Notes and Limitations.</p>
+
+</blockquote>
+
+<h3 id="ttfont">ttfont</h3>
+
+<pre><code>    $font = $pdf-&gt;ttfont($ttf_file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new TrueType (or OpenType) font object. For details, including supported <code>%opts</code>, see <a href="../PDF/Builder/Resource/CIDFont/TrueType.html">PDF::Builder::Resource::CIDFont::TrueType</a>.</p>
+
+<p>See also <a href="../PDF/Builder/Docs.html#TrueType-Fonts">&quot;TrueType Fonts&quot; in PDF::Builder::Docs</a> for additional information, including Notes and Limitations.</p>
+
+</blockquote>
+
+<h3 id="bdfont">bdfont</h3>
+
+<pre><code>    $font = $pdf-&gt;bdfont($bdf_file, @opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new BDF (bitmapped distribution format) font object, based on the specified Adobe BDF file. These are very low resolution fonts that appear to have come off a dot-matrix printer, and should only be used for decorative or novelty purposes.</p>
+
+<p>See also <a href="../PDF/Builder/Resource/Font/BdFont.html">PDF::Builder::Resource::Font::BdFont</a></p>
+
+</blockquote>
+
+<h3 id="cjkfont">cjkfont</h3>
+
+<pre><code>    $font = $pdf-&gt;cjkfont($cjkname, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new CJK font object. These are TrueType-like fonts for East Asian languages (Chinese, Japanese, Korean). For details, including supported <code>%opts</code>, see <a href="../PDF/Builder/Resource/CIDFont/CJKFont.html">PDF::Builder::Resource::CIDFont::CJKFont</a>, as well as <a href="../PDF/Builder/Docs.html#CJK-Fonts">&quot;CJK Fonts&quot; in PDF::Builder::Docs</a>.</p>
+
+<p><b>NOTE:</b> <code>cjkfont</code> is quite old and is not well supported. We recommend that you try using <code>ttfont</code> (or another font routine, if not TTF/OTF) with the appropriate CJK font file. Most appear to be .ttf or .otf format. PDFs created using <code>cjkfont</code> may not be fully portable, and support for <code>cjkfont</code> <i>may</i> be dropped in a future release. We would appreciate hearing from you if you are successfully using <code>cjkfont</code>, and are unable to use <code>ttfont</code> instead.</p>
+
+<p>Among other things, <code>cjkfont</code> selections are limited, as they require CMAP files; they may or may not subset correctly; and they can not be used as the base for synthetic fonts.</p>
+
+</blockquote>
+
+<h3 id="font">font</h3>
+
+<pre><code>    $font = $pdf-&gt;font($name, %opts)</code></pre>
+
+<blockquote>
+
+<p>A convenience function to add a font to the PDF without having to specify the format. Returns the font object, to be used by <a href="../PDF/Builder/Content.html">PDF::Builder::Content</a>.</p>
+
+<p>The font <code>$name</code> is either the name of one of the standard 14 fonts (<a href="../PDF/Builder/Resource/Font/CoreFont.html#STANDARD-FONTS">&quot;STANDARD FONTS&quot; in PDF::Builder::Resource::Font::CoreFont</a>), such as <code>Helvetica</code>, a <code>Font::TTF::Font</code> object, or the path to a font file (including an extension/filetype). There are 15 additional core fonts on a Windows system. Note that the exact name of a core font needs to be given. The file extension (if path given) determines what type of font file it is.</p>
+
+</blockquote>
+
+<pre><code>    my $pdf = PDF::Builder-&gt;new();
+    my $font1 = $pdf-&gt;font(&#39;Helvetica-Bold&#39;);
+    my $font2 = $pdf-&gt;font(&#39;/path/to/ComicSans.ttf&#39;);
+    my $page = $pdf-&gt;page();
+    my $content = $page-&gt;text();
+
+    $content-&gt;position(1 * 72, 9 * 72);
+    $content-&gt;font($font1, 24);
+    $content-&gt;text(&#39;Hello, World!&#39;);
+
+    $content-&gt;position(0, -36);
+    $content-&gt;font($font2, 12);
+    $content-&gt;text(&#39;This is some sample text.&#39;);
+
+    $pdf-&gt;saveas(&#39;sample.pdf&#39;);</code></pre>
+
+<blockquote>
+
+<p>The path can be omitted if the font file is in the current directory or one of the directories returned by <code>font_path</code>.</p>
+
+<p>Core, TrueType (ttf/otf), Adobe PostScript Type 1 (pfa/pfb/t1), and Adobe Glyph Bitmap Distribution Format (bdf) fonts are supported.</p>
+
+</blockquote>
+
+<p>The following options (<code>%opts</code>) are available:</p>
+
+<dl>
+
+<dt>format</dt>
+<dd>
+
+<p>The font format is normally detected automatically based on the file&#39;s extension (if one is given, as in non-core fonts). If you&#39;re using a font with an atypical extension, you can set <code>format</code> to one of <code>truetype</code> (TrueType or OpenType), <code>type1</code> (PostScript Type 1), or <code>bitmap</code> (Adobe Bitmap). There is no <code>format</code> entry for Core fonts, as the name must be an exact match.</p>
+
+</dd>
+<dt>(other options)</dt>
+<dd>
+
+<p>The <code>%opts</code> entries are passed on to the appropriate font format routine (<code>corefont()</code>, <code>ttfont()</code>, etc.), so they can be used here. These include &#39;encode&#39;, &#39;pdfname&#39;, &#39;pfmfile&#39;, &#39;dokern&#39;, etc. See the appropriate font routine for a full list of the supported options.</p>
+
+</dd>
+</dl>
+
+<h3 id="standard_fonts">standard_fonts</h3>
+
+<pre><code>    @names = $pdf-&gt;standard_fonts($flag)
+ </code></pre>
+
+<p>Returns the names of the 14 standard (built-in) &quot;core&quot; fonts, if <code>$flag</code> is omitted or &quot;false&quot; (0). See <a href="../PDF/API2/Resource/Font/CoreFont.html">PDF::API2::Resource::Font::CoreFont</a> for details. <b>Note</b> that these do <i>not</i> include the 14 additional Windows &quot;core&quot; fonts extension, unless <code>$flag</code> is given with a value of &quot;true&quot; (1).</p>
+
+<h3 id="is_standard_font">is_standard_font</h3>
+
+<pre><code>    $boolean = PDF::Builder-&gt;is_standard_font($name);
+ 
+    $boolean = PDF::Builder-&gt;is_standard_font($name, $flag);
+ </code></pre>
+
+<p>Returns true if <code>$name</code> is an exact, case-sensitive match for one of the standard font names.</p>
+
+<p><b>Note</b> that these do <i>not</i> include the 14 additional Windows &quot;core&quot; fonts extension, unless <code>$flag</code> is given with a value of &quot;true&quot; (1), in which case, <code>$name</code> will also be checked against the additional font names.</p>
+
+<h3 id="font_path">font_path</h3>
+
+<pre><code>    @directories = PDF::Builder-&gt;font_path()</code></pre>
+
+<blockquote>
+
+<p>Return the list of directories that will be searched (in order) in addition to the current directory when you add a font to a PDF without including the full path to the font file.</p>
+
+</blockquote>
+
+<h3 id="add_to_font_path-addFontDirs">add_to_font_path, addFontDirs</h3>
+
+<pre><code>    @directories = PDF::Builder::add_to_font_path(&#39;/my/fonts&#39;, &#39;/path/to/fonts&#39;, ...)</code></pre>
+
+<blockquote>
+
+<p>Adds one or more directories to the list of paths to be searched for font files.</p>
+
+<p>Returns the font search path.</p>
+
+<p><b>Alternate name:</b> <code>addFontDirs</code></p>
+
+<p>Prior to recent changes to PDF::API2, this method was addFontDirs(). This method is still available, but may be deprecated some time in the future.</p>
+
+</blockquote>
+
+<h3 id="set_font_path">set_font_path</h3>
+
+<pre><code>    @directories = PDF::Builder-&gt;set_font_path(&#39;/my/fonts&#39;, &#39;/path/to/fonts&#39;);</code></pre>
+
+<blockquote>
+
+<p>Replace the existing font search path. This should only be necessary if you need to remove a directory from the path for some reason, or if you need to reorder the list.</p>
+
+<p>Returns the font search path.</p>
+
+</blockquote>
+
+<h3 id="synfont-synthetic_font">synfont, synthetic_font</h3>
+
+<pre><code>    $font = $pdf-&gt;synfont($basefont, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new synthetic font object. These are modifications to a core (or PS/T1 or TTF/OTF) font, where the font may be replaced by a Type1 or Type3 PostScript font. This does not appear to work with CJK fonts (created with <code>cjkfont</code> method). For details, see <a href="../PDF/Builder/Docs.html#Synthetic-Fonts">&quot;Synthetic Fonts&quot; in PDF::Builder::Docs</a>.</p>
+
+<p>See also <a href="../PDF/Builder/Resource/Font/SynFont.html">PDF::Builder::Resource::Font::SynFont</a></p>
+
+<p><b>Alternate name:</b> <code>synthetic_font</code></p>
+
+<p>Prior to recent PDF::API2 changes, the routine to create modified fonts was &quot;synfont&quot;. PDF::API2 has renamed it to &quot;synthetic_font&quot;, which I don&#39;t like, but to maintain compatibility, &quot;synthetic_font&quot; is available as an alias.</p>
+
+<p>There are also some minor option differences (incompatibilities) discussed in <code>SynFont</code>, including the value of &#39;bold&#39; between the two entry points.</p>
+
+</blockquote>
+
+<h3 id="unifont">unifont</h3>
+
+<pre><code>    $font = $pdf-&gt;unifont(@fontspecs, %opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new uni-font object, based on the specified fonts and options.</p>
+
+<p><b>BEWARE:</b> This is not a true PDF-object, but a virtual/abstract font definition!</p>
+
+<p>See also <a href="../PDF/Builder/Resource/UniFont.html">PDF::Builder::Resource::UniFont</a>.</p>
+
+</blockquote>
+
+<h2 id="Font-Manager-methods">Font Manager methods</h2>
+
+<p>The Font Manager is automatically initialized.</p>
+
+<h3 id="font_settings">font_settings</h3>
+
+<pre><code>    @list = $pdf-&gt;font_settings()  # Get
+
+    $pdf-&gt;font_settings(%info)  # Set</code></pre>
+
+<blockquote>
+
+<p>Change one or more default settings. See <a href="../PDF/Builder/FontManager.html">PDF::Builder::FontManager</a>/font_settings for details.</p>
+
+</blockquote>
+
+<h3 id="add_font_path">add_font_path</h3>
+
+<pre><code>    $rc = $pdf-&gt;add_font_path(&quot;a directory path&quot;, %opts)</code></pre>
+
+<blockquote>
+
+<p>Add a search path for Font Manager font entries. See <a href="../PDF/Builder/FontManager.html">PDF::Builder::FontManager</a>/add_font_path for details.</p>
+
+</blockquote>
+
+<h3 id="add_font">add_font</h3>
+
+<pre><code>    $rc = $pdf-&gt;add_font(%info)</code></pre>
+
+<blockquote>
+
+<p>Add a font (face) definition to the Font Manager list. See <a href="../PDF/Builder/FontManager.html">PDF::Builder::FontManager</a>/add_font for details.</p>
+
+</blockquote>
+
+<h3 id="get_font">get_font</h3>
+
+<pre><code>    @current = $pdf-&gt;get_font()  # Get
+
+    $font = $pdf-&gt;get_font(%info)  # Set</code></pre>
+
+<blockquote>
+
+<p>Retrieve a ready-to-use font, or find out what the current one is. See <a href="../PDF/Builder/FontManager.html">PDF::Builder::FontManager</a>/get_font for details.</p>
+
+</blockquote>
+
+<h3 id="get_external_font">get_external_font</h3>
+
+<pre><code>    $rc = $pdf-&gt;get_external_font()</code></pre>
+
+<blockquote>
+
+<p>See if there is already a predefined (opened) font that the user wants to use. See <a href="../PDF/Builder/FontManager.html">PDF::Builder::FontManager</a>/get_external_font for details.</p>
+
+</blockquote>
+
+<h3 id="dump_font_tables">dump_font_tables</h3>
+
+<pre><code>    $pdf-&gt;dump_font_tables()</code></pre>
+
+<blockquote>
+
+<p>Dump all known font information to STDOUT. See <a href="../PDF/Builder/FontManager.html">PDF::Builder::FontManager</a>/dump_font_tables for details.</p>
+
+</blockquote>
+
+<h1 id="IMAGE-METHODS">IMAGE METHODS</h1>
+
+<h2 id="image">image</h2>
+
+<pre><code>    $object = $pdf-&gt;image($file, %opts);</code></pre>
+
+<blockquote>
+
+<p>A convenience function to attempt to determine the image type, and import a file of that type and return an object that can be placed as part of a page&#39;s content:</p>
+
+</blockquote>
+
+<pre><code>    my $pdf = PDF::Builder-&gt;new();
+    my $page = $pdf-&gt;page();
+
+    my $image = $pdf-&gt;image(&#39;/path/to/image.jpg&#39;);
+    $page-&gt;object($image, 100, 100);
+
+    $pdf-&gt;save(&#39;sample.pdf&#39;);</code></pre>
+
+<blockquote>
+
+<p><code>$file</code> may be either a file name, a filehandle, or a <a href="../PDF/Builder/Resource/XObject/Image/GD.html">PDF::Builder::Resource::XObject::Image::GD</a> object.</p>
+
+<p><b>Caution:</b> Do not confuse this <code>image</code> ($pdf-&gt;) with the image method found in the graphics (gfx) class ($gfx-&gt;), used to actually <i>place</i> a read-in or decoded image on the page!</p>
+
+<p>See <a href="../PDF/Builder/Content.html#image">&quot;image&quot; in PDF::Builder::Content</a> and <a href="../PDF/Builder/Content.html#object">&quot;object&quot; in PDF::Builder::Content</a> for details about placing images on a page once they&#39;re imported.</p>
+
+<p>The image format is normally detected automatically based on the file&#39;s extension (.gif, .png, .tif/.tiff, .jpg/.jpeg, .pnm/.pbm/.pgm/.ppm). If passed a filehandle, image formats GIF, JPEG, PNM, and PNG will be detected based on the file&#39;s header. Unfortunately, at this time, other image formats (TIFF and GD) cannot be automatically detected. (TIFF <i>could</i> be, except that <code>image_tiff()</code> cannot use a filehandle anyway as input when using the libtiff library, which is highly recommended.)</p>
+
+<p>If the file has an atypical extension or the filehandle is for a different kind of image, you can set the <code>format</code> option to one of the supported types: <code>gif</code>, <code>jpeg</code>, <code>png</code>, <code>pnm</code>, or <code>tiff</code>.</p>
+
+<p><b>Note:</b> PNG images that include an alpha (transparency) channel go through a relatively slow process of splitting the image into separate RGB and alpha components as is required by images in PDFs. If you&#39;re having performance issues, install Image::PNG::Libpng to speed up this process by an order of magnitude; either module will be used automatically if available. See the <code>image_png</code> method for details.</p>
+
+<p><b>Note:</b> TIFF image processing is very slow if using the pure Perl decoder. We highly recommend using the Graphics::TIFF library to improve performance. See the <code>image_tiff</code> method for details.</p>
+
+</blockquote>
+
+<h2 id="image_jpeg">image_jpeg</h2>
+
+<pre><code>    $jpeg = $pdf-&gt;image_jpeg($file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Imports and returns a new JPEG image object. <code>$file</code> may be either a filename or a filehandle.</p>
+
+<p>See <a href="../PDF/Builder/Resource/XObject/Image/JPEG.html">PDF::Builder::Resource::XObject::Image::JPEG</a> for additional information and <code>examples/Content.pl</code> for some examples of placing an image on a page.</p>
+
+</blockquote>
+
+<h2 id="image_tiff">image_tiff</h2>
+
+<pre><code>    $tiff = $pdf-&gt;image_tiff($file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Imports and returns a new TIFF image object. <code>$file</code> may be either a filename or a filehandle. For details, see <a href="../PDF/Builder/Docs.html#TIFF-Images">&quot;TIFF Images&quot; in PDF::Builder::Docs</a>.</p>
+
+<p>See <a href="../PDF/Builder/Resource/XObject/Image/TIFF.html">PDF::Builder::Resource::XObject::Image::TIFF</a> and <a href="../PDF/Builder/Resource/XObject/Image/TIFF_GT.html">PDF::Builder::Resource::XObject::Image::TIFF_GT</a> for additional information and <code>examples/Content.pl</code> for some examples of placing an image on a page (JPEG, but the principle is the same). There is an optional TIFF library (TIFF_GT) described, that gives more capability than the default one. See the TIFF_GT documentation for further information on using this library, particularly when passing a <i>filehandle</i> for the file.</p>
+
+</blockquote>
+
+<h3 id="LA_GT">LA_GT</h3>
+
+<pre><code>    $rc = $pdf-&gt;LA_GT()</code></pre>
+
+<blockquote>
+
+<p>Returns 1 if the library name (package) Graphics::TIFF is installed, and 0 otherwise. For this optional library, this call can be used to know if it is safe to use certain functions. For example:</p>
+
+</blockquote>
+
+<pre><code>    if ($pdf-&gt;LA_GT() {
+        # is installed and usable
+    } else {
+        # not available. you will be running the old, pure PERL code
+    }</code></pre>
+
+<h2 id="image_pnm">image_pnm</h2>
+
+<pre><code>    $pnm = $pdf-&gt;image_pnm($file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Imports and returns a new PNM image object. <code>$file</code> may be either a filename or a filehandle.</p>
+
+<p>See <a href="../PDF/Builder/Resource/XObject/Image/PNM.html">PDF::Builder::Resource::XObject::Image::PNM</a> for additional information and <code>examples/Content.pl</code> for some examples of placing an image on a page (JPEG, but the principle is the same).</p>
+
+</blockquote>
+
+<h2 id="image_png">image_png</h2>
+
+<pre><code>    $png = $pdf-&gt;image_png($file, %opts) </code></pre>
+
+<blockquote>
+
+<p>Imports and returns a new PNG image object. <code>$file</code> may be either a filename or a filehandle. For details, see <a href="../PDF/Builder/Docs.html#PNG-Images">&quot;PNG Images&quot; in PDF::Builder::Docs</a>.</p>
+
+<p>See <a href="../PDF/Builder/Resource/XObject/Image/PNG.html">PDF::Builder::Resource::XObject::Image::PNG</a> and <a href="../PDF/Builder/Resource/XObject/Image/PNG_IPL.html">PDF::Builder::Resource::XObject::Image::PNG_IPL</a> for additional information and <code>examples/Content.pl</code> for some examples of placing an image on a page (JPEG, but the principle is the same).</p>
+
+<p>There is an optional PNG library (PNG_IPL) described, that gives more capability than the default one. See the PNG_IPL documentation for further information on using this library, particularly when passing a <i>filehandle</i> for the file.</p>
+
+</blockquote>
+
+<h3 id="LA_IPL">LA_IPL</h3>
+
+<pre><code>    $rc = $pdf-&gt;LA_IPL()</code></pre>
+
+<blockquote>
+
+<p>Returns 1 if the library name (package) Image::PNG::Libpng is installed, and 0 otherwise. For this optional library, this call can be used to know if it is safe to use certain functions. For example:</p>
+
+</blockquote>
+
+<pre><code>    if ($pdf-&gt;LA_IPL() {
+        # is installed and usable
+    } else {
+        # not available. don&#39;t use 16bps or interlaced PNG image files
+    }</code></pre>
+
+<h2 id="image_gif">image_gif</h2>
+
+<pre><code>    $gif = $pdf-&gt;image_gif($file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Imports and returns a new GIF image object. <code>$file</code> may be either a filename or a filehandle.</p>
+
+<p>See <a href="../PDF/Builder/Resource/XObject/Image/GIF.html">PDF::Builder::Resource::XObject::Image::GIF</a> for additional information and <code>examples/Content.pl</code> for some examples of placing an image on a page (JPEG, but the principle is the same).</p>
+
+</blockquote>
+
+<h2 id="image_svg">image_svg</h2>
+
+<pre><code>    $pnm = $pdf-&gt;image_svg($file, %opts)</code></pre>
+
+<blockquote>
+
+<p>Imports and returns a new SVG image object. <code>$file</code> may be a filename, a string, or a filehandle.</p>
+
+<p>See <a href="../PDF/Builder/Resource/XObject/Image/SVG.html">PDF::Builder::Resource::XObject::Image::SVG</a> for additional information and <code>examples/Content.pl</code> for some examples of placing an image on a page (JPEG, but the principle is the same). Note that <code>object()</code> is preferably used rather than <code>image()</code>. If <code>image</code> determines that the image object is a processed SVG array, it simply passes it on to <code>object</code>.</p>
+
+<p><b>CAUTIONS:</b> 1. If using <code>image()</code>, the final two (optional) parameters are <i>not</i> width and height, but instead the horizontal scale and vertical scale. 2. Results are unpredictable if allowing <code>x</code> and <code>y</code> positions to default to <i>Lower Left</i> corner at <code>(0,0)</code>, due to different scaling. It is best to explicitly give the <code>x</code> and <code>y</code> positions. 3. Be aware that due to different scaling, some resulting images may be much larger than expected. Account for this when setting any <code>scale</code> factor.</p>
+
+</blockquote>
+
+<h3 id="LA_SVG">LA_SVG</h3>
+
+<pre><code>    $rc = $pdf-&gt;LA_SVG()</code></pre>
+
+<blockquote>
+
+<p>Returns 1 if the library name (package) SVGPDF is installed, and 0 otherwise. For this optional library, this call can be used to know if it is safe to use certain functions. For example:</p>
+
+</blockquote>
+
+<pre><code>    if ($pdf-&gt;LA_SVG() {
+        # is installed and usable
+    } else {
+        # not available. can&#39;t use image_svg or any other SVG function
+    }</code></pre>
+
+<h2 id="image_gd">image_gd</h2>
+
+<pre><code>    $gdf = $pdf-&gt;image_gd($gd_object, %opts)</code></pre>
+
+<blockquote>
+
+<p>Imports and returns a new image object from Image::GD.</p>
+
+<p>See <a href="../PDF/Builder/Resource/XObject/Image/GD.html">PDF::Builder::Resource::XObject::Image::GD</a> for additional information and <code>examples/Content.pl</code> for some examples of placing an image on a page (JPEG, but the principle is the same).</p>
+
+</blockquote>
+
+<h1 id="COLORSPACE-METHODS">COLORSPACE METHODS</h1>
+
+<h2 id="colorspace">colorspace</h2>
+
+<pre><code>    $colorspace = $pdf-&gt;colorspace($type, @arguments)</code></pre>
+
+<blockquote>
+
+<p>Colorspaces can be added to a PDF to either specifically control the output color on a particular device (spot colors, device colors) or to save space by limiting the available colors to a defined color palette (web-safe palette, ACT file).</p>
+
+<p>Once added to the PDF, they can be used in place of regular hex codes or named colors:</p>
+
+</blockquote>
+
+<pre><code>    my $pdf = PDF::Builder-&gt;new();
+    my $page = $pdf-&gt;page();
+    my $content = $page-&gt;graphics();
+
+    # Add colorspaces for a spot color and the web-safe color palette
+    my $spot = $pdf-&gt;colorspace(&#39;spot&#39;, &#39;PANTONE Red 032 C&#39;, &#39;#EF3340&#39;);
+    my $web = $pdf-&gt;colorspace(&#39;web&#39;);
+
+    # Fill using the spot color with 100% coverage
+    $content-&gt;fill_color($spot, 1.0);
+
+    # Stroke using the first color of the web-safe palette
+    $content-&gt;stroke_color($web, 0);
+
+    # Add a rectangle to the page
+    $content-&gt;rectangle(100, 100, 200, 200);
+    $content-&gt;paint();
+
+    $pdf-&gt;save(&#39;sample.pdf&#39;);</code></pre>
+
+<blockquote>
+
+<p>The following types of colorspaces are supported</p>
+
+</blockquote>
+
+<dl>
+
+<dt>spot</dt>
+<dd>
+
+<p>Spot colors are used to instruct a device (usually a printer) to use or emulate a particular ink color (<code>$tint</code>) for parts of the document. An <code>$alt_color</code> is provided for devices (e.g. PDF viewers) that don&#39;t know how to produce the named color. It can either be an approximation of the color in RGB, CMYK, or HSV formats, or a wildly different color (e.g. 100% magenta, <code>%0F00</code>) to make it clear if the spot color isn&#39;t being used as expected.</p>
+
+</dd>
+</dl>
+
+<pre><code>    my $spot = $pdf-&gt;colorspace(&#39;spot&#39;, $tint, $alt_color);</code></pre>
+
+<dl>
+
+<dt>web</dt>
+<dd>
+
+<p>The web-safe color palette is a historical collection of colors that was used when many display devices only supported 256 colors.</p>
+
+</dd>
+</dl>
+
+<pre><code>    my $web = $pdf-&gt;colorspace(&#39;web&#39;);</code></pre>
+
+<dl>
+
+<dt>act</dt>
+<dd>
+
+<p>An Adobe Color Table (ACT) file provides a custom palette of colors that can be referenced by PDF graphics and text drawing commands.</p>
+
+</dd>
+</dl>
+
+<pre><code>    my $act = $pdf-&gt;colorspace(&#39;act&#39;, $filename);</code></pre>
+
+<dl>
+
+<dt>device</dt>
+<dd>
+
+<p>A device-specific colorspace allows for precise color output on a given device (typically a printing press), bypassing the normal color interpretation performed by raster image processors (RIPs).</p>
+
+</dd>
+</dl>
+
+<pre><code>    my $devicen = $pdf-&gt;colorspace(&#39;device&#39;, @colorspaces);</code></pre>
+
+<blockquote>
+
+<p>Device colorspaces are also needed if you want to blend spot colors:</p>
+
+</blockquote>
+
+<pre><code>    my $pdf = PDF::Builder-&gt;new();
+    my $page = $pdf-&gt;page();
+    my $content = $page-&gt;graphics();
+
+    # Create a two-color device colorspace
+    my $yellow = $pdf-&gt;colorspace(&#39;spot&#39;, &#39;Yellow&#39;, &#39;%00F0&#39;);
+    my $spot = $pdf-&gt;colorspace(&#39;spot&#39;, &#39;PANTONE Red 032 C&#39;, &#39;#EF3340&#39;);
+    my $device = $pdf-&gt;colorspace(&#39;device&#39;, $yellow, $spot);
+
+    # Fill using a blend of 25% yellow and 75% spot color
+    $content-&gt;fill_color($device, 0.25, 0.75);
+
+    # Stroke using 100% spot color
+    $content-&gt;stroke_color($device, 0, 1);
+
+    # Add a rectangle to the page
+    $content-&gt;rectangle(100, 100, 200, 200);
+    $content-&gt;paint();
+
+    $pdf-&gt;save(&#39;sample.pdf&#39;);</code></pre>
+
+<h2 id="colorspace_act">colorspace_act</h2>
+
+<pre><code>    $cs = $pdf-&gt;colorspace_act($file)</code></pre>
+
+<blockquote>
+
+<p>Returns a new colorspace object based on an Adobe Color Table file.</p>
+
+<p>See <a href="../PDF/Builder/Resource/ColorSpace/Indexed/ACTFile.html">PDF::Builder::Resource::ColorSpace::Indexed::ACTFile</a> for a reference to the file format&#39;s specification.</p>
+
+</blockquote>
+
+<h2 id="colorspace_web">colorspace_web</h2>
+
+<pre><code>    $cs = $pdf-&gt;colorspace_web()</code></pre>
+
+<blockquote>
+
+<p>Returns a new colorspace-object based on the &quot;web-safe&quot; color palette.</p>
+
+</blockquote>
+
+<h2 id="colorspace_hue">colorspace_hue</h2>
+
+<pre><code>    $cs = $pdf-&gt;colorspace_hue()</code></pre>
+
+<blockquote>
+
+<p>Returns a new colorspace-object based on the hue color palette.</p>
+
+<p>See <a href="../PDF/Builder/Resource/ColorSpace/Indexed/Hue.html">PDF::Builder::Resource::ColorSpace::Indexed::Hue</a> for an explanation.</p>
+
+</blockquote>
+
+<h2 id="colorspace_separation">colorspace_separation</h2>
+
+<pre><code>    $cs = $pdf-&gt;colorspace_separation($tint, $color)</code></pre>
+
+<blockquote>
+
+<p>Returns a new separation colorspace object based on the parameters.</p>
+
+<p><i>$tint</i> can be any valid ink identifier, including but not limited to: &#39;Cyan&#39;, &#39;Magenta&#39;, &#39;Yellow&#39;, &#39;Black&#39;, &#39;Red&#39;, &#39;Green&#39;, &#39;Blue&#39; or &#39;Orange&#39;.</p>
+
+<p><i>$color</i> must be a valid color specification limited to: &#39;#rrggbb&#39;, &#39;!hhssvv&#39;, &#39;%ccmmyykk&#39; or a &quot;named color&quot; (rgb).</p>
+
+<p>The colorspace model will automatically be chosen based on the specified color.</p>
+
+</blockquote>
+
+<h2 id="colorspace_devicen">colorspace_devicen</h2>
+
+<pre><code>    $cs = $pdf-&gt;colorspace_devicen(\@tintCSx, $samples)
+
+    $cs = $pdf-&gt;colorspace_devicen(\@tintCSx)</code></pre>
+
+<blockquote>
+
+<p>Returns a new DeviceN colorspace object based on the parameters.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    $cy = $pdf-&gt;colorspace_separation(&#39;Cyan&#39;,    &#39;%f000&#39;);
+    $ma = $pdf-&gt;colorspace_separation(&#39;Magenta&#39;, &#39;%0f00&#39;);
+    $ye = $pdf-&gt;colorspace_separation(&#39;Yellow&#39;,  &#39;%00f0&#39;);
+    $bk = $pdf-&gt;colorspace_separation(&#39;Black&#39;,   &#39;%000f&#39;);
+
+    $pms023 = $pdf-&gt;colorspace_separation(&#39;PANTONE 032CV&#39;, &#39;%0ff0&#39;);
+
+    $dncs = $pdf-&gt;colorspace_devicen( [ $cy,$ma,$ye,$bk, $pms023 ] );</code></pre>
+
+<blockquote>
+
+<p>The colorspace model will automatically be chosen based on the first colorspace specified.</p>
+
+</blockquote>
+
+<h1 id="BARCODE-METHODS">BARCODE METHODS</h1>
+
+<p>These are glue routines to the actual barcode rendering routines found elsewhere.</p>
+
+<h2 id="xo_-Bar-Code-routines">xo_* Bar Code routines</h2>
+
+<pre><code>    $bc = $pdf-&gt;xo_codabar(%opts)
+
+    $bc = $pdf-&gt;xo_code128(%opts)
+
+    $bc = $pdf-&gt;xo_2of5int(%opts)
+
+    $bc = $pdf-&gt;xo_3of9(%opts)
+
+    $bc = $pdf-&gt;xo_ean13(%opts)</code></pre>
+
+<blockquote>
+
+<p>Creates the specified barcode object as a form XObject.</p>
+
+</blockquote>
+
+<h1 id="OTHER-METHODS">OTHER METHODS</h1>
+
+<h2 id="xo_form">xo_form</h2>
+
+<pre><code>    $xo = $pdf-&gt;xo_form()</code></pre>
+
+<blockquote>
+
+<p>Returns a new form XObject.</p>
+
+</blockquote>
+
+<h2 id="egstate">egstate</h2>
+
+<pre><code>    $egs = $pdf-&gt;egstate()</code></pre>
+
+<blockquote>
+
+<p>Returns a new extended graphics state object, as described in <a href="../PDF/Builder/Resource/ExtGState.html">PDF::Builder::Resource::ExtGState</a>.</p>
+
+</blockquote>
+
+<h2 id="pattern">pattern</h2>
+
+<pre><code>    $obj = $pdf-&gt;pattern(%opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new pattern object.</p>
+
+</blockquote>
+
+<h2 id="shading">shading</h2>
+
+<pre><code>    $obj = $pdf-&gt;shading(%opts)</code></pre>
+
+<blockquote>
+
+<p>Returns a new shading object.</p>
+
+</blockquote>
+
+<h2 id="named_destination">named_destination</h2>
+
+<pre><code>    $ndest = $pdf-&gt;named_destination($cat, $name, $obj)</code></pre>
+
+<blockquote>
+
+<p>Returns a new named destination object. <code>$cat</code> is the category, and is normally the string <code>&#39;Dests&#39;</code> (it&#39;s a PDF keyword). The <code>$name</code> is the <b>unique</b> (within an entire PDF document) name, such as &quot;foo&quot; in the example below.</p>
+
+<p>See <a href="../PDF/Builder/NamedDestination.html">PDF::Builder::NamedDestination</a> for more information.</p>
+
+<p><b>Example:</b></p>
+
+</blockquote>
+
+<pre><code>    my $dest = PDF::Builder::NamedDestination-&gt;new($pdf);
+    #$dest-&gt;goto($page, &#39;xyz&#39; =&gt; [undef, undef, undef]);  old style
+    $dest-&gt;goto($page, &#39;xyz&#39;, (undef, undef, undef));
+    $pdf-&gt;named_destination(&#39;Dests&#39;, &#39;foo&#39;, $dest);</code></pre>
+
+<h2 id="init_state">init_state()</h2>
+
+<p>Initialize &#39;state&#39; variable that carries information across multiple document passes for <code>column()</code> call. See <a href="../PDF/Builder/Content/Column_docs.html">PDF::Builder::Content::Column_docs</a> for documentation.</p>
+
+<h2 id="pass_start_state">pass_start_state()</h2>
+
+<p>Update &#39;state&#39; variable that carries information across multiple document passes for <code>column()</code> call, at the beginning of each pass. See <a href="../PDF/Builder/Content/Column_docs.html">PDF::Builder::Content::Column_docs</a> for documentation.</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="Builder_index.html">Master Index</a><br>
+</p>
+
+<h2 id="Down-Children">Down (Children)</h2>
+<p>
+<a href=".././PDF/Builder/Annotation.html">PDF::Builder::Annotation</a> -- Add annotations to a PDF<br>
+<a href=".././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+<a href=".././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+<a href=".././PDF/Builder/Docs.html">PDF::Builder::Docs</a> -- Additional documentation for Builder module<br>
+<a href=".././PDF/Builder/FontManager.html">PDF::Builder::FontManager</a> -- Managing the font library for PDF::Builder<br>
+<a href=".././PDF/Builder/Lite.html">PDF::Builder::Lite</a> -- Lightweight PDF creation methods (UNMAINTAINED)<br>
+<a href=".././PDF/Builder/Matrix.html">PDF::Builder::Matrix</a> -- Matrix operations library<br>
+<a href=".././PDF/Builder/NamedDestination.html">PDF::Builder::NamedDestination</a> -- Add named destinations (views) to a PDF<br>
+<a href=".././PDF/Builder/Outline.html">PDF::Builder::Outline</a> -- Manage PDF outlines (a.k.a. <i>bookmarks</i>)<br>
+<a href=".././PDF/Builder/Outlines.html">PDF::Builder::Outlines</a> -- Further Outline handling<br>
+<a href=".././PDF/Builder/Page.html">PDF::Builder::Page</a> -- Methods to interact with individual pages<br>
+<a href=".././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href=".././PDF/Builder/UniWrap.html">PDF::Builder::UniWrap</a> -- Support routines for finding line breakpoints with Unicode text<br>
+<a href=".././PDF/Builder/Util.html">PDF::Builder::Util</a> -- Utility package for often-used methods across the package<br>
+<a href=".././PDF/Builder/ViewerPreferences.html">PDF::Builder::ViewerPreferences</a> -- How the PDF should be displayed or printed<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

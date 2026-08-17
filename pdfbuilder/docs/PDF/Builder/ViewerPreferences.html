@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::ViewerPreferences</title>
+<link rel="stylesheet" href="../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#get_preferences">get_preferences</a></li>
+      <li><a href="#get_preference">get_preference</a></li>
+      <li><a href="#set_preferences">set_preferences</a></li>
+    </ul>
+  </li>
+  <li><a href="#PREFERENCES">PREFERENCES</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::ViewerPreferences - How the PDF should be displayed or printed</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<p>This has been split out from <code>preferences()</code> in <a href="../../PDF/Builder.html">PDF::Builder</a>.</p>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $self = $class-&gt;new($pdf)</code></pre>
+
+<blockquote>
+
+<p>Creates a new ViewerPreferences object from a PDF::Builder object.</p>
+
+</blockquote>
+
+<h2 id="get_preferences">get_preferences</h2>
+
+<pre><code>    %preferences = $self-&gt;get_preferences()</code></pre>
+
+<blockquote>
+
+<p>Returns a hash containing all of the viewer preferences that are defined in the PDF.</p>
+
+</blockquote>
+
+<h2 id="get_preference">get_preference</h2>
+
+<pre><code>    $value = $self-&gt;get_preference($name)</code></pre>
+
+<blockquote>
+
+<p>Returns the value of the specified viewer preference if present, or <code>undef</code> if not.</p>
+
+</blockquote>
+
+<h2 id="set_preferences">set_preferences</h2>
+
+<pre><code>    $self-&gt;set_preferences(%values)</code></pre>
+
+<blockquote>
+
+<p>Sets one or more viewer preferences, as described in the preferences section below.</p>
+
+</blockquote>
+
+<h1 id="PREFERENCES">PREFERENCES</h1>
+
+<p>Viewer Preferences describe how the document should be presented on screen or in print. Not all PDF viewers will respect these preferences.</p>
+
+<p>Boolean preferences default to false and take (or return) 0 or 1 as arguments.</p>
+
+<p>Bounding Box preferences take (or return) one of <code>media_box</code>, <code>crop_box</code>, <code>bleed_box</code>, <code>trim_box</code>, or <code>art_box</code>.</p>
+
+<dl>
+
+<dt>hide_toolbar (boolean)</dt>
+<dd>
+
+<p>A flag specifying whether to hide the tool bars when the document is active.</p>
+
+</dd>
+<dt>hide_menubar (boolean)</dt>
+<dd>
+
+<p>A flag specifying whether to hide the menu bar when the document is active.</p>
+
+</dd>
+<dt>hide_window_ui (boolean)</dt>
+<dd>
+
+<p>A flag specifying whether to hide the user interface elements in the document&#39;s window (such as scroll bars and navigation controls), leaving only the document&#39;s contents displayed.</p>
+
+</dd>
+<dt>fit_window (boolean)</dt>
+<dd>
+
+<p>A flag specifying whether to resize the document&#39;s window to fit the size of the first displayed page.</p>
+
+</dd>
+<dt>center_window (boolean)</dt>
+<dd>
+
+<p>A flag specifying whether to position the document&#39;s window in the center of the screen.</p>
+
+</dd>
+<dt>display_doc_title (boolean)</dt>
+<dd>
+
+<p>A flag specifying whether the window&#39;s title bar should display the document title taken from the Title entry of the document information directory. If false, the title bar should instead display the name of the PDF file containing the document.</p>
+
+</dd>
+<dt>non_full_screen_page_mode (name)</dt>
+<dd>
+
+<p>The document&#39;s page mode, specifying how to display the document on exiting full-screen mode. Options are the same as <code>page_mode</code> in <a href="../../PDF/Builder.html">PDF::Builder</a>, except that the <code>attachments</code> and <code>full_screen</code> options aren&#39;t supported.</p>
+
+</dd>
+<dt>direction (&#39;l2r&#39; or &#39;r2l&#39;)</dt>
+<dd>
+
+<p>The predominant reading order for text (left-to-right or right-to-left).</p>
+
+<p>This entry has no direct effect on the document&#39;s contents or page numbering but may be used to determine the relative positioning of pages when displayed side-by-side or printed n-up.</p>
+
+</dd>
+<dt>view_area (bounding box)</dt>
+<dd>
+
+<p>The name of the page boundary representing the area of a page that shall be displayed when viewing the document on the screen.</p>
+
+</dd>
+<dt>view_clip (bounding box)</dt>
+<dd>
+
+<p>The name of the page boundary to which the contents of a page shall be clipped when viewing the document on the screen.</p>
+
+</dd>
+<dt>print_area (bounding box)</dt>
+<dd>
+
+<p>The name of the page boundary representing the area of a page that shall be rendered when printing the document.</p>
+
+</dd>
+<dt>print_clip (bounding box)</dt>
+<dd>
+
+<p>The name of the page boundary to which the contents of a page shall be clipped when printing the document.</p>
+
+</dd>
+<dt>print_scaling (&#39;none&#39; or &#39;app_default&#39;)</dt>
+<dd>
+
+<p>The page scaling option that shall be selected when a print dialog is displayed for this document. <code>none</code> represents no page scaling, and <code>app_default</code> represents the reader&#39;s default print scaling.</p>
+
+</dd>
+<dt>duplex (&#39;simplex&#39;, &#39;duplex_short&#39;, or &#39;duplex_long&#39;)</dt>
+<dd>
+
+<p>The paper handling option that shall be used when printing the file from the print dialog. The duplex values represent whether the page should be flipped on its short edge or long edge, respectively.</p>
+
+</dd>
+<dt>pick_tray_by_pdf_size (boolean)</dt>
+<dd>
+
+<p>A flag specifying whether the PDF page size shall be used to select the input paper tray. This setting influences only the preset values used to populate the print dialog presented by the reader.</p>
+
+</dd>
+<dt>print_page_rage (an array of integer pairs)</dt>
+<dd>
+
+<p>The page numbers used to initialize the print dialog box when the file is printed. The array shall contain an even number of integers to be interpreted in pairs, with each pair specifying the first and last pages in a sub-range of pages to be printed. The first page of the PDF file shall be denoted by 1.</p>
+
+</dd>
+<dt>num_copies (integer)</dt>
+<dd>
+
+<p>The number of copies that shall be printed when the print dialog is opened for this file.</p>
+
+</dd>
+</dl>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../Builder_index.html">Master Index</a><br>
+<a href="../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../.././PDF/Builder/Annotation.html">PDF::Builder::Annotation</a> -- Add annotations to a PDF<br>
+<a href="../.././PDF/Builder/Basic/PDF.html">PDF::Builder::Basic::PDF</a> -- Various utilities and support routines<br>
+<a href="../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+<a href="../.././PDF/Builder/Docs.html">PDF::Builder::Docs</a> -- Additional documentation for Builder module<br>
+<a href="../.././PDF/Builder/FontManager.html">PDF::Builder::FontManager</a> -- Managing the font library for PDF::Builder<br>
+<a href="../.././PDF/Builder/Lite.html">PDF::Builder::Lite</a> -- Lightweight PDF creation methods (UNMAINTAINED)<br>
+<a href="../.././PDF/Builder/Matrix.html">PDF::Builder::Matrix</a> -- Matrix operations library<br>
+<a href="../.././PDF/Builder/NamedDestination.html">PDF::Builder::NamedDestination</a> -- Add named destinations (views) to a PDF<br>
+<a href="../.././PDF/Builder/Outline.html">PDF::Builder::Outline</a> -- Manage PDF outlines (a.k.a. <i>bookmarks</i>)<br>
+<a href="../.././PDF/Builder/Outlines.html">PDF::Builder::Outlines</a> -- Further Outline handling<br>
+<a href="../.././PDF/Builder/Page.html">PDF::Builder::Page</a> -- Methods to interact with individual pages<br>
+<a href="../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../.././PDF/Builder/UniWrap.html">PDF::Builder::UniWrap</a> -- Support routines for finding line breakpoints with Unicode text<br>
+<a href="../.././PDF/Builder/Util.html">PDF::Builder::Util</a> -- Utility package for often-used methods across the package<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

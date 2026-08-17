@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Content::Text</title>
+<link rel="stylesheet" href="../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#Single-Lines-from-a-String">Single Lines from a String</a>
+        <ul>
+          <li><a href="#text_left">text_left</a></li>
+          <li><a href="#text_center">text_center</a></li>
+          <li><a href="#text_right">text_right</a></li>
+          <li><a href="#text_justified">text_justified</a></li>
+        </ul>
+      </li>
+      <li><a href="#Multiple-Lines-from-a-String">Multiple Lines from a String</a>
+        <ul>
+          <li><a href="#Hyphenation">Hyphenation</a></li>
+          <li><a href="#Methods">Methods</a>
+            <ul>
+              <li><a href="#text_fill_left-text_fill">text_fill_left, text_fill</a></li>
+              <li><a href="#text_fill_center">text_fill_center</a></li>
+              <li><a href="#text_fill_right">text_fill_right</a></li>
+              <li><a href="#text_fill_justified">text_fill_justified</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#Larger-Text-Segments">Larger Text Segments</a>
+        <ul>
+          <li><a href="#paragraph">paragraph</a></li>
+          <li><a href="#section-paragraphs">section, paragraphs</a></li>
+          <li><a href="#textlabel">textlabel</a></li>
+          <li><a href="#column">column</a>
+            <ul>
+              <li><a href="#init_state">init_state()</a></li>
+              <li><a href="#pass_start_state">pass_start_state()</a></li>
+              <li><a href="#pass_end_state">pass_end_state()</a></li>
+              <li><a href="#unstable_state">unstable_state()</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Content::Text - Additional specialized text-related formatting methods</p>
+
+<p>Inherits from <a href="../../../PDF/Builder/Content.html">PDF::Builder::Content</a></p>
+
+<p><b>Note:</b> If you have used some of these methods in PDF::Builder with a <i>graphics</i> type object (e.g., $page-&gt;gfx()-&gt;method()), you may have to change to a <i>text</i> type object (e.g., $page-&gt;text()-&gt;method()).</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="Single-Lines-from-a-String">Single Lines from a String</h2>
+
+<h3 id="text_left">text_left</h3>
+
+<pre><code>    $width = $content-&gt;text_left($text, %opts)</code></pre>
+
+<blockquote>
+
+<p>Alias for <code>text</code>. Implemented for symmetry, for those who use a lot of <code>text_center</code> and <code>text_right</code>, and desire a matching <code>text_left</code>.</p>
+
+<p>Adds text to the page (left justified), at the current position. Note that there is no maximum width, and nothing to keep you from overflowing the physical page on the right! The width used (in points) is <b>returned</b>.</p>
+
+</blockquote>
+
+<h3 id="text_center">text_center</h3>
+
+<pre><code>    $width = $content-&gt;text_center($text, %opts)</code></pre>
+
+<blockquote>
+
+<p>As <code>text</code>, but <i>centered</i> on the current point.</p>
+
+<p>Adds text to the page (centered). The width used (in points) is <b>returned</b>.</p>
+
+</blockquote>
+
+<h3 id="text_right">text_right</h3>
+
+<pre><code>    $width = $content-&gt;text_right($text, %opts)</code></pre>
+
+<blockquote>
+
+<p>As <code>text</code>, but right-aligned to the current point.</p>
+
+<p>Adds text to the page (right justified). Note that there is no maximum width, and nothing to keep you from overflowing the physical page on the left! The width used (in points) is <b>returned</b>.</p>
+
+</blockquote>
+
+<h3 id="text_justified">text_justified</h3>
+
+<pre><code>    $width = $content-&gt;text_justified($text, $width, %opts)</code></pre>
+
+<blockquote>
+
+<p>As <code>text</code>, but stretches text using <code>wordspace</code>, <code>charspace</code>, and (as a last resort) <code>hscale</code>, to fill the desired (available) <code>$width</code>. Note that if the desired width is <i>less</i> than the natural width taken by the text, it will be <i>condensed</i> to fit, using the same three routines.</p>
+
+<p>The unchanged <code>$width</code> is <b>returned</b>, unless there was some reason to change it (e.g., overflow).</p>
+
+<p><b>Options:</b></p>
+
+<dl>
+
+<dt>&#39;nocs&#39; =&gt; value</dt>
+<dd>
+
+<p>If this option value is 1 (default 0), do <b>not</b> use any intercharacter spacing. This is useful for connected characters, such as fonts for Arabic, Devanagari, Latin cursive handwriting, etc. You don&#39;t want to add additional space between characters during justification, which would disconnect them.</p>
+
+<p><i>Word</i> (interword) spacing values (explicit or default) are doubled if nocs is 1. This is to make up for the lack of added/subtracted intercharacter spacing.</p>
+
+</dd>
+<dt>&#39;wordsp&#39; =&gt; value</dt>
+<dd>
+
+<p>The percentage of one space character (default 100) that is the maximum amount to add to (each) interword spacing to expand the line. If <code>nocs</code> is 1, double <code>value</code>.</p>
+
+</dd>
+<dt>&#39;charsp&#39; =&gt; value</dt>
+<dd>
+
+<p>If adding interword space didn&#39;t do enough, the percentage of one em (default 100) that is the maximum amount to add to (each) intercharacter spacing to further expand the line. If <code>nocs</code> is 1, force <code>value</code> to 0.</p>
+
+</dd>
+<dt>&#39;wordspa&#39; =&gt; value</dt>
+<dd>
+
+<p>If adding intercharacter space didn&#39;t do enough, the percentage of one space character (default 100) that is the maximum <i>additional</i> amount to add to (each) interword spacing to further expand the line. If <code>nocs</code> is 1, double <code>value</code>.</p>
+
+</dd>
+<dt>&#39;charspa&#39; =&gt; value</dt>
+<dd>
+
+<p>If adding more interword space didn&#39;t do enough, the percentage of one em (default 100) that is the maximum <i>additional</i> amount to add to (each) intercharacter spacing to further expand the line. If <code>nocs</code> is 1, force <code>value</code> to 0.</p>
+
+</dd>
+<dt>&#39;condw&#39; =&gt; value</dt>
+<dd>
+
+<p>The percentage of one space character (default 25) that is the maximum amount to subtract from (each) interword spacing to condense the line. If <code>nocs</code> is 1, double <code>value</code>.</p>
+
+</dd>
+<dt>&#39;condc&#39; =&gt; value</dt>
+<dd>
+
+<p>If removing interword space didn&#39;t do enough, the percentage of one em (default 10) that is the maximum amount to subtract from (each) intercharacter spacing to further condense the line. If <code>nocs</code> is 1, force <code>value</code> to 0.</p>
+
+</dd>
+</dl>
+
+<p>If expansion (or reduction) wordspace and charspace changes didn&#39;t do enough to make the line fit the desired width, use <code>hscale()</code> to finish expanding or condensing the line to fit.</p>
+
+</blockquote>
+
+<h2 id="Multiple-Lines-from-a-String">Multiple Lines from a String</h2>
+
+<p>The string is split at regular blanks (spaces), x20, to find the longest substring that will fit the <code>$width</code>. If a single word is longer than <code>$width</code>, it will overflow. To stay strictly within the desired bounds, set the option <code>spillover</code>=&gt;0 to disallow spillover.</p>
+
+<h3 id="Hyphenation">Hyphenation</h3>
+
+<p>If hyphenation is enabled, those methods which split up a string into multiple lines (the &quot;text fill&quot;, paragraph, and section methods) will attempt to split up the word that overflows the line, in order to pack the text even more tightly (&quot;greedy&quot; line splitting). There are a number of controls over where a word may be split, but note that there is nothing language-specific (i.e., following a given language&#39;s rules for where a word may be split). This is left to other packages.</p>
+
+<p>There are hard coded minimums of 2 letters before the split, and 2 letters after the split. See <code>Hyphenate_basic.pm</code>. Note that neither hyphenation nor simple line splitting makes any attempt to prevent widows and orphans, prevent splitting of the last word in a column or page, or otherwise engage in more desirable <i>paragraph shaping</i>.</p>
+
+<dl>
+
+<dt>&#39;hyphenate&#39; =&gt; value</dt>
+<dd>
+
+<p>0: no hyphenation (<b>default</b>), 1: do basic hyphenation. Always allows splitting at a soft hyphen (\xAD). Unicode hyphen (U+2010) and non-splitting hyphen (U+2011) are ignored as split points.</p>
+
+</dd>
+<dt>&#39;spHH&#39; =&gt; value</dt>
+<dd>
+
+<p>0: do <i>not</i> split at a hard hyphen (x\2D), 1: <i>OK to split</i> (<b>default</b>)</p>
+
+</dd>
+<dt>&#39;spOP&#39; =&gt; value</dt>
+<dd>
+
+<p>0: do <i>not</i> split after most punctuation, 1: <i>OK to split</i> (<b>default</b>)</p>
+
+</dd>
+<dt>&#39;spDR&#39; =&gt; value</dt>
+<dd>
+
+<p>0: do <i>not</i> split after a run of one or more digits, 1: <i>OK to split</i> (<b>default</b>)</p>
+
+</dd>
+<dt>&#39;spLR&#39; =&gt; value</dt>
+<dd>
+
+<p>0: do <i>not</i> split after a run of one or more ASCII letters, 1: <i>OK to split</i> (<b>default</b>)</p>
+
+</dd>
+<dt>&#39;spCC&#39; =&gt; value</dt>
+<dd>
+
+<p>0: do <i>not</i> split in camelCase between a lowercase letter and an uppercase letter, 1: <i>OK to split</i> (<b>default</b>)</p>
+
+</dd>
+<dt>&#39;spRB&#39; =&gt; value</dt>
+<dd>
+
+<p>0: do <i>not</i> split on a Required Blank (&amp;nbsp;), is <b>default</b>. 1: <i>OK to split on Required Blank.</i> Try to avoid this; it is a desperation move!</p>
+
+</dd>
+<dt>&#39;spFS&#39; =&gt; value</dt>
+<dd>
+
+<p>0: do <i>not</i> split where it will <i>just</i> fit (middle of word!), is <b>default</b>. 1: <i>OK to split to just fit the available space.</i> Try to avoid this; it is a super desperation move, and the split will probably make no linguistic sense!</p>
+
+</dd>
+<dt>&#39;min_prefix&#39; =&gt; value</dt>
+<dd>
+
+<p>Minimum number of letters <i>before</i> word split point (hyphenation point). The <b>default</b> is 2.</p>
+
+</dd>
+<dt>&#39;min_suffix&#39; =&gt; value</dt>
+<dd>
+
+<p>Minimum number of letters <i>after</i> word split point (hyphenation point). The <b>default</b> is 3.</p>
+
+</dd>
+</dl>
+
+<h3 id="Methods">Methods</h3>
+
+<h4 id="text_fill_left-text_fill">text_fill_left, text_fill</h4>
+
+<pre><code>    ($width, $leftover) = $content-&gt;text_fill_left($string, $width, %opts)</code></pre>
+
+<blockquote>
+
+<p>Fill a line of &#39;width&#39; with as much text as will fit, and outputs it left justified. The width actually used, and the leftover text (that didn&#39;t fit), are <b>returned</b>.</p>
+
+</blockquote>
+
+<pre><code>    ($width, $leftover) = $content-&gt;text_fill($string, $width, %opts)</code></pre>
+
+<blockquote>
+
+<p>Alias for text_fill_left().</p>
+
+</blockquote>
+
+<h4 id="text_fill_center">text_fill_center</h4>
+
+<pre><code>    ($width, $leftover) = $content-&gt;text_fill_center($string, $width, %opts)</code></pre>
+
+<blockquote>
+
+<p>Fill a line of &#39;width&#39; with as much text as will fit, and outputs it centered. The width actually used, and the leftover text (that didn&#39;t fit), are <b>returned</b>.</p>
+
+</blockquote>
+
+<h4 id="text_fill_right">text_fill_right</h4>
+
+<pre><code>    ($width, $leftover) = $content-&gt;text_fill_right($string, $width, %opts)</code></pre>
+
+<blockquote>
+
+<p>Fill a line of &#39;width&#39; with as much text as will fit, and outputs it right justified. The width actually used, and the leftover text (that didn&#39;t fit), are <b>returned</b>.</p>
+
+</blockquote>
+
+<h4 id="text_fill_justified">text_fill_justified</h4>
+
+<pre><code>    ($width, $leftover) = $content-&gt;text_fill_justified($string, $width, %opts)</code></pre>
+
+<blockquote>
+
+<p>Fill a line of &#39;width&#39; with as much text as will fit, and outputs it fully justified (stretched or condensed). The width actually used, and the leftover text (that didn&#39;t fit), are <b>returned</b>.</p>
+
+<p>Note that the entire line is fit to the available width via a call to <code>text_justified</code>. See <code>text_justified</code> for options to control stretch and condense. The last line is unjustified (normal size) and left aligned by default, although the option</p>
+
+<p><b>Options:</b></p>
+
+<dl>
+
+<dt>&#39;last_align&#39; =&gt; place</dt>
+<dd>
+
+<p>where place is &#39;left&#39; (default), &#39;center&#39;, or &#39;right&#39; (may be shortened to first letter) allows you to specify the alignment of the last line output.</p>
+
+</dd>
+</dl>
+
+</blockquote>
+
+<h2 id="Larger-Text-Segments">Larger Text Segments</h2>
+
+<h3 id="paragraph">paragraph</h3>
+
+<pre><code>    ($overflow_text, $unused_height) = $txt-&gt;paragraph($text, $width,$height, $continue, %opts)
+
+    ($overflow_text, $unused_height) = $txt-&gt;paragraph($text, $width,$height, %opts)
+
+    $overflow_text = $txt-&gt;paragraph($text, $width,$height, $continue, %opts)
+
+    $overflow_text = $txt-&gt;paragraph($text, $width,$height, %opts)</code></pre>
+
+<blockquote>
+
+<p>Print a single string into a rectangular area on the page, of given width and maximum height. The baseline of the first (top) line is at the current text position.</p>
+
+<p>Apply the text within the rectangle and <b>return</b> any leftover text (if could not fit all of it within the rectangle). If called in an array context, the unused height is also <b>returned</b> (may be 0 or negative if it just filled the rectangle).</p>
+
+<p><code>$continue</code> is optional, with a default value of 0. An <code>%opts</code> list may be given after the fixed parameters, whether or not <code>$continue</code> is explicitly given.</p>
+
+<p>If <code>$continue</code> is 1, the first line does <b>not</b> get special treatment for indenting or outdenting, because we&#39;re printing the continuation of the paragraph that was interrupted earlier. If it&#39;s 0, the first line may be indented or outdented.</p>
+
+<p><b>Options:</b></p>
+
+<dl>
+
+<dt>&#39;pndnt&#39; =&gt; $indent</dt>
+<dd>
+
+<p>Give the amount of indent (positive) or outdent (negative, for &quot;hanging&quot;) for paragraph first lines. The unit is <i>ems</i>. This setting is ignored for centered text.</p>
+
+</dd>
+<dt>&#39;align&#39; =&gt; $choice</dt>
+<dd>
+
+<p><code>$choice</code> is &#39;justified&#39;, &#39;right&#39;, &#39;center&#39;, &#39;left&#39;; the default is &#39;left&#39;. See <code>text_justified</code> call for options to control how a line is expanded or condensed if <code>$choice</code> is &#39;justified&#39;. <code>$choice</code> may be shortened to the first letter.</p>
+
+</dd>
+<dt>&#39;last_align&#39; =&gt; place</dt>
+<dd>
+
+<p>where place is &#39;left&#39; (default), &#39;center&#39;, or &#39;right&#39; (may be shortened to first letter) allows you to specify the alignment of the last line output, but applies only when <code>align</code> is &#39;justified&#39;.</p>
+
+</dd>
+<dt>&#39;underline&#39; =&gt; $distance</dt>
+<dd>
+
+</dd>
+<dt>&#39;underline&#39; =&gt; [ $distance, $thickness, ... ]</dt>
+<dd>
+
+<p>If a scalar, distance below baseline, else array reference with pairs of distance and line thickness.</p>
+
+</dd>
+<dt>&#39;spillover&#39; =&gt; $over</dt>
+<dd>
+
+<p>Controls if words in a line which exceed the given width should be &quot;spilled over&quot; the bounds, or if a new line should be used for this word.</p>
+
+<p><code>$over</code> is 1 or 0, with the default 1 (spills over the width).</p>
+
+</dd>
+</dl>
+
+<p><b>Example:</b></p>
+
+<pre><code>    $txt-&gt;font($font,$fontsize);
+    $txt-&gt;leading($leading);
+    $txt-&gt;translate($x,$y);
+    $overflow = $txt-&gt;paragraph( &#39;long paragraph here ...&#39;,
+                                 $width,
+                                 $y+$leading-$bottom_margin );</code></pre>
+
+<p><b>Note:</b> if you need to change any text treatment <i>within</i> a paragraph (<b>bold</b> or <i>italicized</i> text, for instance), this can not handle it. Only plain text (all the same font, size, etc.) can be typeset with <code>paragraph()</code>. Also, there is currently very limited line splitting (hyphenation) to better fit to a given width, and nothing is done for &quot;widows and orphans&quot;.</p>
+
+</blockquote>
+
+<h3 id="section-paragraphs">section, paragraphs</h3>
+
+<pre><code>    ($overflow_text, $continue, $unused_height) = $txt-&gt;section($text, $width,$height, $continue, %opts)
+
+    $overflow_text = $txt-&gt;section($text, $width,$height, $continue, %opts)</code></pre>
+
+<blockquote>
+
+<p>The <code>$text</code> contains a string with one or more paragraphs <code>$width</code> wide, starting at the current text position, with a newline \n between each paragraph. Each paragraph is output (see <code>paragraph</code>) until the <code>$height</code> limit is met (a partial paragraph may be at the bottom). Whatever wasn&#39;t output, will be <b>returned</b>. If called in an array context, the unused height and the paragraph &quot;continue&quot; flag are also <b>returned</b>.</p>
+
+<p><code>$continue</code> is 0 for the first call of section(), and then use the value returned from the previous call (1 if a paragraph was cut in the middle) to prevent unwanted indenting or outdenting of the first line being printed.</p>
+
+<p><b>Options:</b></p>
+
+<dl>
+
+<dt>&#39;pvgap&#39; =&gt; $vertical</dt>
+<dd>
+
+<p>Additional vertical space (unit: pt) between paragraphs (default 0). Note that this space will also be added after the last paragraph printed, <b>unless</b> you give a negative value. The |pvgap| is the value used (positive); negative tells <code>section</code> <i>not</i> to add the gap (space) after the last paragraph in the section.</p>
+
+</dd>
+</dl>
+
+<p>See <code>paragraph</code> for other <code>%opts</code> you can use, such as <code>align</code> and <code>pndnt</code>.</p>
+
+<p><b>Alternate name:</b> paragraphs</p>
+
+<p>This is for compatibility with PDF::API2, which renamed <code>section</code>.</p>
+
+</blockquote>
+
+<h3 id="textlabel">textlabel</h3>
+
+<pre><code>    $width = $txt-&gt;textlabel($x,$y, $font, $size, $text, %opts)</code></pre>
+
+<blockquote>
+
+<p>Place a line of text at an arbitrary <code>[$x,$y]</code> on the page, with various text settings (treatments) specified in the call.</p>
+
+<dl>
+
+<dt>$font</dt>
+<dd>
+
+<p>A previously created font.</p>
+
+</dd>
+<dt>$size</dt>
+<dd>
+
+<p>The font size (points).</p>
+
+</dd>
+<dt>$text</dt>
+<dd>
+
+<p>The text to be printed (a single line).</p>
+
+</dd>
+</dl>
+
+<p><b>Options:</b></p>
+
+<dl>
+
+<dt>&#39;rotate&#39; =&gt; $deg</dt>
+<dd>
+
+<p>Rotate <code>$deg</code> degrees counterclockwise from due East.</p>
+
+</dd>
+<dt>&#39;color&#39; =&gt; $cspec</dt>
+<dd>
+
+<p>A color name or permitted spec, such as <code>#CCE840</code>, for the character <i>fill</i>.</p>
+
+</dd>
+<dt>&#39;strokecolor&#39; =&gt; $cspec</dt>
+<dd>
+
+<p>A color name or permitted spec, such as <code>#CCE840</code>, for the character <i>outline</i>.</p>
+
+</dd>
+<dt>&#39;charspace&#39; =&gt; $cdist</dt>
+<dd>
+
+<p>Additional distance between characters.</p>
+
+</dd>
+<dt>&#39;wordspace&#39; =&gt; $wdist</dt>
+<dd>
+
+<p>Additional distance between words.</p>
+
+</dd>
+<dt>&#39;hscale&#39; =&gt; $hfactor</dt>
+<dd>
+
+<p>Horizontal scaling mode (percentage of normal, default is 100).</p>
+
+</dd>
+<dt>&#39;render&#39; =&gt; $mode</dt>
+<dd>
+
+<p>Character rendering mode (outline only, fill only, etc.). See <code>render</code> call.</p>
+
+</dd>
+<dt>&#39;left&#39; =&gt; 1</dt>
+<dd>
+
+<p>Left align on the given point. This is the default.</p>
+
+</dd>
+<dt>&#39;center&#39; =&gt; 1</dt>
+<dd>
+
+<p>Center the text on the given point.</p>
+
+</dd>
+<dt>&#39;right&#39; =&gt; 1</dt>
+<dd>
+
+<p>Right align on the given point.</p>
+
+</dd>
+<dt>&#39;align&#39; =&gt; $placement</dt>
+<dd>
+
+<p>Alternate to left, center, and right. <code>$placement</code> is &#39;left&#39; (default), &#39;center&#39;, or &#39;right&#39;.</p>
+
+</dd>
+</dl>
+
+<p>Other options available to <code>text</code>, such as underlining, can be used here.</p>
+
+<p>The width used (in points) is <b>returned</b>.</p>
+
+</blockquote>
+
+<p><b>Please note</b> that <code>textlabel()</code> was not designed to interoperate with other text operations. It is a standalone operation, and does <i>not</i> leave a &quot;next write&quot; position (or any other setting) for another <code>text</code> mode operation. A following write will likely be at <code>(0,0)</code>, and not at the expected location.</p>
+
+<p><code>textlabel()</code> is intended as an &quot;all in one&quot; convenience function for single lines of text, such as a label on some graphics, and not as part of putting down multiple pieces of text. It <i>is</i> possible to figure out the position of a following write (either <code>textlabel</code> or <code>text</code>) by adding the returned width to the original position&#39;s <i>x</i> value (assuming left-justified positioning).</p>
+
+<h3 id="column">column</h3>
+
+<p>See <a href="../../../PDF/Builder/Content/Column_docs.html">PDF::Builder::Content::Column_docs</a> for documentation.</p>
+
+<h4 id="init_state">init_state()</h4>
+
+<p>See <a href="../../../PDF/Builder.html">PDF::Builder</a> for code and <a href="../../../PDF/Builder/Content/Column_docs.html">PDF::Builder::Content::Column_docs</a> for documentation.</p>
+
+<h4 id="pass_start_state">pass_start_state()</h4>
+
+<p>See <a href="../../../PDF/Builder.html">PDF::Builder</a> for code and <a href="../../../PDF/Builder/Content/Column_docs.html">PDF::Builder::Content::Column_docs</a> for documentation.</p>
+
+<h4 id="pass_end_state">pass_end_state()</h4>
+
+<p>See <a href="../../../PDF/Builder/Content/Column_docs.html">PDF::Builder::Content::Column_docs</a> for documentation.</p>
+
+<h4 id="unstable_state">unstable_state()</h4>
+
+<p>See <a href="../../../PDF/Builder/Content/Column_docs.html">PDF::Builder::Content::Column_docs</a> for documentation</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../Builder_index.html">Master Index</a><br>
+<a href="../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../.././PDF/Builder/Content/Column_docs.html">PDF::Builder::Content::Column_docs</a> --  -- column text formatting system<br>
+<a href="../../.././PDF/Builder/Content/Hyphenate_basic.html">PDF::Builder::Content::Hyphenate_basic</a> -- Simple hyphenation capability<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

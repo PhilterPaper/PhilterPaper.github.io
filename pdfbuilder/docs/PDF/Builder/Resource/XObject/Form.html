@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::XObject::Form</title>
+<link rel="stylesheet" href="../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+      <li><a href="#Down-Children">Down (Children)</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#bbox">bbox</a></li>
+      <li><a href="#resource">resource</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::XObject::Form - Base class for external form objects</p>
+
+<p>Inherits from <a href="../../../../PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $form = PDF::Builder::Resource::XObject::Form-&gt;new($pdf)</code></pre>
+
+<blockquote>
+
+<p>Creates a form resource.</p>
+
+</blockquote>
+
+<h2 id="bbox">bbox</h2>
+
+<pre><code>    ($llx, $lly, $urx, $ury) = $form-&gt;bbox($llx, $lly, $urx, $ury)</code></pre>
+
+<blockquote>
+
+<p>Get or set the coordinates of the form object&#39;s bounding box.</p>
+
+</blockquote>
+
+<h2 id="resource">resource</h2>
+
+<pre><code>    $resource = $form-&gt;resource($type, $key)
+
+    $form-&gt;resource($type, $key, $object, $force)</code></pre>
+
+<blockquote>
+
+<p>Get or add a resource required by the form&#39;s contents, such as a Font, XObject, ColorSpace, etc.</p>
+
+<p>By default, an existing <code>$key</code> will not be overwritten. Set <code>$force</code> to override this behavior.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../Builder_index.html">Master Index</a><br>
+<a href="../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a> -- Base class for external raster image objects<br>
+</p>
+
+<h2 id="Down-Children">Down (Children)</h2>
+<p>
+<a href="../../../.././PDF/Builder/Resource/XObject/Form/BarCode.html">PDF::Builder::Resource::XObject::Form::BarCode</a> -- Base class for one-dimensional barcodes<br>
+<a href="../../../.././PDF/Builder/Resource/XObject/Form/Hybrid.html">PDF::Builder::Resource::XObject::Form::Hybrid</a> -- Support routines for Forms<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

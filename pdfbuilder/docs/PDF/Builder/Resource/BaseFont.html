@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::BaseFont</title>
+<link rel="stylesheet" href="../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#METHODS">METHODS</a>
+    <ul>
+      <li><a href="#new">new</a></li>
+      <li><a href="#descrByData">descrByData</a></li>
+    </ul>
+  </li>
+  <li><a href="#FONT-MANAGEMENT-RELATED-METHODS">FONT-MANAGEMENT RELATED METHODS</a>
+    <ul>
+      <li><a href="#fontname">fontname</a></li>
+      <li><a href="#altname">altname</a></li>
+      <li><a href="#subname">subname</a></li>
+      <li><a href="#apiname">apiname</a></li>
+      <li><a href="#issymbol">issymbol</a></li>
+      <li><a href="#iscff">iscff</a></li>
+    </ul>
+  </li>
+  <li><a href="#TYPOGRAPHY-RELATED-METHODS">TYPOGRAPHY-RELATED METHODS</a>
+    <ul>
+      <li><a href="#upem">upem</a></li>
+      <li><a href="#fontbbox">fontbbox</a></li>
+      <li><a href="#capheight">capheight</a></li>
+      <li><a href="#xheight">xheight</a></li>
+      <li><a href="#missingwidth">missingwidth</a></li>
+      <li><a href="#maxwidth">maxwidth</a></li>
+      <li><a href="#avgwidth">avgwidth</a></li>
+      <li><a href="#flags">flags</a></li>
+      <li><a href="#stemv">stemv</a></li>
+      <li><a href="#stemh">stemh</a></li>
+      <li><a href="#italicangle">italicangle</a></li>
+      <li><a href="#isfixedpitch">isfixedpitch</a></li>
+      <li><a href="#underlineposition">underlineposition</a></li>
+      <li><a href="#underlinethickness">underlinethickness</a></li>
+      <li><a href="#ascender">ascender</a></li>
+      <li><a href="#descender">descender</a></li>
+    </ul>
+  </li>
+  <li><a href="#GLYPH-RELATED-METHODS">GLYPH-RELATED METHODS</a>
+    <ul>
+      <li><a href="#glyphNames">glyphNames</a></li>
+      <li><a href="#glyphNum">glyphNum</a></li>
+      <li><a href="#uniByGlyph">uniByGlyph</a></li>
+      <li><a href="#uniByEnc">uniByEnc</a></li>
+      <li><a href="#uniByMap">uniByMap</a></li>
+      <li><a href="#encByGlyph">encByGlyph</a></li>
+      <li><a href="#encByUni">encByUni</a></li>
+      <li><a href="#mapByGlyph">mapByGlyph</a></li>
+      <li><a href="#mapByUni">mapByUni</a></li>
+      <li><a href="#glyphByUni">glyphByUni</a></li>
+      <li><a href="#glyphByEnc">glyphByEnc</a></li>
+      <li><a href="#glyphByMap">glyphByMap</a></li>
+      <li><a href="#wxByGlyph">wxByGlyph</a></li>
+      <li><a href="#wxByUni">wxByUni</a></li>
+      <li><a href="#wxByEnc">wxByEnc</a></li>
+      <li><a href="#wxMissingByEnc">wxMissingByEnc</a></li>
+      <li><a href="#wxByMap">wxByMap</a></li>
+      <li><a href="#width">width</a></li>
+      <li><a href="#width_array">width_array</a></li>
+      <li><a href="#utfByStr">utfByStr</a></li>
+      <li><a href="#strByUtf">strByUtf</a></li>
+      <li><a href="#textByStr">textByStr</a></li>
+      <li><a href="#textByStrKern">textByStrKern</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::BaseFont - Base class for font resources</p>
+
+<p>Inherits from <a href="../../../PDF/Builder/Resource.html">PDF::Builder::Resource</a></p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $font = PDF::Builder::Resource::BaseFont-&gt;new($pdf, $name)</code></pre>
+
+<blockquote>
+
+<p>Return a font resource object.</p>
+
+</blockquote>
+
+<h2 id="descrByData">descrByData</h2>
+
+<pre><code>    $descriptor = $font-&gt;descrByData()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s FontDescriptor key structure based on the font&#39;s data.</p>
+
+</blockquote>
+
+<h1 id="FONT-MANAGEMENT-RELATED-METHODS">FONT-MANAGEMENT RELATED METHODS</h1>
+
+<h2 id="fontname">fontname</h2>
+
+<pre><code>    $name = $font-&gt;fontname()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s name (a.k.a. display name).</p>
+
+</blockquote>
+
+<h2 id="altname">altname</h2>
+
+<pre><code>    $name = $font-&gt;altname()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s alternative name (a.k.a. Windows name for a PostScript font).</p>
+
+</blockquote>
+
+<h2 id="subname">subname</h2>
+
+<pre><code>    $name = $font-&gt;subname()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s subname (a.k.a. font variant).</p>
+
+</blockquote>
+
+<h2 id="apiname">apiname</h2>
+
+<pre><code>    $name = $font-&gt;apiname()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s name to be used internally (should be equal to $font-&gt;name()).</p>
+
+</blockquote>
+
+<h2 id="issymbol">issymbol</h2>
+
+<pre><code>    $issymbol = $font-&gt;issymbol()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s symbol flag (i.e., is this a symbol font).</p>
+
+</blockquote>
+
+<h2 id="iscff">iscff</h2>
+
+<pre><code>    $iscff = $font-&gt;iscff()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s Compact Font Format flag.</p>
+
+</blockquote>
+
+<h1 id="TYPOGRAPHY-RELATED-METHODS">TYPOGRAPHY-RELATED METHODS</h1>
+
+<h2 id="upem">upem</h2>
+
+<pre><code>    $upem = $font-&gt;upem()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s scaling factor (Units Per em). It is typically 1000 in most fonts, but more recent TTF and OTF fonts often use 2048 units.</p>
+
+</blockquote>
+
+<h2 id="fontbbox">fontbbox</h2>
+
+<pre><code>    ($llx,$lly, $urx,$ury) = $font-&gt;fontbbox()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s bounding box.</p>
+
+</blockquote>
+
+<h2 id="capheight">capheight</h2>
+
+<pre><code>    $capheight = $font-&gt;capheight()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s capheight value.</p>
+
+</blockquote>
+
+<h2 id="xheight">xheight</h2>
+
+<pre><code>    $xheight = $font-&gt;xheight()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s xheight value.</p>
+
+</blockquote>
+
+<h2 id="missingwidth">missingwidth</h2>
+
+<pre><code>    $missingwidth = $font-&gt;missingwidth()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s missingwidth value.</p>
+
+</blockquote>
+
+<h2 id="maxwidth">maxwidth</h2>
+
+<pre><code>    $maxwidth = $font-&gt;maxwidth()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s maxwidth value.</p>
+
+</blockquote>
+
+<h2 id="avgwidth">avgwidth</h2>
+
+<pre><code>    $avgwidth = $font-&gt;avgwidth()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s avgwidth (average width) value.</p>
+
+</blockquote>
+
+<h2 id="flags">flags</h2>
+
+<pre><code>    $flags = $font-&gt;flags()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s flags value.</p>
+
+</blockquote>
+
+<h2 id="stemv">stemv</h2>
+
+<pre><code>    $stemv = $font-&gt;stemv()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s stemv value.</p>
+
+</blockquote>
+
+<h2 id="stemh">stemh</h2>
+
+<pre><code>    $stemh = $font-&gt;stemh()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s stemh value.</p>
+
+</blockquote>
+
+<h2 id="italicangle">italicangle</h2>
+
+<pre><code>    $italicangle = $font-&gt;italicangle()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s italicangle (slant, obliqueness) value.</p>
+
+</blockquote>
+
+<h2 id="isfixedpitch">isfixedpitch</h2>
+
+<pre><code>    $isfixedpitch = $font-&gt;isfixedpitch()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s isfixedpitch flag.</p>
+
+</blockquote>
+
+<h2 id="underlineposition">underlineposition</h2>
+
+<pre><code>    $underlineposition = $font-&gt;underlineposition()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s underlineposition value.</p>
+
+</blockquote>
+
+<h2 id="underlinethickness">underlinethickness</h2>
+
+<pre><code>    $underlinethickness = $font-&gt;underlinethickness()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s underlinethickness value.</p>
+
+</blockquote>
+
+<h2 id="ascender">ascender</h2>
+
+<pre><code>    $ascender = $font-&gt;ascender()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s ascender value.</p>
+
+</blockquote>
+
+<h2 id="descender">descender</h2>
+
+<pre><code>    $descender = $font-&gt;descender()</code></pre>
+
+<blockquote>
+
+<p>Return the font&#39;s descender value.</p>
+
+</blockquote>
+
+<h1 id="GLYPH-RELATED-METHODS">GLYPH-RELATED METHODS</h1>
+
+<h2 id="glyphNames">glyphNames</h2>
+
+<pre><code>    @names = $font-&gt;glyphNames()</code></pre>
+
+<blockquote>
+
+<p>Return the defined glyph names of the font.</p>
+
+</blockquote>
+
+<h2 id="glyphNum">glyphNum</h2>
+
+<pre><code>    $glNum = $font-&gt;glyphNum()</code></pre>
+
+<blockquote>
+
+<p>Return the number of defined glyph names of the font.</p>
+
+</blockquote>
+
+<h2 id="uniByGlyph">uniByGlyph</h2>
+
+<pre><code>    $uni = $font-&gt;uniByGlyph($char)</code></pre>
+
+<blockquote>
+
+<p>Return the unicode by glyph name.</p>
+
+</blockquote>
+
+<h2 id="uniByEnc">uniByEnc</h2>
+
+<pre><code>    $uni = $font-&gt;uniByEnc($char)</code></pre>
+
+<blockquote>
+
+<p>Return the Unicode by the font&#39;s encoding map.</p>
+
+</blockquote>
+
+<h2 id="uniByMap">uniByMap</h2>
+
+<pre><code>    $uni = $font-&gt;uniByMap($char)</code></pre>
+
+<blockquote>
+
+<p>Return the Unicode by the font&#39;s default map.</p>
+
+</blockquote>
+
+<h2 id="encByGlyph">encByGlyph</h2>
+
+<pre><code>    $char = $font-&gt;encByGlyph($glyph)</code></pre>
+
+<blockquote>
+
+<p>Return the character by the given glyph name of the font&#39;s encoding map.</p>
+
+</blockquote>
+
+<h2 id="encByUni">encByUni</h2>
+
+<pre><code>    $char = $font-&gt;encByUni($uni)</code></pre>
+
+<blockquote>
+
+<p>Return the character by the given Unicode of the font&#39;s encoding map.</p>
+
+</blockquote>
+
+<h2 id="mapByGlyph">mapByGlyph</h2>
+
+<pre><code>    $char = $font-&gt;mapByGlyph($glyph)</code></pre>
+
+<blockquote>
+
+<p>Return the character by the given glyph name of the font&#39;s default map.</p>
+
+</blockquote>
+
+<h2 id="mapByUni">mapByUni</h2>
+
+<pre><code>    $char = $font-&gt;mapByUni($uni)</code></pre>
+
+<blockquote>
+
+<p>Return the character by the given Unicode of the font&#39;s default map.</p>
+
+</blockquote>
+
+<h2 id="glyphByUni">glyphByUni</h2>
+
+<pre><code>    $name = $font-&gt;glyphByUni($unicode)</code></pre>
+
+<blockquote>
+
+<p>Return the glyph&#39;s name by the font&#39;s Unicode map. <b>CAUTION:</b> non-standard glyph-names are mapped onto the ms-symbol area (0xF000).</p>
+
+</blockquote>
+
+<h2 id="glyphByEnc">glyphByEnc</h2>
+
+<pre><code>    $name = $font-&gt;glyphByEnc($char)</code></pre>
+
+<blockquote>
+
+<p>Return the glyph&#39;s name by the font&#39;s encoding map.</p>
+
+</blockquote>
+
+<h2 id="glyphByMap">glyphByMap</h2>
+
+<pre><code>    $name = $font-&gt;glyphByMap($char)</code></pre>
+
+<blockquote>
+
+<p>Return the glyph&#39;s name by the font&#39;s default map.</p>
+
+</blockquote>
+
+<h2 id="wxByGlyph">wxByGlyph</h2>
+
+<pre><code>    $width = $font-&gt;wxByGlyph($glyph)</code></pre>
+
+<blockquote>
+
+<p>Return the glyph&#39;s width. This is a value, that when divided by 1000 and multiplied by the font size (height in points), gives the advance width to the next character&#39;s start. Typically, the width will be under 1000.</p>
+
+</blockquote>
+
+<h2 id="wxByUni">wxByUni</h2>
+
+<pre><code>    $width = $font-&gt;wxByUni($uni)</code></pre>
+
+<blockquote>
+
+<p>Return the Unicode character&#39;s width. This is a value, that when divided by 1000 and multiplied by the font size (height in points), gives the advance width to the next character&#39;s start. Typically, the width will be under 1000.</p>
+
+</blockquote>
+
+<h2 id="wxByEnc">wxByEnc</h2>
+
+<pre><code>    $width = $font-&gt;wxByEnc($char)</code></pre>
+
+<blockquote>
+
+<p>Return the character&#39;s width based on the current encoding. This is a value, that when divided by 1000 and multiplied by the font size (height in points), gives the advance width to the next character&#39;s start. Typically, the width will be under 1000.</p>
+
+</blockquote>
+
+<h2 id="wxMissingByEnc">wxMissingByEnc</h2>
+
+<pre><code>    $flag = $font-&gt;wxMissingByEnc($char)</code></pre>
+
+<blockquote>
+
+<p>Return true if the character&#39;s width (based on the current encoding) is supplied by &quot;missing width&quot; of font.</p>
+
+</blockquote>
+
+<h2 id="wxByMap">wxByMap</h2>
+
+<pre><code>    $width = $font-&gt;wxByMap($char)</code></pre>
+
+<blockquote>
+
+<p>Return the character&#39;s width based on the font&#39;s default encoding. This is a value, that when divided by 1000 and multiplied by the font size (height in points), gives the advance width to the next character&#39;s start. Typically, the width will be under 1000.</p>
+
+</blockquote>
+
+<h2 id="width">width</h2>
+
+<pre><code>    $wd = $font-&gt;width($text)</code></pre>
+
+<blockquote>
+
+<p>Return the width of $text as if it were at font size 1 (unscaled). <b>CAUTION:</b> works correctly only if a proper Perl string is used, either in native or UTF-8 format (check utf8-flag).</p>
+
+</blockquote>
+
+<h2 id="width_array">width_array</h2>
+
+<pre><code>    @widths = $font-&gt;width_array($text)</code></pre>
+
+<blockquote>
+
+<p>Return (as an array) the widths of the words in $text as if they were at size 1.</p>
+
+</blockquote>
+
+<h2 id="utfByStr">utfByStr</h2>
+
+<pre><code>    $utf8string = $font-&gt;utfByStr($string)</code></pre>
+
+<blockquote>
+
+<p>Return the utf8-string from string based on the font&#39;s encoding map.</p>
+
+</blockquote>
+
+<h2 id="strByUtf">strByUtf</h2>
+
+<pre><code>    $string = $font-&gt;strByUtf($utf8_string)</code></pre>
+
+<blockquote>
+
+<p>Return the encoded string from utf8-string based on the font&#39;s encoding map.</p>
+
+</blockquote>
+
+<h2 id="textByStr">textByStr</h2>
+
+<pre><code>    $pdf_string = $font-&gt;textByStr($string)</code></pre>
+
+<blockquote>
+
+<p>Return a properly formatted representation of $string for use in the PDF.</p>
+
+</blockquote>
+
+<h2 id="textByStrKern">textByStrKern</h2>
+
+<pre><code>    $pdf_string = $font-&gt;textByStrKern($string)</code></pre>
+
+<blockquote>
+
+<p>Return a properly formatted representation of $string, with kerning, for use in the PDF.</p>
+
+</blockquote>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../Builder_index.html">Master Index</a><br>
+<a href="../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../.././PDF/Builder/Resource/CIDFont.html">PDF::Builder::Resource::CIDFont</a> -- Base class for CID fonts<br>
+<a href="../../.././PDF/Builder/Resource/ColorSpace.html">PDF::Builder::Resource::ColorSpace</a> -- Base class for PDF color spaces<br>
+<a href="../../.././PDF/Builder/Resource/Colors.html">PDF::Builder::Resource::Colors</a> -- Translate color names into RGB settings<br>
+<a href="../../.././PDF/Builder/Resource/ExtGState.html">PDF::Builder::Resource::ExtGState</a> -- Graphics state dictionary support<br>
+<a href="../../.././PDF/Builder/Resource/Font.html">PDF::Builder::Resource::Font</a> -- Some common support routines for font files<br>
+<a href="../../.././PDF/Builder/Resource/Glyphs.html">PDF::Builder::Resource::Glyphs</a> -- Preparsed uniglyph.txt file information<br>
+<a href="../../.././PDF/Builder/Resource/PaperSizes.html">PDF::Builder::Resource::PaperSizes</a> -- List of standard paper sizes and their dimensions<br>
+<a href="../../.././PDF/Builder/Resource/Pattern.html">PDF::Builder::Resource::Pattern</a> -- Support stub for fill patterns<br>
+<a href="../../.././PDF/Builder/Resource/Shading.html">PDF::Builder::Resource::Shading</a> -- Support stub for fill shading patterns<br>
+<a href="../../.././PDF/Builder/Resource/UniFont.html">PDF::Builder::Resource::UniFont</a> -- Unicode Font Support<br>
+<a href="../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

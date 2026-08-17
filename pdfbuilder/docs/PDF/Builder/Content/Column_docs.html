@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Content::Column_docs</title>
+<link rel="stylesheet" href="../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#PDF%3A%3ABuilder%3A%3AContent%3A%3AText-column-and-related-routines">PDF::Builder::Content::Text/column and related routines</a>
+    <ul>
+      <li><a href="#column">column</a>
+        <ul>
+          <li><a href="#Special-notes-on-saving-and-restoring-the-font">Special notes on saving and restoring the font</a></li>
+        </ul>
+      </li>
+      <li><a href="#Markup-supported">Markup supported</a>
+        <ul>
+          <li><a href="#pre-already-formatted-from-another-format">pre (already formatted from another format)</a></li>
+          <li><a href="#none">none</a></li>
+          <li><a href="#md1-Markdown">md1 (Markdown)</a>
+            <ul>
+              <li><a href="#Standard-Markdown">Standard Markdown</a></li>
+              <li><a href="#Extended-Markdown">Extended Markdown</a></li>
+            </ul>
+          </li>
+          <li><a href="#html-HTML">html (HTML)</a>
+            <ul>
+              <li><a href="#Standard-HTML-tags">Standard HTML tags</a></li>
+              <li><a href="#Extended-HTML-tags">Extended HTML tags</a></li>
+              <li><a href="#Standard-CSS-properties-and-values">Standard CSS properties and values</a></li>
+              <li><a href="#Length-Measures">Length Measures</a></li>
+              <li><a href="#Extended-CSS-properties-and-values">Extended CSS properties and values</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#General-Comments">General Comments</a></li>
+      <li><a href="#init_state">init_state</a></li>
+      <li><a href="#pass_start_state">pass_start_state</a></li>
+      <li><a href="#pass_end_state">pass_end_state</a></li>
+      <li><a href="#unstable_state">unstable_state</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Content::Column_docs -- column text formatting system</p>
+
+<h1 id="PDF::Builder::Content::Text-column-and-related-routines">PDF::Builder::Content::Text/column and related routines</h1>
+
+<p>These routines form a sub-library for support of complex columnar output with high level markup languages. Currently, a single rectangular layout may be defined on a page, to be filled by user-defined content. Any content which could not be fit within the column confines is returned in an internal array format, and may be passed to the next <code>column()</code> call to finish the formatting.</p>
+
+<p>Future plans call for non-rectangular columns to be definable, as well as flow from one column to another on a page, and column balancing. Other possible enhancements call for support of non-Western writing systems (e.g., bidirectional text, using the HarfBuzz library), proper word-splitting and paragraph shaping (possibly using the Knuth-Plass algorithm), and additional markup languages.</p>
+
+<h2 id="column">column</h2>
+
+<pre><code>    ($rc, $next_y, $unused) = $text-&gt;column($page, $text, $grfx, $markup, $txt, %opts)</code></pre>
+
+<blockquote>
+
+<p>This method fills out a column of text on a page, returning any unused portion that could not be fit, and where it left off on the page.</p>
+
+<p>Tag names, CSS entries, markup type, etc. are case-sensitive (usually lower-case letters only). For example, you cannot give a &lt;P&gt; paragraph in HTML or a <b>P</b> selector in CSS styling.</p>
+
+<p><b>$page</b> is the page context. Currently, its only use is for page annotations for links (&#39;md1&#39; []() and &#39;html&#39; &lt;a&gt;), so if you&#39;re not using those, you may pass anything such as <code>undef</code> for <code>$page</code> if you wish.</p>
+
+<p><b>$text</b> is the text context, so that various font and text-output operations may be performed. It is often, but not necessarily always, the same as the object containing the &quot;column&quot; method.</p>
+
+<p><b>$grfx</b> is the graphics (gfx) context. It may be a dummy (e.g., undef) if <i>no</i> graphics are to be drawn, but graphical items such as the column outline (&#39;outline&#39; option) and horizontal rule (&lt;hr&gt; in HTML markup) use it. Currently, <i>text-decoration</i> underline (default for links, &#39;md1&#39; <code>[]()</code> and &#39;html&#39; <code>&lt;a&gt;</code>) or line-through or overline use the text context, but may in the future require a valid graphics context. Images (when implemented) will require a graphics context.</p>
+
+<p><b>$markup</b> is information on what sort of <i>markup</i> is being used to format and lay out the column&#39;s text:</p>
+
+<dl>
+
+<dt>&#39;pre&#39;</dt>
+<dd>
+
+<p>The input material has already been processed and is already in the desired form. <code>$txt</code> is an array reference to the list of hashes. This <i>must</i> be used when you are calling <code>column()</code> a second (or later) time to output material left over from the first call. It may also be used when the caller application has already processed the text into the appropriate format, and other markup isn&#39;t being used.</p>
+
+</dd>
+<dt>&#39;none&#39;</dt>
+<dd>
+
+<p>If <i>none</i> is specified, there is no markup in use. At most, a blank line or a new text array element specifies a new paragraph, and that&#39;s it. <code>$txt</code> may be a single string, or an array (list) of strings.</p>
+
+<p>The input <b>txt</b> is a list (anonymous array reference) of strings, each containing one or more paragraphs. A single string may also be given. An empty line between paragraphs may be used to separate the paragraphs. Paragraphs may not span array elements.</p>
+
+</dd>
+<dt>&#39;md1&#39;</dt>
+<dd>
+
+<p>This specifies a certain flavor of Markdown compatible with Text::Markdown. See the full description below.</p>
+
+<p>There are other flavors of Markdown, so other md<i>n</i> flavors <i>may</i> be defined in the future, such as POD from Perl code.</p>
+
+</dd>
+<dt>&#39;html&#39;</dt>
+<dd>
+
+<p>This specifies that a large subset of HTML markup is used, along with some attributes and CSS.</p>
+
+<p>Numeric entities (decimal &amp;#nnn; and hexadecimal &amp;#xnnn;) are supported, as well as named entities (&amp;mdash; for example).</p>
+
+<p>The input <b>txt</b> is a list (anonymous array reference) of strings, each containing one or more paragraphs and other markup. A single string may also be given. Per normal HTML practice, paragraph tags should be used to mark paragraphs. <i>Note that HTML::TreeBuilder is configured to automatically mark top body-level text with paragraph tags, in case you forget to do so, although it is probably better to do it yourself, to maintain more control over the processing.</i> Separate array elements will first be glued together into a single string before processing, permitting paragraphs to span array elements if desired.</p>
+
+</dd>
+<dt>Other input formats</dt>
+<dd>
+
+<p>There are other markup languages out there, such as HTML-like Pango, nroff-like man page, Markdown-like wikimedia, and Perl&#39;s POD, that might be supported in the future (provided there are supported Perl libraries for them). It is very unlikely that TeX or LaTeX will ever be supported, as they both already have excellent PDF output.</p>
+
+<p>PDF::Builder currently only supports the markup languages described above. If you want to use something else (e.g., Perl&#39;s POD, or <i>man</i> format, or even MS Word or some other WYSIWYG format), you will need to find a converter utility to convert it to a supported flavor of Markdown or HTML. Many such converters already exist, so take a look (although you may well have to do some cleanup before <code>column()</code> accepts the resulting HTML as input).</p>
+
+<p>Perhaps in the future, PDF::Builder will directly support additional formats, but no promises.</p>
+
+</dd>
+</dl>
+
+<p><b>$txt</b> is the input text: a string, an array reference to multiple strings, or an array reference to hashes. See <code>$markup</code> for details.</p>
+
+<p><b>%opts</b> Options -- a number of these are, despite the name, mandatory.</p>
+
+<dl>
+
+<dt>&#39;rect&#39; =&gt; [x, y, width, height]</dt>
+<dd>
+
+<p>This defines a column as a rectangular area of a given width and height (both in points) on the current page. <i>In the future, it is expected that more elaborate non-rectangular areas will be definable, but for now, a simple rectangle is all that is permitted.</i> The column&#39;s upper left coordinate is <code>x, y</code>.</p>
+
+<p>The top text baseline is assumed to be relative to the UL corner (based on the determined line height), and the column outline clips that baseline, as it does additional baselines down the page (interline spacing is <code>leading</code> multiplied by the largest <code>font_size</code> or image height needed on that line).</p>
+
+<p><i>Currently, &#39;rect&#39; is required, as it is the only column shape supported.</i></p>
+
+</dd>
+<dt>&#39;relative&#39; =&gt; [ x, y, scale(s) ]</dt>
+<dd>
+
+<p><code>&#39;relative&#39;</code> defaults to <code>[ 0, 0, 1, 1 ]</code>, and allows a column outline (currently only &#39;rect&#39;) to be either absolute or relative. <code>x</code> and <code>y</code> are added to each <code>x,y</code> coordinate pair, <i>after</i> scaling. Scaling values:</p>
+
+<dl>
+
+<dt>(none) The scaling defaults to 1 in both x and y dimensions (no change).</dt>
+<dd>
+
+</dd>
+<dt>scale (one value) The scaling in both the x (width) and y (height) dimensions uses this value.</dt>
+<dd>
+
+</dd>
+<dt>scale_x, scale_y (two values) There are two separate scaling factors for the x dimension (width) and y dimension (height).</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>This permits a generically-shaped outline to be defined, scaled (perhaps not preserving the aspect ratio) and placed anywhere on the page. This could save you from having to define similarly-shaped columns from scratch multiple times. If you want to define a relative outline, the lower left corner (whether or not it contains a point, and whether or not it&#39;s the first one listed) would usually be <code>0, 0</code>, to have scaling work as expected. In other works, your outline template should be in the lower left corner of the page.</p>
+
+</dd>
+<dt>&#39;start_y&#39; =&gt; $start_y</dt>
+<dd>
+
+<p>If omitted, it is assumed that you want to start at the top of the defined column (the maximum <code>y</code> value minus the maximum vertical extent of this line). If used, the normal value is the <code>next_y</code> returned from the previous <code>column()</code> call. It is the deepest extent reached by the previous line (plus leading), and is the top-most point of the new first line of this <code>column()</code> call.</p>
+
+<p>Note that the <code>x</code> position will be determined by the column shape and size (the left-most point of the baseline), so there is no place to explicitly set an <code>x</code> position to start at.</p>
+
+</dd>
+<dt>&#39;font_size&#39; =&gt; $font_size</dt>
+<dd>
+
+<p>This is the starting font size (in points) to be used. Over the course of the text, it may be modified by markup. The default is 12pt. It is in turn overridden by any CSS or HTML font size-settings.</p>
+
+<p>The starting font size may be set in a number of ways. It may be inherited from a previous <code>$text-&gt;font(..., font-size)</code> statement; it may be set via the <code>font_size</code> option (overriding any font method inheritance); it may default to 12pt (if neither explicit way is given). For HTML markup, it may of course be modified by the <code>font</code> tag or by CSS styling <code>font-size</code>. For Markdown, it may be modified by CSS styling.</p>
+
+</dd>
+<dt>&#39;font_info&#39; =&gt; $string</dt>
+<dd>
+
+<p>This permits the user to specify the starting font used in <code>column()</code> (body font-family, font-style, font-weight, color). <code>column()</code> will pick up any font already loaded (<code>$text-&gt;font($font, $size);</code>, or using FontManager), and use that as the &quot;current&quot; font. If no font has been loaded, and no other instructions are given, the FontManager default (core Times-Roman) will be used.</p>
+
+<p>The <code>font_info</code> option for <code>column()</code> may be given to override either of the two above methods. You may specify a <code>$string</code> of <b>&#39;-fm-&#39;</b> to instruct <code>column()</code> to use the FontManager &quot;default&quot; font (Times face core font). Or, you may pick a font face <i>known</i> to FontManager (added by user code if not one of the 28 core fonts), and optionally give it style and weight: <code>$string</code> of <b>&#39;face:style:weight:color&#39;</b>. The style defaults to &#39;normal&#39; (non-italic), or &#39;normal&#39; or &#39;0&#39; may be given. For italics, use &#39;italic&#39; or &#39;1&#39;. The weight defaults to &#39;normal&#39; (unbolded weight), or &#39;normal&#39; or &#39;0&#39; may be given. For bold (heavy) text, use &#39;bold&#39; or &#39;1&#39;. Finally, a color may be given.</p>
+
+<p>Finally, the <code>style</code> option for <code>column()</code> may be given to override any of the above settings, e.g., <b>&#39;style&#39;=&gt;{ body { font-family:... }</b> and set the initial current font. Remember that, as with anything font-related that <code>column()</code> does, the &#39;face&#39; (family) used must already be known to FontManager (explicitly loaded with <code>add_font()</code> if not one of the 28 core fonts). Remember that the first 14 fonts are standard PDF, and the second 14 are normally supplied with Windows (but not always with other operating systems).</p>
+
+</dd>
+<dt>&#39;marker_width&#39; =&gt; $marker_width</dt>
+<dd>
+
+</dd>
+<dt>&#39;marker_gap&#39; =&gt; $marker_gap</dt>
+<dd>
+
+<p>This is the width of the gutter to the left of a list item, where (for the first line of the item) the marker lives. The marker contains the symbol (for bulleted/unordered lists) or formatted number and &quot;before&quot; and &quot;after&quot; text (for numbered/ordered lists). Both have a single space (marker_gap = 1em) before the item text starts. The number is a length, in points.</p>
+
+<p>The default is 1 em (1 times the font_size passed to <code>column()</code>), and is not adjusted for any changes of font_size in the markup, so that lists are indented <i>consistently</i>. This is usually fine for unordered (bulleted) lists and single digit ordered (numbered) lists, although you may need to make it wider for two or three digit numbered lists. An explicit value passed in is also not changed -- the gutter width for the marker will be the same in all lists (keeping them aligned). If you plan to have exceptionally long markers, such as an ordered list of years in Roman numerals, e.g., <b>(MCMXCIX)</b>, you may want to make this gutter a bit wider.</p>
+
+<p>A value may be given for the marker_gap, which is the gap between the (<code>$marker_width</code> wide) <i>marker</i> and the start of the list item&#39;s text. The default is $fs points (1 em), set by the font_size in the markup.</p>
+
+<p>The <code>list-style-position</code> CSS property may be given as the standard &#39;outside&#39; (the default) or &#39;inside&#39;, or (extension to CSS) to indent the left side of second, third, etc. &lt;li&gt; lines to somewhere between the &#39;inside&#39; and &#39;outside&#39; positions. Be sure to consider the <code>_marker-align</code> extended property to left, center, or right (default) align the marker within the <code>marker_gutter</code>.</p>
+
+</dd>
+<dt>&#39;leading&#39; =&gt; $leading</dt>
+<dd>
+
+<p>This is the leading <i>ratio</i> used throughout the column text. The <code>$x, $y</code> position through <code>$x + width</code> is assumed to be the first text baseline. The next line down will be <code>$y - $leading*$font_size</code>. If the font_size changes for any reason over the course of the column, the baseline spacing (leading * font_size) will also change. The <b>default</b> leading ratio is 1.125 (12.5% added to font).</p>
+
+</dd>
+<dt>&#39;para&#39; =&gt; [ $indent, $top-margin ]</dt>
+<dd>
+
+<p>When starting a new paragraph, these are the <i>default</i> indentation (in points), and the extra vertical spacing for a top margin on a paragraph. Otherwise, the default is <code>[ 1*$font_size, 0 ]</code> (1em indent, 0 additional vertical space). Either may be overridden by the appropriate CSS settings. An <i>outdent</i> may be defined with a negative indentation value. These apply to all <code>$markup</code> types.</p>
+
+<p>At the top of a column, any top margin (not just for paragraphs) is ignored.</p>
+
+</dd>
+<dt>&#39;outline&#39; =&gt; &quot;color string&quot;</dt>
+<dd>
+
+<p>You may optionally request that the column be outlined in a given color, to aid in debugging fitting problems. This will require that the graphics context be provided to <code>column()</code>.</p>
+
+</dd>
+<dt>&#39;color&#39; =&gt; &quot;color string&quot;</dt>
+<dd>
+
+<p>The color to draw the text (or rule or other graphic) in. The default is black (#000000).</p>
+
+</dd>
+<dt>&#39;style&#39; =&gt; &quot;CSS styling&quot;</dt>
+<dd>
+
+<p>You may define CSS (selectors and properties lists) to override the built-in CSS defaults. These will be applied for the entire <code>column()</code> call. You can use this, or <code>style</code> tags in &#39;html&#39;, but for &#39;none&#39; or &#39;md1&#39;, you will need to use this method to set styling. See also the <code>font_info=&gt;</code> option to set initial font settings.</p>
+
+<p>Note that, unlike the <code>style=</code> <i>attribute</i> in HTML tags, the <code>style=&gt;</code> option is formatted like a &lt;style&gt; <i>tag</i> -- that is, with <b>selector {</b> <i>property</i>: <i>value</i>;... <b>}</b>. If you want to set <i>global</i> values, use the <b>body</b> selector.</p>
+
+</dd>
+<dt>&#39;substitute&#39; =&gt; [ [ &#39;char or string&#39;, &#39;before&#39;, &#39;replace&#39;, &#39;after&#39;],... ]</dt>
+<dd>
+
+<p>When a certain Unicode code point (character) or string is found, insert <i>before</i> text before the character, replace the character or string with <i>replace</i> text, and insert <i>after</i> text after the character. This may make it easier to insert HTML code (font, color, etc.) into Markdown text, if the desired settings and character can not be produced by your Markdown editor. This applies both to &#39;md1&#39; and &#39;html&#39; markup. Multiple substitutions may be defined via multiple array elements. If you want to leave the original character or string <i>itself</i> unchanged, you should define the <i>replace</i> text to be the same as <code>&#39;char or string&#39;</code>. &#39;before&#39; and/or &#39;after&#39; text may be empty strings if you don&#39;t want to insert some sort of markup there.</p>
+
+<p>Example: to insert a red cross (X-out) and green tick (check) mark</p>
+
+<pre><code>    &#39;substitute&#39; =&gt; [
+      [ &#39;%cross%&#39;, &#39;&lt;font face=&quot;ZapfDingbats&quot; color=&quot;red&quot;&gt;&#39;, &#39;8&#39;, &#39;&lt;/font&gt;&#39; ],
+      [ &#39;%tick%&#39;, &#39;&lt;font face=&quot;ZapfDingbats&quot; color=&quot;green&quot;&gt;&#39;, &#39;4&#39;, &#39;&lt;/font&gt;&#39; ],
+    ]</code></pre>
+
+<p>should change <code>%cross%</code> in Markdown text (&#39;md1&#39;) or HTML text (&#39;html&#39;) to <code>&lt;font face=&quot;ZapfDingbats&quot; color=&quot;green&quot;&gt;8&lt;/font&gt;</code> and similarly for <code>%tick%</code>. This is done <i>after</i> the Markdown is converted to HTML (but before HTML is parsed), so make sure that your macro text (e.g., <code>%tick%</code>) isn&#39;t something that Markdown will try to interpret by itself! Also, Perl&#39;s regular expression parser seems to get upset with some characters, such as <code>|</code>, so don&#39;t use them as delimiters (e.g., <code>|cross|</code>). You don&#39;t <i>have</i> to wrap your macro name in delimiters, but it can make the text structure clearer, and may be necessary in order not to do substitutions in the wrong place.</p>
+
+</dd>
+<dt>&#39;state&#39; =&gt; \%state</dt>
+<dd>
+
+<p>This is the state of processing, including (in particular), information on all the requested references (&lt;a&gt;, &lt;_ref&gt;) and targets (&lt;_reft&gt; and specific id&#39;s). Before use, it must be created and initialized. During multiple passes across multiple column() calls, &#39;state&#39; preserves all the link information. It can even preserve information across the creation of multiple related PDFs, though this may require writing and reading back from a file. There is no information in &#39;state&#39; that is likely to be of interest to a user (i.e., all internal data). If &#39;state&#39; is not given, it will (in most cases) be impossible to define various kinds of links (including cross references). A URL link to a browser does not need <code>&#39;state&#39;</code>, but all other kinds of links to this or other PDF files do.</p>
+
+</dd>
+<dt>&#39;page&#39; =&gt; [ $ppn, $extfile, $fpn, $LR, $bind ]</dt>
+<dd>
+
+<p>This array of values gives <code>column()</code> information needed for generating links (both <i>goto</i> and <i>pdf</i> annotations), and (TBD) left- and right-hand page processing, including how much to shift <code>column()</code> definitions to the outside of the page for binding purposes (TBD). The link information is as follows:</p>
+
+<dl>
+
+<dt>$ppn</dt>
+<dd>
+
+<p>This is the Physical Page Number of the page currently being generated. It is always an integer greater than 0, and takes a value 1,2,3,... It is needed if this page is used as the target for an external (across PDFs) link, using a physical page number and not a Named Destination. Remember to increment it every time the code calls the <code>page()</code> method. It may be left undefined if you are sure you&#39;re never going to generate a link (via <code>pdf</code> call, not using a Named Destination) to this PDF file from another PDF.</p>
+
+</dd>
+<dt>$extfile</dt>
+<dd>
+
+<p>This describes the external path, filename, and extension of <b>this</b> PDF being created. It is needed if this page is used as the target for an external (across PDFs) link. Remember that this is the <i>final</i> location and name of where this file will live when in use, not necessarily where it is being <i>created</i> at this moment! It may be left undefined or a random name if you are sure you&#39;re never going to generate a link (via <code>pdf</code> call) to <i>this</i> PDF file from another PDF.</p>
+
+</dd>
+<dt>$fpn</dt>
+<dd>
+
+<p>This is the <i>Formatted</i> Page Number of the page being generated. In the simplest case, it is equal to the Physical Page Number, but often you will want to &quot;get fancy&quot; with numbering, such as a prefix for an appendix (&#39;C-2&#39;, &#39;Glossary-5&#39;, etc.), lowercase Roman numerals in the front matter, etc. You might even want to carry one single sequence of decimal page numbers across multiple PDFs, thus starting at other than &quot;1&quot;. If you leave it undefined, certain kinds of links and cross reference formats (where the formatted page number is shown) will not be possible.</p>
+
+</dd>
+<dt>$LR</dt>
+<dd>
+
+<p>This says whether it&#39;s a left-hand page or a right-hand page, for purposes of formatting layout and shifting the <code>column()</code> outline left or right (towards the &quot;outside&quot; of the page) to allow binding space. If undefined, it defaults to an &#39;R&#39; right-hand page. This ability is currently unused.</p>
+
+</dd>
+<dt>$bind</dt>
+<dd>
+
+<p>This is the number of points to shift the <code>column()</code> coordinates towards the &quot;outside&quot; of the page for purposes of binding multiple pages together, whether left-right alternation or all right-hand pages (e.g., punched for a notebook or spiral binding, or just stapled on the inside, or glued or sewn into a paperback or hard-cover binding). If undefined, the default is 0. This ability is currently unused.</p>
+
+</dd>
+</dl>
+
+</dd>
+<dt>&#39;restore&#39; =&gt; flag</dt>
+<dd>
+
+<p>This integer flag determines what sort of cleanup <code>column()</code> will do upon exit, to restore (or not) the font state (face, bold or normal weight, italic or normal style, size, and color).</p>
+
+<dl>
+
+<dt>for rc = 0 (all input markup was used up, without running out of column)</dt>
+<dd>
+
+<dl>
+
+<dt>restore =&gt; 0</dt>
+<dd>
+
+<p>This is the <b>default</b>. Upon exiting, <code>column()</code> will attempt to restore the state to what one would see if there was yet more text to be output. Note that this is <i>not</i> necessarily what one would see if the entire state was restored to entry conditions. The intent is that another <code>column()</code> call can be immediately made, using whatever font state was left by the previous call, as though the two calls&#39; markup inputs were concatenated.</p>
+
+</dd>
+<dt>restore =&gt; 1</dt>
+<dd>
+
+<p>This value of <code>restore</code> commands that <i>no</i> change be made to the font state, that is, <code>column()</code> exits with the font state left in the last text output. This may or may not be desirable, especially if the last text output left the text in an unexpected state.</p>
+
+</dd>
+<dt>restore =&gt; 2</dt>
+<dd>
+
+<p>This value of <code>restore</code> attempts to bring the font state all the way back to what it was upon <i>entry</i> to the routine, as if it had never been called. Note that if <code>column()</code> was called with no global font settings, that can not be undone, although the color <i>can</i> be changed back to its original state, usually black.</p>
+
+<p><b>CAUTION:</b> The Font Manager is not synchronized with whatever state the font is returned to. You should not request the &#39;current&#39; font, but should instead explicitly set it to a specific face, etc., which resets &#39;current&#39;.</p>
+
+</dd>
+</dl>
+
+</dd>
+<dt>for rc = 1 (ran out of column space before all the input markup was used up)</dt>
+<dd>
+
+<dl>
+
+<dt>restore =&gt; 0</dt>
+<dd>
+
+<p>This is the <b>default</b>. Upon exiting, no changes will be made to the font state. As the code will be in the middle of some output, the font state is kept the same, so the next <code>column()</code> call (for the overflow) can pick up where the previous call left off, with regards to the font state.</p>
+
+<p>It is equivalent to <code>restore = 1</code>.</p>
+
+</dd>
+<dt>restore =&gt; 1</dt>
+<dd>
+
+<p>This is the same as <code>restore = 0</code>.</p>
+
+</dd>
+<dt>restore =&gt; 2</dt>
+<dd>
+
+<p>This value of <code>restore</code> attempts to bring the font state all the way back to what it was upon <i>entry</i> to the routine, as if it had never been called. Note that if <code>column()</code> was called with no global font settings, that can not be undone, although the color <i>can</i> be changed back to its original state, usually black.</p>
+
+<p><b>CAUTION:</b> The Font Manager is not synchronized with whatever state the font is returned to. You should not request the &#39;current&#39; font, but should instead explicitly set it to a specific face, etc., which resets &#39;current&#39;.</p>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<p><b>Data returned by this call</b></p>
+
+<p>If there is more text than can be accommodated by the column size, the unused portion is returned, with a return code of 1. It is an empty list if all the text could be formatted, and the return code is 0. <code>next_y</code> is the y coordinate where any additional text (<code>column()</code> call) could be added to a column (as <code>start_y</code>) that wasn&#39;t completely filled. This would be at the starting point of a new column (i.e., the last paragraph is ended). Note that the application code should check if this position is too far down the page (in the bottom margin) and not blindly use it! Also, as &#39;md1&#39; is first converted to HTML, any unused portion will be returned as &#39;pre&#39; markup, rather than Markdown or HTML. Be sure to specify &#39;pre&#39; for any continuation of the column (with one or more additional <code>column()</code> calls), rather than &#39;none&#39;, &#39;md1&#39;, or &#39;html&#39;.</p>
+
+<dl>
+
+<dt>$rc</dt>
+<dd>
+
+<p>The return code.</p>
+
+<dl>
+
+<dt>&#39;0&#39;</dt>
+<dd>
+
+<p>A return code of 0 indicates that the call completed, while using up all the input <code>$txt</code>. It did <i>not</i> run out of defined column space.</p>
+
+<p><b>NOTE:</b> if <code>restore</code> has a value of 1, the <code>column()</code> call makes no effort to &quot;restore&quot; conditions to any starting values. If your last bit of text left the &quot;current&quot; font with some &quot;odd&quot; face/family, size, <i>italicized</i>, <b>bolded</b>, or colored; that will be what is used by the next column call (or other PDF::Builder text calls). This is done in order to allow you to easily chain from one column to the next, without having to manually tell the system what font, color, etc. you want to return to. On the other hand, in some cases you may want to start from the same initial conditions as usual. You may want to add <code>get_font()</code>, <code>font()</code>, <code>fillcolor()</code>, and <code>strokecolor()</code> calls as necessary before the next text output, to get the expected text characteristics. Or, you can simply let <code>restore</code> default to 0 to get the same effect.</p>
+
+</dd>
+<dt>&#39;1&#39;</dt>
+<dd>
+
+<p>A return code of 1 indicates that the call completed by filling up the defined column space. It did <i>not</i> run out of input <code>$txt</code>. You will need to make one or more calls with empty column space (to fill), to use up the remaining input text (with &quot;pre&quot; <i>$markup</i>).</p>
+
+<p>If <code>restore</code> defaults to 0 (or is set to 1), the text settings in the &quot;current&quot; font are left as-is, so that whatever you were doing when you ran out of defined column (as regards to font face/family, size, italic and bold states, and color) should automatically be the same when you make the next <code>column()</code> call to make more output.</p>
+
+</dd>
+</dl>
+
+<p>Additional return codes <i>may</i> be added in the future, to indicate failures of one sort or another.</p>
+
+</dd>
+<dt>$next_y</dt>
+<dd>
+
+<p>The next page &quot;y&quot; coordinate to start at, if using the same column definition as the previous <code>column()</code> definition did (i.e., you didn&#39;t completely fill the column, and received a return code of 0). In that case, <code>$next_y</code> would give the page &quot;y&quot; coordinate to pass to <code>column()</code> (as <code>start_y</code>) to start a new paragraph at.</p>
+
+<p>If the return code <code>$rc</code> was 1 (column was used up), the <code>$next_y</code> returned will be -1, as it would be meaningless to use it.</p>
+
+</dd>
+<dt>$unused</dt>
+<dd>
+
+<p>This is the unused portion of the input text (return code <code>$rc</code> is 1), in a format (&quot;pre&quot; <code>$markup</code>) suitable for input as <code>$txt</code>. It will be a <i>reference</i> to an array of hashes.</p>
+
+<p>If <code>$rc</code> is 0 (all input was used up), <code>$unused</code> is an empty anonymous array. It contains nothing to be used.</p>
+
+</dd>
+</dl>
+
+</blockquote>
+
+<h3 id="Special-notes-on-saving-and-restoring-the-font">Special notes on saving and restoring the font</h3>
+
+<p>It is important to let <code>column()</code> know what font face (font-family), weight, and style to use, so it can switch between normal, bold, and italic as desired. There are several methods to <i>explicitly select</i> a font face (font-family) and its variants (weight, style) upon entry to <code>column()</code>. One is to use the <code>font_info</code> option to <code>column</code>, including &quot;-fm-&quot; (default) to use FontManager&#39;s default font (core Times-Roman). Another is to use the <code>style</code> option to <code>column()</code> to override the <b>body</b> default CSS. A third, if using HTML or Markdown, is to add a &lt;style&gt; tag to the beginning of the text markup, in order to set the <b>body</b> CSS (as with <code>style</code>). All of these methods will set the <b>body</b>&#39;s font.</p>
+
+<p>If nothing special is done, the font selection upon entry to <code>column()</code> will default to using the default FontManager settings (core Times-Roman, equivalent to <code>&#39;font_info&#39;=&gt;&#39;-fm-&#39;</code>). <code>font_info</code> may also be explicitly set to specify the body text font-family (optionally also style, weight, and color). <code>&#39;font_info&#39;=&gt;&#39;-ext-&#39;</code> may be given to tell FontManager to pick up an already-loaded font in this text context. It will label that font <b>-external-</b> and use it as the current font. <i>However</i>, be aware that if doing this, <code>column()</code> will <b>not</b> know the actual face (font-family) of whatever font this is, and thus can not change the font-weight (bold) or font-style (italic). These change requests will be ignored. If no font is already loaded, the FontManager&#39;s default font (<code>-fm-</code> core Times-Roman) will be selected (and no &quot;-external-&quot; font defined). Whatever way is used to specify he body font-family on the command line, it may be overridden by a <code>&lt;style&gt;</code> tag or <code>&#39;style&#39;=&gt;</code> command line CSS specification.</p>
+
+<p>Once <code>column()</code> has already been called within a given text context, whatever font is in force at the end of the call will be preserved by the text context, available to be picked up by the next <code>column()</code> call with <code>&#39;font_info&#39;=&gt;&#39;-ext&#39;</code> within <i>this</i> text context. <i>column() will still <b>not</b> know the font-family, since this information is not carried in the text context!</i> Note that a text context is limited to a single page of a PDF, at most (it must be defined by the <code>$page-&gt;text()</code> call, and is reset with each new page). The user code may of course choose to load a new font externally to <code>column()</code>, in order to use that one upon entry. An <code>-external-</code> font still cannot change style or weight.</p>
+
+<p>Any font &quot;face&quot; used must be first registered with FontManager. The standard core fonts (as well as Windows extensions) are preregistered. If user code loads an arbitrary font outside of <code>column()</code>, it will only be known as &quot;-external-&quot; (as described above). <code>column()</code> calls (including CSS font-family) only recognize registered faces, so it knows where to find the font file and other information, and can cache the loaded font. It can keep track of which font is currently being used, and know how to set bold and italic variants.</p>
+
+<p>When the end of the defined column is reached (before the text source is exhausted), all open tags are preserved, so that the next <code>column()</code> call (with <i>pre</i> formatting) can pick up with the same font settings as before. However, this works only as long as the complete font description is set in the tags (including the face). If the font face is not given in the tags, it will not be known, and bold and italic will likely not work at the next change. If the text is in the middle of a highlighted phrase (e.g., bold or italic, or a different font), that particular font should be picked up again. However, the <b>body</b> font face and variant may not be correctly resumed if it is assumed that the proper font has been inherited by the next <code>column()</code> call. Explicitly setting the <b>body</b> font should allow the font to return to a known starting condition, although it is possible that (based on nesting of font changes at the column break) other aspects might be incorrect.</p>
+
+<p>To summarize, the best practice is to register (<code>add_font</code>) to FontManager any fonts you wish to use, and then explicitly use <code>font_info</code> or <code>style</code> to let <code>column()</code> know what the base font is for your text. This is better than externally loading a font, and depending on its being inherited from the text context, which may in turn may leave it in some other state after a <code>column()</code> call, as well as not being able to change bold and italic.</p>
+
+<h2 id="Markup-supported">Markup supported</h2>
+
+<h3 id="pre-already-formatted-from-another-format">pre (already formatted from another format)</h3>
+
+<p>This is an internal format, essentially the output from HTML::TreeBuilder. As this data is consumed by output, it is removed from the array. If any is left over when the column is filled, it is returned to the user, and may be used in a &#39;pre&#39; format call to <code>column()</code> to finish the job.</p>
+
+<p>If you wish to manually generate &#39;pre&#39; format data, you may do so, although it is usually easier to use a higher level markup such as &#39;md1&#39; or &#39;html&#39;.</p>
+
+<h3 id="none">none</h3>
+
+<p>This format simply has empty lines separating paragraphs. Otherwise it has no markup.</p>
+
+<h3 id="md1-Markdown">md1 (Markdown)</h3>
+
+<p>This is the version of the Markdown language supported by the Text::Markdown library. It is converted into the equivalent HTML and then processed by HTML::TreeBuilder.</p>
+
+<h4 id="Standard-Markdown">Standard Markdown</h4>
+
+<ul>
+
+<li><p>* or _ produces italic text</p>
+
+</li>
+<li><p>** produces bold text</p>
+
+</li>
+<li><p>*** produces bold+italic text</p>
+
+</li>
+<li><p>* (in column 1) produces a bulleted list</p>
+
+</li>
+<li><p>1. (2., 3., etc. if desired) in column 1 produces a numbered list 1., 2., etc.</p>
+
+</li>
+<li><p># produces a level 1 heading. ## produces a level 2 heading, etc. (up to ###### level 6 heading)</p>
+
+</li>
+<li><p>---, ===, or ___ produces a horizontal rule</p>
+
+</li>
+<li><p>~~ enclose a section of text to be line-through&#39;d (strike-out)</p>
+
+</li>
+<li><p>[label](URL) external links (to HTML page or within this document, see &#39;&lt;a&gt;&#39; for URL/href formats)</p>
+
+</li>
+<li><p>[label][n] reference-style links <b>NOT</b> currently supported</p>
+
+</li>
+<li><p>[label][^n] footnote-style links <b>NOT</b> currently supported</p>
+
+</li>
+<li><p>` (backticks) enclose a &quot;code&quot; format phrase</p>
+
+</li>
+<li><p>``` (backticks) enclose a &quot;code&quot; format <i>block</i>, <b>NOT</b> currently supported</p>
+
+</li>
+<li><p>![alt text](path_to_image) image, <b>NOT</b> currently supported</p>
+
+</li>
+<li><p>table entries with | and - (or HTML tags) <b>NOT</b> currently supported</p>
+
+</li>
+<li><p>superscripts (^) and subscripts (~) (or HTML tags) <b>NOT</b> currently supported</p>
+
+</li>
+<li><p>definition lists with : <b>NOT</b> currently supported</p>
+
+</li>
+<li><p>task lists - [ ] <b>NOT</b> currently supported</p>
+
+</li>
+<li><p>emojis will <b>NEVER</b> be supported. We have a perfectly good alphabet.</p>
+
+</li>
+<li><p>highlighting (inline == or HTML &lt;mark&gt;) <b>NOT</b> currently supported</p>
+
+</li>
+</ul>
+
+<p>HTML (see below) may be mixed in as desired (although not within &quot;code&quot; blocks marked by backticks, where &lt;, &gt;, and &amp; get turned into HTML entities, disabling the intended tags). Markdown will be converted into HTML, which will then be interpreted into PDF. <i>Note that Text::Markdown may produce HTML for certain features, that is not yet supported by HTML processing (see &#39;html&#39; section below). Let us know if you need such a feature!</i></p>
+
+<p>The input <b>txt</b> is a list (anonymous array reference) of strings, each containing one or more paragraphs and other markup. A single string may also be given. Per Markdown formatting, an empty line between paragraphs may be used to separate the paragraphs. Separate array elements will first be glued together into a single string before processing, permitting paragraphs to span array elements if desired.</p>
+
+<h4 id="Extended-Markdown">Extended Markdown</h4>
+
+<p>CSS (Cascading Style Sheets) may be defined for resulting HTML tags (or &quot;body&quot; for global settings), via the <code>style=&gt;</code> <code>column()</code> option. You may also prepend a <code>&lt;style&gt;</code> HTML tag, with CSS markup, to your Markdown source.</p>
+
+<p>Standard Markdown permits an &#39;id&#39; to be defined in a heading, by suffixing the text with <code>{#id_name}</code>. This is equivalent to <code>id=&quot;id_name&quot;</code> in HTML markup. Although Text::Markdown does not currently support it, <code>column()</code> implements this way of defining a target&#39;s id, and in fact extends it to permit an id to be defined for any tag with child text.</p>
+
+<p>Markdown is further extended by <code>column()</code> to permit a &#39;title&#39; to be defined for any tag with child text, by use of <code>{^title_text}</code>. Note that this &#39;title&#39; is the <i>link title</i> to be used, <b>not</b> browser style &quot;hover&quot; popup text. It is the equivalent of <code>title=&quot;title_text&quot;</code> in &lt;a&gt; or &lt;_ref&gt; HTML markup. Any link tag may define the PDF &quot;fit&quot; to use at the target, by <code>{%fit_type,parm(s)}</code> or <code>fit=&quot;fit_type,parm(s)&quot;</code> in &lt;a&gt; or &lt;_ref&gt; HTML markup.</p>
+
+<p>There are other HTML equivalents defined by Standard Markdown which may not be implemented (converted) by Text::Markdown. Among these are <code>~~</code> line-through (strike-out) and <code>===</code> horizontal rule, which have been fixed with post-processing of the generated HTML. Let us know if you find any more such cases, and we may be able to extend the functionality of &#39;md1&#39; formatting, or if necessary, implement &#39;md2&#39; format to use a different library. By default, Text::Markdown disables extended &lt;_tagname&gt; calls, but these all should be handled properly in post-processing. There are also Markdown features that may be implemented by Text::Markdown, but the resulting HTML is not supported by <code>column()</code> (yet). If you are missing a needed feature, ask about our moving it up on the priority list.</p>
+
+<h3 id="html-HTML">html (HTML)</h3>
+
+<p>This is the HTML language to be processed by the HTML::TreeBuilder library. It is processed into an array of tags and text strings (&#39;pre&#39; format), which is interpreted by <code>column()</code>. A substantial subset of CSS (Cascading Style Sheets) is also interpreted by <code>column()</code>, although selectors are primitive compared to what a browser supports.</p>
+
+<h4 id="Standard-HTML-tags">Standard HTML tags</h4>
+
+<p>A good many HTML tags are implemented, although not all of them:</p>
+
+<ul>
+
+<li><p><b>&lt;i&gt; or &lt;em&gt;</b> produces italic or slanted/oblique text, where available through FontManager</p>
+
+</li>
+<li><p><b>&lt;b&gt; or &lt;strong&gt;</b> produces bold text, where available through FontManager</p>
+
+</li>
+<li><p><b>&lt;s&gt;, &lt;strike&gt;, and &lt;del&gt;</b> produce text line-through (strike-out or strike-through)</p>
+
+</li>
+<li><p><b>&lt;u&gt; and &lt;ins&gt;</b> produce underlined text</p>
+
+</li>
+<li><p><b>&lt;code&gt;</b> produce &#39;code&#39;-style fixed-pitch text</p>
+
+</li>
+<li><p><b>&lt;h1&gt; through &lt;h6&gt;</b> produce level 1 through 6 headings and subheadings</p>
+
+</li>
+<li><p><b>&lt;hr&gt;</b> produce a horizontal rule</p>
+
+<p>The <code>width=&quot;length&quot;</code> attribute gives a length (width, in pixels) less than the full column width, and <code>size=&quot;height&quot;</code> attribute gives the height (thickness) of the rule. CSS properties <code>width</code> and <code>height</code> are the equivalent, permitting other units of measure.</p>
+
+<p>The default <code>width</code> is the full column, and <code>size</code> (thickness) of the line is 0.5pt.</p>
+
+<p>Note that most browsers default to <i>center</i> alignment if the width is less than the full column, which is the default here. The <b>align</b> attribute is available here to specify <i>left</i> alignment of the rule, <i>center</i> alignment (default), or <i>right</i> alignment. Note that this attribute is deprecated in the HTML standard, however, PDF::Builder does not yet support the suggested CSS methods (properties) for doing this.</p>
+
+</li>
+<li><p><b>&lt;blockquote&gt;</b> produces a quotation block, a paragraph indented on both sides and of smaller font size</p>
+
+</li>
+<li><p><b>&lt;p&gt;</b> produces a paragraph</p>
+
+</li>
+<li><p><b>&lt;font face=&quot;font-family&quot; color=&quot;color&quot; size=&quot;font-size&quot;&gt;</b> as selecting font face, color, and size (considered better to use CSS)</p>
+
+</li>
+<li><p><b>&lt;span&gt;</b> needs a style= attribute with CSS to do anything useful</p>
+
+</li>
+<li><p><b>&lt;ul&gt;</b> produces an unordered (bulleted) list. The <code>type</code> attribute to override the default marker is supported</p>
+
+</li>
+<li><p><b>&lt;ol&gt;</b> produces an ordered (numbered) list. <code>start=</code>, <code>type=</code>, and <code>reverse=</code> attributes are supported to override the default starting count, format, and direction</p>
+
+</li>
+<li><p><b>&lt;li&gt;</b> adds a list item to a list (ul, ol, or _sl). The <code>value=</code> attribute may be given to override the ordered list counter, and the <code>type=</code> attribute may be given to override the default marker type</p>
+
+</li>
+<li><p><b>&lt;a href=&quot;URL&quot;&gt;</b> produces a link to a browser URL or to this or another PDF document. &quot;URL&quot; is anchor/link, web page URL or this document target <code>#p[-x-y[-z]]</code> (p is physical page number), or path to external PDF document before the #. ##NamedDest and extPDF##NamedDest are supported. Otherwise treat as an &quot;id&quot; (id=).</p>
+
+<ul>
+
+<li><p><b>href=&quot;protocol://...&quot;</b> a link will be generated to an HTML browser or (for protocol &quot;mailto&quot;) an email client. The tag remains &lt;a&gt; and a&#39;s CSS properties are used. Otherwise, internally the tag will be changed to &lt;_ref&gt;, whose CSS properties will be used</p>
+
+</li>
+<li><p><b>href=&quot;#p&quot; or &quot;#p-x-y&quot; or &quot;#p-x-y-zoom&quot;</b> a link will be generated to a physical page number &quot;p&quot; in this document. Optionally, an x-y location on the page (for fit=&quot;xyz&quot;) may be given with an optional zoom factor</p>
+
+</li>
+<li><p><b>&quot;PDF_document_path#p&quot; etc.</b> a link will be generated to a physical page number &quot;p&quot; in an external document. Note that the path and filename must point to either an absolute address or to one relative to where this PDF will be located</p>
+
+</li>
+<li><p><b>&quot;##Named_destination&quot;</b> a link will be generated to a Named Destination in this document (see &lt;_nameddest&gt;). Note that the Named Destination itself will define the &quot;fit&quot; to be used</p>
+
+</li>
+<li><p><b>&quot;PDF_document_path##Named_destination&quot;</b> a link will be generated to a Named Destination defined in an external document. Note that the path and filename must point to either an absolute address or to one relative to where this PDF will be located, and that the Named Destination itself will define the &quot;fit&quot; to be used</p>
+
+</li>
+<li><p><b>&quot;#id_name&quot; or &quot;id_name&quot;</b> a link will be generated to the &quot;id&quot; of given name, which may be in this PDF document or another (if processed in the same run). If a &quot;#&quot; is used, the name must <b>not</b> be all decimal digits, or all decimal digits followed by a &quot;-&quot; and other parts, as this will be interpreted as a &quot;#p&quot; physical page link!</p>
+
+</li>
+</ul>
+
+<p>The link&#39;s child text, if not empty, will be used for the resulting link. If there is none, any &quot;title&quot; attribute or <code>{^title text}</code> provided with the target (such as &lt;_reft&gt;) will be used. Finally, any native &quot;child text&quot; (e.g., a heading&#39;s text content) will be used.</p>
+
+<p>If using HTML markup, any tag with an id= may be a target. Especially for Markdown use, any tag with child text (not just a heading&#39;s text) may include <code>{#idname}</code> to be parsed out as <code>id=&quot;idname&quot;</code> (and thus usable as a target).</p>
+
+<p>An explicit &quot;fit=&quot; attribute may be given in the &lt;a&gt; tag, to specify the page fit used by the PDF Reader at the target location. For example, fit=&quot;xyz,45,600,1.5&quot; to place the window upper left corner at 45,600 and 150% zoom factor. For Markdown usage, {%xyz,45,600,1.5} in the link text (title) would be the equivalent (xyz fit, at 45,600, zoom 1.5). For a page number target (#p), -x-y (and optionally -zoom) may be added for the same effect (xyz fit). &quot;null&quot; or &quot;undef&quot; may be used for undefined items. For any fit, %x and %y may be used for the target&#39;s x and y location, to use the actual target location and not a fixed location on a page.</p>
+
+</li>
+<li><p><b>In plan, but not yet implemented</b></p>
+
+<ul>
+
+<li><p>&#39;pre&#39; (preformatted blocks),</p>
+
+</li>
+<li><p>&#39;cite&#39;, &#39;q&#39;, &#39;samp&#39;, &#39;var&#39;, &#39;kbd&#39; (various highlights),</p>
+
+</li>
+<li><p>&#39;big&#39;, &#39;bigger&#39;, &#39;small&#39;, &#39;smaller&#39; (various font sizes),</p>
+
+</li>
+<li><p>&#39;img&#39; (image display),</p>
+
+</li>
+<li><p>&#39;br&#39;, &#39;nobr&#39; (line break, line break suppression),</p>
+
+</li>
+<li><p>&#39;sup&#39;, &#39;sub&#39; (superscript and subscript),</p>
+
+</li>
+<li><p>&#39;dl&#39;, &#39;dt&#39;, &#39;dd&#39; (definition lists),</p>
+
+</li>
+<li><p>&#39;table&#39;, &#39;thead&#39;, &#39;tbody&#39;, &#39;tfoot&#39;, &#39;tr&#39;, &#39;th&#39;, &#39;td&#39; (tables),</p>
+
+</li>
+<li><p>&#39;mark&#39; (highlighting... requires ability to set background color),</p>
+
+</li>
+<li><p>&#39;div&#39; (handle div&#39;s in some manner),</p>
+
+</li>
+<li><p>&#39;center&#39;,</p>
+
+</li>
+<li><p>&#39;caption&#39;, &#39;figure&#39;, &#39;figcap&#39; (optional sub- and super-sections)</p>
+
+</li>
+<li><p>&#39;nav&#39;, &#39;header&#39;, &#39;footer&#39;, &#39;address&#39;, &#39;article&#39;, &#39;aside&#39;, &#39;canvas&#39;, &#39;section&#39;, &#39;summary&#39; (possibly some sectioning)</p>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+<p><i>Numbered</i> (decimal and hexadecimal) entities are supported, as well as <i>named</i> entities (e.g., <code>&amp;mdash;</code>). Lists get a &quot;gutter&quot; (for the marker) of <i>marker_width</i> points wide, and a &quot;gap&quot; between the marker&#39;s field and the start of the item&#39;s text (<i>marker_gap</i> points wide), so list alignments are consistent over the call.</p>
+
+<h4 id="Extended-HTML-tags">Extended HTML tags</h4>
+
+<p>A number of HTML-like tags, whose names start with an underscore &quot;_&quot;, have been implemented to perform various tasks. These include:</p>
+
+<ul>
+
+<li><p><b>&lt;_ref&gt;</b> defines an <i>alternative</i> form of a link to this or another PDF document (not for URLs to HTML or email; for that, use &lt;a&gt;). The attribute <code>tgtid=</code> is required, and equivalent to &lt;a&gt;&#39;s <code>href=</code>. The attribute <code>title=</code> is optional, and provides title text for the link. The attribute <code>fit=</code> is optional, and provides a non-default &quot;fit&quot; for the target page (note that a Named Destination target provides its own &quot;fit&quot;). For a &#39;fit&#39; of &#39;xyz&#39;, you may use &#39;%x&#39; for the x value and &#39;%y&#39; for the y value to use the current positions, rather than fixed values. Note that any &lt;a&gt; link <i>not</i> to a browser or email client will be internally converted to &lt;_ref&gt;, so CSS for formatting the link text (title) will be defined under &#39;_ref&#39;</p>
+
+</li>
+<li><p><b>&lt;_reft&gt;</b> defines a target id for a link (via the <code>id=</code> attribute), especially if an existing id is not conveniently at hand. See <code>id=</code> attributes in most HTML tags, and <code>{#id_name}</code> for many Markdown &quot;tags&quot;. An optional attribute <code>title=</code> may be given to provide a default link text for the link (&lt;a&gt; or &lt;_ref&gt;) referring to this id</p>
+
+</li>
+<li><p><b>&lt;_nameddest&gt;</b> defines a Named Destination within this document, accessible via a &quot;##&quot; format link href, or from some PDF Readers on the command line (one or more of <code>#ND_name</code>, <code>#name=ND_name</code>, or <code>#nameddest=ND_name</code> will usually work, when appended to the PDF file path and name, just like with HTML anchor id&#39;s). The attribute <code>name=&quot;ND_name&quot;</code> is required, to globally name this Destination (the character set allowed and maximum length vary among Readers!). The optional attribute <code>fit=&quot;fit_info&quot;</code> may be give to specify a non-default &quot;fit&quot; when invoked. It is the type of fit (e.g., &quot;xyz&quot;, &quot;fith&quot;, etc.) followed by any location values required by that fit, all separated by commas. <code>xyz,%x-100,$y+100,null</code> is the default fit</p>
+
+</li>
+<li><p><b>&lt;_marker&gt;</b> provides a place to specify, via CSS, on a <i>per list item basis</i>, overrides to default marker settings (see also <code>_marker-*</code> CSS extensions below). If omitted, the same HTML list markers and CSS properties are used for each list item (per usual practice). The intent of this tag is to permit styling changes such as font, color, and alignment to an individual list item (&lt;li&gt;). This tag is placed immediately <i>before</i> the &lt;li&gt; it applies to</p>
+
+</li>
+<li><p><b>&lt;_move&gt;</b> provides a way to explicitly move the current write point left or right. Attribute <code>x=&quot;value&quot;</code> is an absolute move (in points), while attribute <code>dx=&quot;value&quot;</code> is a relative move from the current write point. Along with the &quot;text-align&quot; CSS property, this can provide a way to fine tune text position within a column line.</p>
+
+<p>An x value that is a bare number (no units) is assumed to specify <i>points</i>, equivalent to units of <code>pt</code>. The unit may also be <code>%</code>, where 0% is the left end of the column, 50% is the center, and 100% is the right end. A dx value that is a bare number (no units) is assumed to specify <i>points</i>, equivalent to units of <code>pt</code>. The unit may also be <code>%</code>, a fraction of the column width to move (+ right, - left). Note that results are unpredictable if you move beyond the edge of the column in either direction</p>
+
+</li>
+<li><p><b>&lt;_sl&gt;</b> provides a <i>simple list</i>, very similar to an <i>unordered list</i>, except for no list markers</p>
+
+</li>
+<li><p><b>In plan, but not yet implemented</b></p>
+
+<ul>
+
+<li><p>&#39;_k&#39; (manual kerning control)</p>
+
+</li>
+<li><p>&#39;_ovl&#39; (overline, similar to underline and line-through)</p>
+
+</li>
+<li><p>&#39;_lig&#39; (specify a particular ligature to use here)</p>
+
+</li>
+<li><p>&#39;_nolig&#39; (suppress ligatures by HarfBuzz)</p>
+
+</li>
+<li><p>&#39;_swash&#39; and &#39;_altg&#39; (specify a particular alternate glyph to use here)</p>
+
+</li>
+<li><p>&#39;_sc&#39; (specify &quot;small caps&quot; font variant, with forced end after N words)</p>
+
+</li>
+<li><p>&#39;_pc&#39; (specify &quot;petite caps&quot; font variant, with forced end after N words)</p>
+
+</li>
+<li><p>&#39;_dc&#39; (specify &quot;dropped cap&quot; font variant in some manner, also CSS)</p>
+
+</li>
+<li><p>? (specify conditional and unconditional page breaks)</p>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+<h4 id="Standard-CSS-properties-and-values">Standard CSS properties and values</h4>
+
+<p>CSS (Cascading Style Sheets) may be defined for HTML tags (or &quot;body&quot; for global settings), via the <code>style=&gt;</code> <code>column()</code> option. You may also add one or more <code>&lt;style&gt;</code> HTML tags, with CSS markup, to your HTML source. Such entries will be combined into a global style section.</p>
+
+<p>&lt;style&gt; tags may be placed in an optional &lt;head&gt; section, or within the &lt;body&gt;. In the latter case, style tags will be pulled out of the body and added (in order) on to the end of any style tag(s) defined in a head section. Multiple style tags will be condensed into a single collection (later definitions of equal precedence overriding earlier). These stylings will have global effect, as though they were defined in the head. As with normal CSS, the hierarchy of a given property (in decreasing precedence) is</p>
+
+<pre><code>    appearance in a style= tag attribute
+    appearance in a tag attribute (possibly a different name than the property)
+    appearance in a #IDname selector in a &lt;style&gt;
+    appearance in a .classname selector in a &lt;style&gt;
+    appearance in a tag name selector in a &lt;style&gt;</code></pre>
+
+<p>Selectors are quite simple: a single tag name (e.g., <b>body</b>), a single class (.cname), or a single ID (#iname). There are <i>no</i> combinations (e.g., <code>p.abstract</code> or <code>ol, ul</code>), hierarchies (e.g., <code>ol &gt; li</code>), specified number of appearance, pseudotags, or other such complications as found in a browser&#39;s CSS. Sorry!</p>
+
+<h4 id="Length-Measures">Length Measures</h4>
+
+<p>Property values which are lengths (including <code>font-size</code>) may have units of <b>pt</b> (points, 72 to the inch), <b>px</b> (pixels, currently fixed at 78 to the inch), <b>in</b> (inches), <b>cm</b>, <b>mm</b>, <b>em</b> (equal to font-size), <b>en</b> (0.5em), and <b>ex</b> (currently 0.5em, but in the future may be able to query the font&#39;s actual x-height). % (percentage) of the current font-size (in most cases, unless otherwise noted) is allowed, although some properties may in the future support % of the enclosing object size. Sizes may be negative numbers (useful only for margins).</p>
+
+<ul>
+
+<li><p>For property <i>list-style-position</i>, % is relative to the marker width+gap, not font-size (and pt values may be given, where &quot;inside&quot; = 0% and &quot;outside&quot; = 100% of marker width+gap). The standard &#39;outside&#39; (default) and &#39;inside&#39; values may also be given.</p>
+
+</li>
+<li><p>For the <i>&lt;hr</i>&gt; tag, the &quot;width&quot; and &quot;size&quot; attributes are in points. For the CSS &quot;width&quot; property, absolute units may be given, or % of available column width. For the CSS &quot;height&quot; property, absolute units may be given.</p>
+
+</li>
+</ul>
+
+<p><b>Note</b> that eventually we may support <code>li::marker</code>, which is now standard CSS, but there does not appear to be a way to support changes via <code>style=</code>, because the same property names (e.g., <i>color</i>) would apply to both the marker and the list item text. This will require extensive changes to CSS style to permit complex selectors, which <code>column()</code> does not currently offer. Even doing that, we may retain the current &quot;marker&quot; tags and CSS introduced here. I think W3C may have missed the boat by not doing something like an optional <code>_marker</code> to permit normal properties for markers alone, but configurable in-line with <code>style=</code>.</p>
+
+<p>Supported CSS properties:</p>
+
+<ul>
+
+<li><p><b>color</b> (foreground color, in standard PDF::Builder formats)</p>
+
+</li>
+<li><p><b>display</b> (<i>inline</i> or <i>block</i>)</p>
+
+</li>
+<li><p><b>font-family</b> (name as defined to FontManager, e.g. Times)</p>
+
+</li>
+<li><p><b>font-size</b> (length measure)</p>
+
+<p>Note that <b>body</b> <code>font-size</code> is the starting point, and so if given, must be a bare number (greater than 0) or number + &#39;pt&#39;. <code>font-size</code>s for other tags may be given as % of inherited font-size or em (100% of font-size), en (50%), or ex (currently fixed at 50%).</p>
+
+<p>Unless otherwise prohibited, any tag&#39;s CSS may first change the font-size, and then properties such as margins defined as % of font-size will be calculated using the new font-size, rather than the inherited one.</p>
+
+</li>
+<li><p><b>font-style</b> (<i>normal</i> or <i>italic</i>)</p>
+
+</li>
+<li><p><b>font-weight</b> (<i>normal</i> or <i>bold</i>)</p>
+
+</li>
+<li><p><b>height</b> (pt, bare number)</p>
+
+<p>Thickness (height) of <b>horizontal rule</b>. The HTML attribute is <code>size</code>.</p>
+
+</li>
+<li><p><b>list-style-position</b> (outside, inside, <b>extension:</b> number pt or % to indent)</p>
+
+</li>
+<li><p><b>list-style-type</b> (marker description, see also _marker-text/before/after)</p>
+
+</li>
+<li><p><b>margin-top/right/bottom/left</b> (length measure)</p>
+
+<p>Note that adjacent bottom and top margins will be collapsed to use the <i>larger</i> amount of the two. Negative margin values (&quot;pulling&quot; objects towards each other) are allowed, and positive margin values &quot;push&quot; objects away from each other.</p>
+
+</li>
+<li><p><b>text-decoration</b> (none, underline, line-through, overline)</p>
+
+<p>May use more than one value (except &#39;none&#39;) separated by spaces.</p>
+
+<p><b>Note 1:</b> various HTML tags (such as <i>u</i>, <i>ins</i>, <i>del</i>, <i>s</i>) make use of this CSS property, and may of course be changed in the styling.</p>
+
+<p><b>Note 2:</b> both <i>underline</i> and <i>overline</i> are solid lines, which will collide with glyph descenders and ascenders respectively. We are investigating means of implementing something like the CSS <i>text-decoration-skip-ink: auto</i> property. PDF does not appear to currently define a way of doing this (to be handled by the Reader). <i>line-through</i> is also a solid line that collides with glyph strokes, but the usual intent <i>is</i> to obscure the text, so there are no plans to change this default behavior.</p>
+
+<p><b>Note 3:</b> these decorations are made as escapes within the text object, rather than within the graphics object. We reserve the right to (in the future) change this to require a graphics object to draw them. Some lead time will be given so that you have a chance to update your code.</p>
+
+<p><b>Note 4:</b> <i>line-through</i> uses a fixed % of ascender height, rather than of <i>ex</i> height. In some fonts, this may result in a <i>line-through</i> &quot;floating&quot; above the bulk of the characters (intersecting only ascenders), i.e., it is above the x-height. It&#39;s on the &quot;to do&quot; list to address this.</p>
+
+</li>
+<li><p><b>line-height</b> (leading, as ratio of baseline-spacing to font-size).</p>
+
+<p>Currently, percentage of font-size and absolute units (e.g., pt) are <b>not</b> supported. The default value is 1.125 (18pt line-to-line for font-size 16).</p>
+
+<p><b>Note:</b> <b>text-height</b>, the former <i>incorrect</i> name for this property, is still supported (as an alias for <b>line-height</b>) through release 3.029, but may be withdrawn as soon as release 3.030. Update your code if you use it!</p>
+
+</li>
+<li><p><b>text-indent</b> (length measure)</p>
+
+<p>For paragraph indentation.</p>
+
+</li>
+<li><p><b>text-align</b> (left/center/right justify at current text position)</p>
+
+<p><b>Note:</b> if center or right justified, you should keep the text short enough to fit within the left and right bounds of the column. Center and right justification need an explicit position defined (usually via &lt;_move&gt;) and will not properly wrap to a new line.</p>
+
+</li>
+<li><p><b>width</b> (length measure) width (length) of <b>horizontal rule</b></p>
+
+<p>Currently only used for &lt;hr&gt;. In the future it may be expanded to other object types. &lt;hr&gt; may be permitted in the future to be a percentage of the enclosing parent&#39;s width.</p>
+
+</li>
+<li><p><b>height</b> (length measure) height (thickness) of <b>horizontal rule</b></p>
+
+<p>Currently only used for &lt;hr&gt;. In the future it may be expanded to other object types. &lt;hr&gt; may be permitted in the future to be a percentage of the enclosing parent&#39;s height.</p>
+
+<p>The equivalent HTML attribute is <code>size</code>.</p>
+
+</li>
+<li><p><b>In plan, but not yet implemented</b></p>
+
+<ul>
+
+<li><p>white-space (treatment of line-ends and various spaces),</p>
+
+</li>
+<li><p>/* and */ comments in CSS</p>
+
+</li>
+<li><p>border and border-* (border properties),</p>
+
+</li>
+<li><p>padding and padding-* (padding properties),</p>
+
+</li>
+<li><p>list-style-image (use an image as a list bullet),</p>
+
+</li>
+<li><p>margin (update the four <code>margin-*</code> properties in one setting, add &#39;auto&#39; value)</p>
+
+</li>
+<li><p>background-color (also for &lt;mark&gt; tag),</p>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+<p>See the <a href="#Length-Measures">&quot;Length Measures&quot;</a> section to see what measurements are allowed.</p>
+
+<p><b>CAUTION:</b> comments /* and */ are NOT currently supported in CSS -- perhaps in the future.</p>
+
+<h4 id="Extended-CSS-properties-and-values">Extended CSS properties and values</h4>
+
+<p>A number of additional (non-standard) CSS properties and/or values have been defined for additional functionality for <code>column()</code>. Note that if you set _marker-* properties in a list, all nested lists will, as usual, inherit these properties. If you don&#39;t want that, you will need to cancel the new settings by resetting them to standard values in the nested &lt;ul&gt; or &lt;ol&gt; tag&#39;s style.</p>
+
+<ul>
+
+<li><p><b>_marker-before</b> (constant text to insert <i>before</i> an &lt;ol&gt; marker, default nothing)</p>
+
+</li>
+<li><p><b>_marker-after</b> (constant text to insert <i>after</i> an &lt;ol&gt; marker, default period &quot;.&quot;)</p>
+
+</li>
+<li><p><b>_marker-text</b> (define text to use as marker instead of the system-generated text)</p>
+
+</li>
+<li><p><b>_marker-color</b> (change color from default, such as color-coded &gt;ul&gt; bullets)</p>
+
+</li>
+<li><p><b>_marker-font</b> (change marker font face (font-family))</p>
+
+</li>
+<li><p><b>_marker-style</b> (change marker font style, e.g., italic)</p>
+
+</li>
+<li><p><b>_marker-size</b> (change marker font size)</p>
+
+</li>
+<li><p><b>_marker-weight</b> (change marker font weight)</p>
+
+</li>
+<li><p><b>_marker-align</b> (left/center/right justify within marker_width gutter)</p>
+
+</li>
+<li><p><b>list-style-position</b> standard (inside or outside) or numeric (points or percentage of marker_width gutter + marker_gap)</p>
+
+</li>
+</ul>
+
+<p>There are additional non-standard CSS &quot;properties&quot; that you would normally <b>not</b> set in CSS. They are internal state trackers:</p>
+
+<ul>
+
+<li><p><b>_parent-fs</b> (current running font size, in points)</p>
+
+<p>This is actually the parent of this tag&#39;s font-size, which the current tag inherits and may set to a new value if desired (with <code>font-size</code> property).</p>
+
+</li>
+<li><p><b>_href</b> (URL for &lt;a&gt;, normally provided by href= attribute)</p>
+
+</li>
+<li><p><b>_left</b> (running number of points to indent on the left, from margin-left and list nesting)</p>
+
+</li>
+<li><p><b>_left_nest</b> (amount to indent next nested list)</p>
+
+</li>
+<li><p><b>_right</b> (running number of points to indent on the right, from margin-right)</p>
+
+</li>
+</ul>
+
+<h2 id="General-Comments">General Comments</h2>
+
+<p>The Font Manager system is used to supply the requested fonts, so it is up to the application to preload the desired font information <i>before</i> <code>column()</code> is called. Any request to change the encoding within <code>column()</code> will be ignored, as the fonts have already been specified for a specific encoding. Needless to say, the encoding used in creating the input text needs to match the specified font encoding.</p>
+
+<p>Absent any markup changing the font face or styling, whatever is defined by Font Manager as the <i>current</i> font will be what is used. This way, you may inherit the font from the previous <code>column()</code>, or call <code>$text-</code>font($pdf-&gt;get_font(), size)&gt; to set both the font and size, or just call <code>$pdf-</code>get_font()&gt; to set only the font, relying on the <code>font_size</code> option or CSS markup to set the size.</p>
+
+<p>Line fitting (paragraph shaping) is currently quite primitive. Words will not be split (hyphenated). <i>It is planned to eventually add Knuth-Plass paragraph shaping, along with proper language-dependent hyphenation.</i></p>
+
+<p>Each change of font automatically supplies its maximum ascender and minimum descender, the <b>extents</b> above and below the text line&#39;s baseline. Each block of text with a given face and variant, or change of font size, will be given the same <i>vertical</i> extents -- the extents are font-wide, and not determined on a per-glyph basis. So, unfortunately, a block of text &quot;acemnorsuvwz&quot; will have the same vertical extents as a block of text &quot;bdfghijklpqty&quot;. For a given line of text, the highest ascender and the lowest descender (plus leading) will be used to position the line at the appropriate distance below the previous line (or the top of the column). No attempt is made to &quot;fit&quot; projections into recesses (jigsaw-puzzle like). If there is an inset into the side of a column, or it is otherwise not a straight vertical line, so long as the baseline fits within the column outline, no check is made whether descenders or ascenders will fall outside the defined column (i.e., project into the inset). We suggest that you try to keep font sizes fairly consistent, to keep reasonably consistent text vertical extents.</p>
+
+<h2 id="init_state">init_state</h2>
+
+<pre><code>    %state = PDF::Builder-&gt;init_state(%lists)
+
+    %state = PDF::Builder-&gt;init_state()</code></pre>
+
+<p>This method is used in <a href="../../../PDF/Builder/Content/Text.html">PDF::Builder::Content::Text</a> to create and initialize the hash structure that permits transfer of data between <code>column()</code> calls, as well as accumulating link information to build intra- and inter-PDF file jumps for a variety of uses.</p>
+
+<p><b>%lists</b> is optional, and allows the user to define tags (which have an id= ) lists for various purposes. These are anonymous lists. Element &#39;_reft&#39; is predefined for cross reference targets, and already includes the &lt;_reft&gt; tag as &#39;_reft&#39;. <b>Do not add &#39;_reft&#39; to the &#39;_reft&#39; list!</b> The user may wish to add other tags (which have id= ) to be used, and define other lists to be accumulated. For example,</p>
+
+<pre><code>    {&#39;_reft&#39; =&gt; [ &#39;h1&#39;, &#39;h2&#39;, &#39;h3&#39;, &#39;h4&#39; ],
+     &#39;TOC&#39;   =&gt; [ &#39;_part&#39;, &#39;_chap&#39;, &#39;h1&#39;, &#39;h2&#39;, &#39;h3&#39; ], }</code></pre>
+
+<p>adds the top 4 heading levels to cross references (&#39;_reft&#39; is already there), and creates a 5-level list of tags to build a Table of Contents. Additional lists might include for an Index, glossary, List of Tables, List of Figures (Illustrations, Photos), List of Equations, etc. <i>TOC, Index, etc. have not yet been implemented, but are planned for the near future!</i></p>
+
+<p>If no <code>%lists</code> parameter is given, you will be limited to cross references from &lt;_reft&gt; only, and no entries specifically for TOC etc. will be defined. Remember, only tags with <code>id=</code>s in your markup will be used as link targets.</p>
+
+<p>If you are using **markdown** for your source, you may not be able to define <code>id=</code>s for all your &quot;tags&quot; (HTML tags produced after translation from markdown), and thus will need to use <code>&lt;_reft&gt;</code>s as link targets, which should be passed through to HTML. For applications such as a TOC, you <i>may</i> be able to postprocess the _reft list to separate out (based on id given) this large group of target ids into groups for specific purposes, such as a TOC.</p>
+
+<pre><code>    %state = PDF::Builder-&gt;init_state(%lists)</code></pre>
+
+<p>This creates the state structure (hash) to be passed to <code>column()</code> calls, and it saves information from invocation to invocation. It must be initialized <i>before</i> the first pass of the loop which invokes one or more <code>column()</code> formatting calls at each pass (for a different part of the document).</p>
+
+<p>It is defined in PDF::Builder (Builder.pm) as <a href="../../../PDF/Builder/init_state.html">PDF::Builder::init_state</a>, rather than here in PDF::Builder::Content::Text, because <code>$text</code> does not yet exist when it needs to be called.</p>
+
+<h2 id="pass_start_state">pass_start_state</h2>
+
+<pre><code>    $rc = $pdf-&gt;pass_start_state($pass_count, $max_passes, \%state)</code></pre>
+
+<p>This does whatever is necessary at the <i>start</i> of a pass (number $pass_count). Currently, this is resetting the &#39;changed_target&#39; hash list.</p>
+
+<p>It is defined in PDF::Builder (Builder.pm) as <a href="../../../PDF/Builder/pass_start_state.html">PDF::Builder::pass_start_state</a>, rather than here in PDF::Builder::Content::Text, because <code>$text</code> does not yet exist when it needs to be called.</p>
+
+<h2 id="pass_end_state">pass_end_state</h2>
+
+<pre><code>    $rc = $text-&gt;pass_end_state($pass_count, $max_passes, $pdf, $state, %opts)</code></pre>
+
+<p>This examines the state structure (hash), resolves any content changes that need to be made, and builds a list of all refs (by target id <code>tgtid</code>) which are still changing at this pass. If any have changed, a non-zero return code (number of cases) is returned, but if everything has settled down, the return code is 0.</p>
+
+<dl>
+
+<dt>$pass_count</dt>
+<dd>
+
+<p>What pass number we are on. Start at 1, and must be no greater than <code>max_passes</code>.</p>
+
+</dd>
+<dt>$max_passes</dt>
+<dd>
+
+<p>The pass number of the last permitted pass, if reached. We may exit before this if things settle down quickly enough. If</p>
+
+<ol>
+
+<li><p>page numbers are not output in link text (<code>page_numbers == 0</code>) _and_</p>
+
+</li>
+<li><p><code>title=</code> is given in all &#39;_ref&#39; tags, _or_ all _ref&#39;s without title attributes are backwards references (all forward _ref&#39;s have a title)</p>
+
+</li>
+</ol>
+
+<p>you may often be able to get away with a single pass (<code>max_passes == 1</code>). You still may be informed that not all cross references have settled.</p>
+
+</dd>
+<dt>$pdf</dt>
+<dd>
+
+<p>The PDF object.</p>
+
+</dd>
+<dt>$state</dt>
+<dd>
+
+<p>Hashref to state structure, which includes, among other things, lists of link sources (_ref tags) and link targets (_reft and other listed tags).</p>
+
+</dd>
+<dt>%opts</dt>
+<dd>
+
+<p>Options.</p>
+
+<dl>
+
+<dt>&#39;debug&#39; =&gt; 1</dt>
+<dd>
+
+<p>Draw a border around the link text (the source, not the target), so you can see where a click would take effect.</p>
+
+</dd>
+<dt>&#39;deltas&#39; =&gt; [ 20, 20 ]</dt>
+<dd>
+
+<p>To show some context around the target text (if <i>xyz</i> fit is used without a specific x and y), the upper left corner of the target window is placed these amounts (units <i>points</i>) from the left (delta x) and top (delta y) edges of the target text. The default is 20 (points) each, roughly a couple of lines&#39; worth. The left side is limited to the page edge, and the top side is limited to the page top.</p>
+
+<p>Note that the upper edge of the text is where the <i>previous</i> line left off, so if there is a top margin on the target text (e.g., it&#39;s a heading), the offset will be from there, not the text itself, and the view window may therefore be up higher on the page than you would otherwise expect. This has been known to confuse users with a PDF Reader which displays a fixed-size popup window showing the target a link will go to, which might even miss the target text entirely if the deltas are too large.</p>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<p>If all references include their own title string and do <b>not</b> show a page (only the title string as the annotation link text), a document should take only one pass. Often two passes are enough to resolve even forward references which need to pick up text from later in the document, but sometimes (especially if special formatting of page numbers is involved), a target may move back and forth between two pages and not settle down. In such cases, you may need to simplify or rearrange the text, such as moving a target back from the end of a page, or changing from specialty formats (such as &quot;on following page&quot; to a fixed &quot;on page N&quot;.</p>
+
+<p><b>Fields in %state structure:</b></p>
+
+<pre><code>    settings       = hold settings between column() calls
+      TBD
+
+    xrefs          = source of link (&lt;_ref&gt;) info needed
+      [  ]           = array of each link source
+        id             = target&#39;s id, tag that defines a target
+        fit            = any fit information provided
+        tfn            = target filename (FINAL position and name) used for 
+                         external links
+        tppn           = target physical page number (integer &gt; 0)
+        sppn           = source physical page number (integer &gt; 0)
+        other_pg       = text for &quot;other page&quot; if page_numbers &gt; 0
+         prev_other_pg  = previous value (to detect change)
+        tfpn           = formatted page number (string, may be &#39;&#39;)
+        tx,ty          = coordinates of target on page (used for fit)
+        title          = text for link. if not defined in &lt;_ref&gt;, use one
+                         in &lt;_reft&gt; (if defined), else &quot;natural text&quot; such
+                         as heading &lt;hX&gt; child text
+         prev_title     = previous value (to detect change)
+        tag            = tag that produced this target (useful for formatting,
+                         e.g., indenting TOC entries based on hX level)
+        click          = [ ] of one or more click areas, each element is
+                         [sppn, [x,y, x,y]]
+
+    xreft          = tag that created a target for a link (&lt;_reft&gt; et al.)
+      _reft          = entries for cross reference targets (_reft list)
+        id
+          tfn        = filepath for external links
+          tppn       = target physical page number
+          tfpn       = target formatted page number
+          tx,ty      = coordinates of target on page
+          title      = title, defaulting to &quot;natural text&quot;, to update source
+          tag        = tag type that produced this entry
+      $another_list  = other tag list name list of targets (e.g., TOC)
+        id...
+      etc.
+
+    changed_target = hash of tgtids (in xrefs id) that changed AFTER link text
+                     and page text output, requiring another pass
+
+    tag_lists      = anon list of tags (with id) to put in various lists.
+                     see &#39;init_state()&#39; for building tag lists
+      _reft          = [ ] predefined for cross references, may add more (such
+                       as hX heading tags)
+      TOC            = [ ] NOT predefined, add if desired ...TBD
+      Index          = [ ] NOT predefined, add if desired, etc. ...TBD
+
+   nameddest = hash of named destinations to be defined
+      $name  = name of the destination
+        fit  = fit information (location, parms)
+        ppn  = physical page number in this PDF
+        x,y  = x and y coordinates on page  </code></pre>
+
+<p>Note that the link text (&#39;title&#39;) and any page information (&#39;on page X&#39;) need to be output at each pass, to determine where everything is, while other information is stored until the last pass, to actually generate the annotation links. The &quot;last pass&quot; will be either when it is found that all link information has &quot;settled down&quot;, or the <code>max_passes</code> limit is reached.</p>
+
+<h2 id="unstable_state">unstable_state</h2>
+
+<pre><code>    @list = $text-&gt;unstable_state(\%state)</code></pre>
+
+<p>This returns a list (array) of string target ids (tgtid) which appear to still be changing at the end of the loop, i.e., have not settled down.</p>
+
+<p>If this method is called when <code>check_state()</code> returned a 0, the list will be empty. It may also be called at each pass, for diagnostic purposes.</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../Builder_index.html">Master Index</a><br>
+<a href="../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../.././PDF/Builder/Content.html">PDF::Builder::Content</a> -- Methods for adding graphics and text to a PDF<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../.././PDF/Builder/Content/Hyphenate_basic.html">PDF::Builder::Content::Hyphenate_basic</a> -- Simple hyphenation capability<br>
+<a href="../../.././PDF/Builder/Content/Text.html">PDF::Builder::Content::Text</a> -- Additional specialized text-related formatting methods<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+

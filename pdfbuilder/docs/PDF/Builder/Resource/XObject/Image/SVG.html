@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PDF::Builder::Resource::XObject::Image::SVG</title>
+<link rel="stylesheet" href="../../../../../../../resources/common.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+
+<ul id="index">
+  <li><a href="#NAVIGATION-LINKS">NAVIGATION LINKS</a>
+    <ul>
+      <li><a href="#Up-Parents">Up (Parents)</a></li>
+      <li><a href="#Siblings">Siblings</a></li>
+    </ul>
+  </li>
+  <li><a href="#NAME">NAME</a>
+    <ul>
+      <li><a href="#METHODS">METHODS</a></li>
+      <li><a href="#new">new</a>
+        <ul>
+          <li><a href="#What-is-returned">What is returned</a></li>
+          <li><a href="#Dealing-with-multiple-image-objects-and-combining-them">Dealing with multiple image objects, and combining them</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>PDF::Builder::Resource::XObject::Image::SVG - Support routines for SVG (Scalable Vector Graphics) image library</p>
+
+<p>Inherits from <a href="../../../../../PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a></p>
+
+<p>Note that, unlike the output of other image formats, <code>image_svg()</code> returns an <i>array</i> of anonymous hashes, one for each &lt;svg&gt; tag within the SVG input. See <a href="#What-is-returned">&quot;What is returned&quot;</a> below for details.</p>
+
+<h2 id="METHODS">METHODS</h2>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $res = PDF::Builder::Resource::XObject::Image::SVG-&gt;new($pdf, $file, %opts)</code></pre>
+
+<p><code>$file</code> gives the SVG input (see the SVGPDF library for details and limitations). It may be a filename, a string reference (with SVG content), or a filehandle.</p>
+
+<blockquote>
+
+<p>Options:</p>
+
+<dl>
+
+<dt>subimage =&gt; n</dt>
+<dd>
+
+<p>If multiple <code>svg</code> entries are in an SVG file, and they are not combined by the SVGPDF <code>combine</code> option into one image, this permits selection of which image to display. Any <i>n</i> may be given, from 0 up to the number of <code>svg</code> images minus 1. The n-th element will be retained, and all others discarded. The default is to return the entire array, and not remove any elements, permitting display of mulitple images in any desired order. See the discussion on combining multiple images <a href="#Dealing-with-multiple-image-objects-and-combining-them">&quot;Dealing with multiple image objects, and combining them&quot;</a>. The default behavior of the display routine (<code>object</code>) is to display only the first element (there must be at least one).</p>
+
+</dd>
+<dt>MScore =&gt; flag</dt>
+<dd>
+
+<p>If set to true (a non-zero value), a font callback for the 14 Microsoft Windows &quot;core&quot; extensions will be added to any other font callbacks given by the user. These include &quot;Georgia&quot; serif, &quot;Verdana&quot; sans-serif, and &quot;Trebuchet&quot; sans-serif fonts, and &quot;Wingdings&quot; and &quot;Webdings&quot; symbology fonts. Non-Windows systems usually don&#39;t include these &quot;core&quot; fonts, so it may be unsafe to use them.</p>
+
+<p>This option is enabled for all operating systems, not just MS Windows, so you can create PDFs that make use of Windows &quot;core&quot; fonts (extension). This does not guarantee that such fonts <i>will</i> be available on the machine used to read the resulting PDF!</p>
+
+</dd>
+<dt>compress =&gt; flag</dt>
+<dd>
+
+<p>If set to true (a non-zero value; default is 1), the resulting XObject stream will be compressed. This is what you would normally do. On the other hand, setting it to false (0) leaves the stream uncompressed. You may wish to do this if you want to examine the stream in the finished PDF, such as is done for the t-test.</p>
+
+</dd>
+</dl>
+
+<p>SVGPDF Options:</p>
+
+<p>These are options which, if given, are passed on to the SVGPDF library. Some of them are fixed by <code>image_svg</code> and can not be changed, while others are defaulted by <code>image_svg</code> but <i>can</i> be overridden by the user.</p>
+
+<p>You should consult the SVGPDF library documentation for more details on such options.</p>
+
+<dl>
+
+<dt>pdf =&gt; PDF object</dt>
+<dd>
+
+<p>This is automatically set by the SVG routine, and can <b>not</b> be overridden by the user. It is passed to <code>SVGPDF-&gt;new()</code>.</p>
+
+</dd>
+<dt>fontsize =&gt; n</dt>
+<dd>
+
+<p>This is the font size (in points) for SVGPDF to use to scale text and figure the <i>em</i> and <i>ex</i> sizes. The default is 12 points. It is passed on to both the <code>SVGPDF-&gt;new()</code> and <code>$svg-&gt;process()</code> SVGPDF methods.</p>
+
+</dd>
+<dt>pagesize =&gt; [ width, height ]</dt>
+<dd>
+
+<p>This is the maximum dimensions of the resulting object, in case there are no dimensions given, or they are too large to display. The default is 595 pt x 842 pt (A4 page size), internal to SVGPDF. It is passed to <code>SVGPDF-&gt;new()</code>.</p>
+
+</dd>
+<dt>grid =&gt; n</dt>
+<dd>
+
+<p>The default is 0. A value greater than 0 indicates the spacing (in points) of a grid for development/debugging purposes. It is passed to <code>SVGPDF-&gt;new()</code>.</p>
+
+</dd>
+<dt>verbose =&gt; n</dt>
+<dd>
+
+<p>It defaults to 0 (fatal messages only), but the user may set it to a higher value for outputting informational messages. It is passed to <code>SVGPDF-&gt;new()</code>.</p>
+
+</dd>
+<dt>fc =&gt; \&amp;fonthandler_callback</dt>
+<dd>
+
+<p>This is a list of one or more callbacks for the font handler. If the <code>MScore</code> flag is true (see above), another callback will be added to the list to handle MS Windows &quot;core&quot; font faces. It is passed to <code>SVGPDF-&gt;new()</code>.</p>
+
+<p>Note that some supporting packages, such as GnuPlot, make use of Windows fonts such as <b>Arial</b>, which may or may not be installed on non-Windows platforms, and even for Windows, would need to be added to FontManager. You should check the resulting SVG files produced by Third-Party packages to see what fonts they are expecting. MathJax creates text characters as filled outlines in SVG, and does not appear to use any standard fonts.</p>
+
+</dd>
+<dt>combine =&gt; &#39;method&#39;</dt>
+<dd>
+
+<p>If there are multiple XObjects defined by an SVG (due to multiple <code>svg</code> entries), they may be combined into a single XObject. The default is <b>none</b>, which does <i>not</i> combine XObjects. Currently, the only other supported method is <b>stacked</b>, which vertically stacks images, with <code>sep</code> spacing between them. At this writing, the <b>bbox</b> combine method is <i>not</i> supported by SVGPDF, but may be in the future. It is passed to <code>$svg-&gt;process()</code>.</p>
+
+</dd>
+<dt>sep =&gt; n</dt>
+<dd>
+
+<p>Vertical space (in points) to add between individual images when <code>combine</code> is not &#39;none&#39;. The default is 0 (no space between images). It is passed to <code>$svg-&gt;process()</code>.</p>
+
+</dd>
+</dl>
+
+</blockquote>
+
+<h3 id="What-is-returned">What is returned</h3>
+
+<p>Returns an image in the SVG. Unlike other image formats, it is <i>not</i> actually some form of image object, but an array (of at least one element) containing XObjects of the SVG converted into PDF graphics and text commands. If an SVG includes a pixel-based image, that image will be scaled up and down in the normal image way, while PDF graphics and text are always fully scalable, both when setting an image size <i>and</i> when zooming in and out in a PDF Reader.</p>
+
+<p>A returned &quot;object&quot; is always an array of hashes (including the XObject as one of the elements), one per <code>svg</code> tag. Note that <code>svg</code>s must be peers (top-level), and may <b>not</b> be nested one within another! In most applications, an SVG file will have one <code>svg</code> tag and thus a single element in the array. However, some SVGs will produce multiple array elements from multiple <code>svg</code> tags.</p>
+
+<h3 id="Dealing-with-multiple-image-objects-and-combining-them">Dealing with multiple image objects, and combining them</h3>
+
+<p>If you don&#39;t set <code>subimage</code>, the full array will be returned. If you set <code>subimage =&gt; n</code>, where <i>n</i> is a valid element number (0...), all elements <i>except</i> the n-th will be discarded, leaving a single element array. When it comes time for <code>object()</code> to display this XObject array, the first (0th) element will be displayed, and any other elements will be ignored. Thus, the default behavior is effectively <code>subimage =&gt; 0</code>. You may call either <code>object</code> or <code>image</code>, as <code>image</code> will simply pass everything on to <code>object</code>.</p>
+
+<p>Remember that <i>not</i> setting <code>subimage</code> will cause the entire array to be returned. You are free to rearrange and/or subset this array, if you wish. If you want to display (in the PDF) multiple images, you can select one or more of the array elements to be processed (see the examples). If you want to stack all of them vertically, perhaps with some space between them, consider using the <code>combine =&gt; &#39;stacked&#39;</code> option, but be aware that the total height of the single resulting image may be too large for your page! You may need to output them separately, as many as will fit on a page.</p>
+
+<p>This leaves the possibility of <i>overlaying</i> multiple images to overlap in one large combined image. You have the various width and height (and bounding box coordinates), so it <i>is</i> possible to align images to have the same origin. SVGPDF <i>may</i> get <code>combine =&gt; &#39;bbox&#39;</code> at some point in the future, to automate this, but for the time being you need to do it yourself. Keep an eye out for different <code>svg</code>s scaled at different sizes; they may need rescaling to overlay properly.</p>
+
+<h1 id="NAVIGATION-LINKS">NAVIGATION LINKS</h1>
+
+<h2 id="Up-Parents">Up (Parents)</h2>
+
+<p><a href="../../../../Builder_index.html">Master Index</a><br>
+<a href="../../../../.././PDF/Builder.html">PDF::Builder</a> -- Facilitates the creation and modification of PDF files<br>
+<a href="../../../../.././PDF/Builder/Resource.html">PDF::Builder::Resource</a> -- Base class for PDF resources<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject.html">PDF::Builder::Resource::XObject</a> -- Base class for external objects<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image.html">PDF::Builder::Resource::XObject::Image</a> -- Base class for external raster image objects<br>
+</p>
+
+<h2 id="Siblings">Siblings</h2>
+<p>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/GD.html">PDF::Builder::Resource::XObject::Image::GD</a> -- Support routines for Graphics Development image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/GIF.html">PDF::Builder::Resource::XObject::Image::GIF</a> -- Support routines for GIF image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/JPEG.html">PDF::Builder::Resource::XObject::Image::JPEG</a> -- Support routines for JPEG image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNG.html">PDF::Builder::Resource::XObject::Image::PNG</a> -- Support routines for PNG image library (using pure Perl code)<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNG_IPL.html">PDF::Builder::Resource::XObject::Image::PNG_IPL</a> -- Support routines for PNG image library (using Image::PNG::Libpng)<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/PNM.html">PDF::Builder::Resource::XObject::Image::PNM</a> -- Support routines for PNM (Portable aNy Map) image library<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF.html">PDF::Builder::Resource::XObject::Image::TIFF</a> -- TIFF image support<br>
+<a href="../../../../.././PDF/Builder/Resource/XObject/Image/TIFF_GT.html">PDF::Builder::Resource::XObject::Image::TIFF_GT</a> -- TIFF image support (Graphics::TIFF enabled)<br>
+</p>
+<h3>###</h3>
+</body>
+</html>
+
