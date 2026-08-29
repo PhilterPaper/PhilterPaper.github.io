@@ -14,5 +14,6 @@
 pod2htmd.tmp
 # ignore .md documentation except for root README
 *.md
-! /README.md
+!/README.md
 # local build process
+/Build_notes.txt
