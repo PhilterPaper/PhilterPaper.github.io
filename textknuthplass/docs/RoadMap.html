@@ -15,7 +15,7 @@ pleasing "well-shaped" paragraph. It uses the Knuth-Plass algorithm made famous
 in (La)TeX, and is usable by a wide range of calling systems.</p>
 
 <p><em>We can offer no guarantees that any of these items listed will be addressed,
-nor in what order. We will be happy to discuss offers of Pull Requests to 
+nor in what order. We will be happy to discuss offers of Pull Requests to
 implement specific items.</em></p>
 
 <p>Keep in mind that the output from this package will be used by a variety of
@@ -38,8 +38,8 @@ this is something in Text::KnuthPlass or better handled in the caller.</p>
 <ul>
 <li>ASCII hyphen U+002D  should always be an acceptable break point</li>
 <li>soft hyphen U+00AD  should always be an acceptable break point</li>
-<li>narrow hyphen U+2010 (preferred over ASCII hyphen, but need to check if 
-it's in the particular font in use). should always be an acceptable 
+<li>narrow hyphen U+2010 (preferred over ASCII hyphen, but need to check if
+it's in the particular font in use). should always be an acceptable
 break point</li>
 <li>non-breaking hyphen U+2011 (like U+2010, but forbid break here)</li>
 <li>figdash U+2012</li>
@@ -71,7 +71,8 @@ baseline spacing (leading) can vary as fonts and font sizes change.</li>
 to output a "soft hyphen" (U+00AD) rather than a "hard hyphen" (U+002D). Any
 further processing of the PDF (such as a reflow, or a screen reader), can
 thus know that the word was split and can be recombined (use caution with
-Dutch and German!).</li>
+Dutch and German!). Perhaps even make U+00AD the default, and require an
+explicit parameter setting to use U+002D '-'.</li>
 <li>Figure out what to do when mixing bidirectional text (e.g., Arabic) with
 LTR text (e.g., English) and a word needs to be split for a line to fit.
 Presumably you don't want a hyphenated word right in the middle of a line.</li>
@@ -82,7 +83,7 @@ be changeable so that the correct word-splitting library can be used for it.
 The markup needs to be preserved in some manner so that (once the paragraph's
 individual lines have been decided upon) the calling program can proceed to
 pick the appropriate font file. This may require a new API.</li>
-<li>Find and document any other hidden or hard-coded settings (make 
+<li>Find and document any other hidden or hard-coded settings (make
 configurable). The 1982 KP article has some suggestions.</li>
 <li>A general means is needed to set parameters, such as</p>
 
@@ -95,7 +96,7 @@ amount and number of lines, such as to accommodate dropped caps. Also to
 suppress indent after a heading</li>
 <li>where to allow splits around hard-coded hyphens and dashes (some styles
 permit break <em>before</em> the dash)</li>
-<li>manual setting of discretionary/auxiliary spaces (try hard to suppress 
+<li>manual setting of discretionary/auxiliary spaces (try hard to suppress
 line break, but not absolutely forbid) such as (TeX-style) with Dr.&amp;Smith</li>
 <li>adjust handling of glue (space) after punctuation</li>
 <li>allow punctuation "hanging over" past the right margin (or left margin for
@@ -125,23 +126,32 @@ break points, etc.</li>
 scripts, as well as kerning, ligatures, and Small/Petite Caps in Western
 languages. As part of the markup, forbid/suggest ligatures. Ligatures usually
 change the width little enough that they won't affect a breakpoint, but the
-change in word length still needs to be accounted for in glue length.</li>
+change in word length still needs to be accounted for in glue length. Post
+processing needed by output routines to know which letters were replaced (by
+HarfBuzz) ligatures, and what the new word lengths are. HSadvancewidth() presumably
+knows what to do with kerning, and may know what ligatures it will be using.
+Needs plenty of testing!</li>
 <li>As part of a new hyphenation library (a separate library) that allows
 switching among several languages and proper handling of Dutch and German rules,
 deal with emergency situations where the library has no idea how to split a
 "word". This could include on camelCase, letters/numbers, internal punctuation,
 etc., as well as a "Hail Mary" option if a word won't even fit on the available
-line.</li>
+line. If a line becomes far too loose due to an unsplittable "word" (such as a
+URL or a hash value), it would be time to do a Hail Mary, but you don't want to
+do this in the initial split-up of words (camelCase, etc. OK). Should explicitly
+call hyphenator just for oversized words, and when line too loose. Re punctuation,
+split after various hyphens (including - and SHYs), before # or % (so hex values
+aren't separated), etc.</li>
 <li>Other improvements suggested for Knuth-Plass. detect and penalize:</p>
 
 <ul>
-<li>"cubs" (probably better to flag a last line less than 25% of available 
+<li>"cubs" (probably better to flag a last line less than 25% of available
 line, than just a single word)</li>
 <li>"stacks" of the same word or fragment at the beginning or end of two
 consecutive lines</li>
 <li>"rivers" (a major headache to implement)</li>
-<li>multiple hyphenated lines in a row (increase the hyphenation 
-penalty/demerit with each one; reverse at each unhyphenated line until 
+<li>multiple hyphenated lines in a row (increase the hyphenation
+penalty/demerit with each one; reverse at each unhyphenated line until
 back to default amount)</li>
 <li>hyphenated penultimate line (not sure this is really needed)</li>
 <li>if ragged right or left, don't let a complete word overhang space on the
@@ -160,6 +170,9 @@ left margin too. Want only one punctuation mark over the margin.</li>
 <li>Consider "optical alignment" to allow slight overhang left and right of some
 letters and other characters. This will vary by font, so it requires some low-level
 interfacing with font support.</li>
+<li>How to handle swashes and alternate glyphs for letter(s)? Need for KP to know
+width of replacement letter before it does any line splitting. Some sort of markup
+(in addition to style, weight, etc.) to let KP know what the glyph is to be.</li>
 </ol>
 </body>
 </html>

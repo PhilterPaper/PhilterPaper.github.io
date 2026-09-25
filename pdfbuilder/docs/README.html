@@ -8,7 +8,7 @@ h1 { text-align: center; }
 </style>
 </head>
 <body>
-<h1>PDF::Builder release 3.028</h1>
+<h1>PDF::Builder release 3.029</h1>
 
 <p>A Perl library to create and modify PDF (Portable Document Format) files</p>
 
@@ -35,8 +35,7 @@ each other and one will not interfere with the other if both are installed.
 However, you should <em>not</em> try mixing the two libraries within one running
 program, as they still share many routine names!</p>
 
-<p>The
-<a href="https://www.catskilltech.com/FreeSW/product/PDF%2DBuilder/title/PDF%3A%3ABuilder/freeSW_full">Home Page</a>
+<p>The <a href="https://PhilterPaper.github.io/pdfbuilder/index.html">Home Page</a>
 includes Documentation and Examples output, for your convenience. Of course, the examples
 and the documentation (POD) are included with PDF::Builder, but you would need to build them.</p>
 
@@ -48,11 +47,36 @@ and the documentation (POD) are included with PDF::Builder, but you would need t
 See <strong>Changes</strong> file for the version and list of changes from the previous
 release.</p>
 
+<h2>A CAUTION on PDF versions</h2>
+
+<p>PDF::Builder (like its predecessor) is written to produce, <em>and process</em>,
+<strong>PDF 1.4</strong> level documents. A few PDF 1.5 features are <em>tolerated</em>, but be
+aware that many 1.5 and up features are likely to be mishandled. If you must
+read in and process a PDF that contains features of version 1.5 or higher,
+it is possible that PDF::Builder may fail in some manner. Many bugs reported
+against PDF::Builder turn out to be an attempt to read in a PDF of version 1.5
+or higher! Do note that many PDF writers will label their output as 1.7 (or
+even 2.0), while not necessarily incorporating features beyond 1.4, but you
+cannot count on this. If you can adjust this setting, consider asking your
+PDF writer to produce only 1.4 level PDF files.</p>
+
+<p>Although PDF::Builder <em>does</em> support most PDF features up to level 1.4, it is
+<strong>not</strong> guaranteed to properly read in and handle <em>every</em> legal 1.4 feature
+defined. It was written to primarily <em>produce</em> 1.4 level documents that
+basically any PDF reader out there can handle. A few 1.5 level features can be
+read in and properly handled, or even produced from calls (see the documentation).
+The only thing guaranteed is that PDF::Builder <em>should</em> be able to read in any
+document that it has produced.</p>
+
 <h2>Obtaining and Installing the Package</h2>
+
+<p>Presumably, you have a Perl interpreter installed, of at least version 5.28.
+PDF::Builder may work on slightly older versions, but it is not tested on
+anything earlier than 5.28.</p>
 
 <p>The installable Perl package may be obtained from
 "https://metacpan.org/pod/PDF::Builder", or via a CPAN installer package. If
-you install this product, only the run-time modules will be installed. Download
+you <em>install</em> this product, only the run-time modules will be installed. Download
 the full <code>.tar.gz</code> file and unpack it (uncompress, then extract directory --
 hint: on Windows, <strong>7-Zip File Manager</strong> is an excellent tool) to get
 utilities, test buckets, example usage, etc.</p>
@@ -67,7 +91,8 @@ compiles at this time).</p>
 Strawberry Perl for Windows), no other tools or manually-installed prereqs are
 needed (worst case, you can unpack the <code>.tar.gz</code> file and copy files into
 place yourself!). Currently there are no compiles and links (Perl extensions)
-done during the install process, only copying of .pm Perl module files. </p>
+done during the install process, only copying of .pm Perl module files, and
+running of a test suite. </p>
 
 <p>A package installer such as "cpan" (included with Strawberry Perl and some
 other systems) can retrieve the package, unpack and copy files, and run 
@@ -85,6 +110,30 @@ and improve PDF::Builder. Read about the list of optional libraries in
 PDF::Builder::Docs, and decide whether or not you want to install any of them.
 By default, <strong>none</strong> are installed.</p>
 
+<h3>Notes on running Perl programs</h3>
+
+<p>Most Perl programs (scripts) are named with a <code>.pl</code> file extension, e.g.,
+<em>program</em>.pl, although some (especially some t-tests) lack an extension.
+Different operating systems treat such files in different ways. Linux and
+similar systems usually ignore the file extension, and look for a "hashbang"
+entry such as <code>#!/usr/bin/perl</code> or perhaps <code>#!/usr/local/bin/perl</code>. Perl is
+normally installed on such systems, but the path to the interpreter may vary.</p>
+
+<p>Windows systems normally do not come with Perl pre-installed, and once installed,
+do not know what to do with a <code>.pl</code> file. It <em>is</em> possible to configure Windows
+to recognize a <code>.pl</code> file extension as needing <code>perl</code> to run, and even to look
+for <code>.pl</code> extension files once the normal <em>command</em><code>.com</code>, <code>.exe</code>, and <code>.bat</code>
+extensions have not been found. Thus, <em>program.pl</em> and even just <em>program</em> can
+be made to run from the command line or File Explorer.</p>
+
+<p>Whenever instructions are given to run a Perl program, it should always be safe
+to run it as <code>perl</code> <em>filename</em>. In a few specific cases (some t-tests), a <code>-T</code>
+flag needs to be used (you will get an error if it isn't given). We will usually
+(but not guaranteed) include a hashbang line in any Perl script provided, and in
+any scripts invoking other Perl scripts we will try to use the <code>perl</code> form so
+that it should run properly on any platform. Please feel free to report anything
+that we've overlooked.</p>
+
 <h2>Requirements</h2>
 
 <h3>Perl</h3>
@@ -101,7 +150,7 @@ more than 6 years old, you should be thinking about upgrading.</p>
 whether Strawberry releases the newest Perl level. As Strawberry Perl releases 
 new Perl levels, usually on an annual basis, we intend to bump up our required 
 minimum Perl level (even-numbered production releases), to keep support for the 
-last 6 calendar years of Perl releases, dropping older ones. </p>
+last 6 calendar years of Perl releases, dropping older ones.</p>
 
 <p>Note that we have
 been informed that enough users want to run PDF::Builder at older levels that
@@ -289,7 +338,7 @@ tree of documentation. There's a lot of additional information in the
 PDF::Builder::Docs module (it's all documentation).</p>
 
 <p>You may find it more convenient to point your browser to our
-<a href="https://PhilterPaper.github.io/index.html">Documentation and Examples Pages</a>
+<a href="https://PhilterPaper.github.io/pdfbuilder/index.html">Home Page</a>
 to see the full documentation build (as well as most of the example outputs).</p>
 
 <p>We admit that the documentation is a bit light on "how to" task orientation.
